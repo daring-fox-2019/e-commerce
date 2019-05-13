@@ -27,14 +27,13 @@ before(function(done) {
     // end INITIAL USER
 });
 
-after(function(done) {
-    clearUser(done);
-});
+// after(function(done) {
+//     clearUser(done);
+// });
 
 describe('User Test', function() {
     describe('POST /users/signin', function() {
         it('should send an object of user loggedin user with 200 status code', function(done) {
-            
             chai
                 .request(app)
                 .post('/users/signin')
