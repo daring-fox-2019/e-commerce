@@ -46,7 +46,7 @@ after(function(done) {
 });
 
 describe('Cart Test', function() {
-    describe('POST /carts/:productId', function() {
+    describe('POST /cart', function() {
         it('should send an object of cart', function(done) {
             this.timeout(3000);
             const buyProduct = {
@@ -56,7 +56,7 @@ describe('Cart Test', function() {
             
             chai
                 .request(app)
-                .post(`/carts/${productId}`)
+                .post(`/carts`)
                 .send(buyProduct)
                 .end(function(err, res) {
                     expect(err).to.be.null;

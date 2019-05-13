@@ -22,7 +22,7 @@ before(function(done) {
         .send(newProduct)
         .end(function(err, res) {
             productId= res.body._id
-    });
+        });
 });
 
 after(function(done) {

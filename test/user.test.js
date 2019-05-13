@@ -4,24 +4,25 @@ const chai      = require('chai'),
       app       = require('../app')
       clearUser = require('../helpers/clearUser');
 
-const userTest = {
+const userCreate = {
     name: 'lutfi',
-    email: 'lutfi@x.com',
+    email: 'lutfi@dummy.com',
     password: '1234'
 }
+let userTest={}
 
 chai.use(chaiHttp);
 
 before(function(done) {
     clearUser(done)
-
+    
     // INITIAL USER
     chai
         .request(app)
         .post('/users/signup')
-        .send(userTest)
+        .send(userCreate)
         .end(function(err, res) {
-            userId= res.body._id
+            userTest= res.body
     });
     // end INITIAL USER
 });
@@ -33,26 +34,22 @@ after(function(done) {
 describe('User Test', function() {
     describe('POST /users/signin', function() {
         it('should send an object of user loggedin user with 200 status code', function(done) {
-            const user = {
-                email: 'lutfi@x.com',
-                password: '1234'
-            }
             
             chai
                 .request(app)
                 .post('/users/signin')
-                .send(user)
+                .send({
+                    email: userCreate.email,
+                    password: userCreate.password
+                })
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res).to.have.status(200);
                     expect(res.body).to.be.an('object');
-                    expect(res.body).to.have.property('_id');
+                    expect(res.body).to.have.property('token');
                     expect(res.body).to.have.property('name');
-                    expect(res.body).to.have.property('email');
-                    expect(res.body).to.have.property('password');
                     expect(res.body.name).to.equal(`${userTest.name}`);
                     expect(res.body.email).to.equal(`${userTest.email}`);
-                    expect(res.body.password).to.equal(`${userTest.password}`)
                     done();
                 });
         })
