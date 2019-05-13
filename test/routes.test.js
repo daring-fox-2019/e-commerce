@@ -69,7 +69,7 @@ describe("App",function(){
       .set('token', token)
       .send(reqBody)
       .end(function(err, res) {
-        id = res.body
+        id = res.body._id
         expect(err).to.be.null;
         expect(res).to.have.status(201);
         done();
@@ -86,7 +86,6 @@ describe("App",function(){
       });
     });
     it('baca satu product dari id /read/:id', function(done) {
-      let id = "5cd94bcc2b3184474fe33b93"
       agent
       .get(`/products/read/${id}`)
       .set('token', token)
@@ -108,7 +107,6 @@ describe("App",function(){
       });
     });
     it('update product /read/update', function(done) {
-      let id = "5cd94bcc2b3184474fe33b93"
       let reqBody = {
         title: "aja",
         content: "aja",
@@ -124,7 +122,6 @@ describe("App",function(){
       });
     });
     it('delete product /delete/:id', function(done) {
-      let id = "5cd94bcc2b3184474fe33b93"
       agent
       .delete(`/products/delete/${id}`)
       .set('token', token)
