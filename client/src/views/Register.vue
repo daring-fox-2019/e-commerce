@@ -16,8 +16,8 @@
                 id="password"
                 type="password"
               ></v-text-field>
-              <v-text-field prepend-icon="pen" name="firstname" label="First name" type="text"></v-text-field>
-              <v-text-field prepend-icon="pen" name="lastname" label="Last name" type="text"></v-text-field>
+              <v-text-field prepend-icon="account_circle" name="firstname" label="First name" type="text"></v-text-field>
+              <v-text-field prepend-icon="account_circle" name="lastname" label="Last name" type="text"></v-text-field>
             </v-form>
           </v-card-text>
           <v-card-actions>

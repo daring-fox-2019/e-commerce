@@ -23,7 +23,6 @@
               <v-card-actions>
                 <v-btn color="yellow" light>Login</v-btn>
                 <v-btn light to="/">Back</v-btn>
-                <div class="g-signin2" style="height: 60px; width: 100%;" data-onsuccess="onSignIn"></div>
               </v-card-actions>
             </v-flex>
             <v-flex>
@@ -34,9 +33,14 @@
                     <v-flex dark pa-2>
                         <h4>Or login with:</h4>
                     </v-flex>
-                    <v-flex pa-3>
-                        <div class="g-signin2" data-width="300" data-height="200" data-longtitle="true"></div>
-                        <div id="google-signin-button" style="width: 100%;"></div>
+                    <v-flex px-3>
+                      <!-- <div class="g-signin2" data-width="300" data-height="200" data-longtitle="true"></div> -->
+                      <div id="google-signin-button" style="width: 100%;"></div>
+                    </v-flex>
+                    <v-flex px-3 pb-3>
+                      <v-btn class="linkedInButton" color="blue lighten-2" :href="linkedInCodeRequestURL" block>
+                        <v-icon>fab fa-linkedin</i></v-icon>&nbsp;&nbsp;LinkedIn
+                      </v-btn>
                     </v-flex>
                 </v-layout>
             </v-flex>
@@ -46,9 +50,14 @@
     </v-layout>
   </v-container>
 </template>
+
 <style scoped>
 .abcRioButtonContentWrapper {
     width: 100%;
+}
+.linkedInButton {
+  width: 200px;
+  height: 50px;
 }
 </style>
 
@@ -62,14 +71,19 @@ export default {
         }
     },
     mounted() {
-    gapi.signin2.render('google-signin-button', {
-        'scope': 'profile email',
-        'width': 200,
-        'height': 50,
-        'font-size': 12,
-        'theme': 'dark',
-        'onsuccess': this.onSignIn
-    })
+      gapi.signin2.render('google-signin-button', {
+          'scope': 'profile email',
+          'width': 200,
+          'height': 50,
+          'font-size': 12,
+          'theme': 'dark',
+          'onsuccess': this.onSignIn
+      })
+    },
+    computed: {
+      linkedInCodeRequestURL() {
+        return `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${process.env.VUE_APP_LINKEDIN_CLIENT_ID}&redirect_uri=${process.env.VUE_APP_LINKEDIN_REDIRECT_URI}&scope=r_liteprofile%20r_emailaddress%20w_member_social`
+      }
     },
     methods: {
         onSignIn (user) {
@@ -81,7 +95,8 @@ export default {
             api.post('/auth/google', {token: idToken})
                 .then(({data}) => {
                     swal.fire('Nice!', `Welcome, ${profile.getName()}`, 'success')
-                    this.$emit('success')
+                    localStorage.setItem('ecomm_token', data.access_token)
+                    this.$emit('success', data.user)
                     this.$router.push('/')
                 })
                 .catch(({response}) => {

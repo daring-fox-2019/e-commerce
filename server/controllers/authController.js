@@ -6,6 +6,22 @@ const axios = require('axios')
 const linkedinRequestAuth = `https://www.linkedin.com/oauth/v2/accessToken`
 
 class AuthController {
+    static currentUser(req, res) {
+
+        User.findOne({_id: req.user._id})
+            .then(data => {
+                if(data) {
+                    res.status(200).json(data)
+                }
+                else {
+                    res.status(401).json('Invalid user ID. Please login using the correct ID')
+                }
+            })
+            .catch(err => {
+                res.status(500).json(err.message)
+            })
+    }
+
     static signup(req, res) {
         User.create({...req.body})
             .then(created => {
@@ -96,7 +112,7 @@ class AuthController {
                             lastname: user.lastname,
                             role: user.role
                         })
-                        res.status(200).json({access_token: access_token})
+                        res.status(200).json({access_token: access_token, user: user})
                     }
                     else {
                         res.status(401).json(`Incorrect password`)
