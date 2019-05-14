@@ -81,20 +81,89 @@ class AuthController {
         });
     }
 
-    static linkedinSignIn(req, res) {
-        console.log('...linkedin arrive...', req.query);
-        let signinCode = req.body.code
-
+    static linkedinRedirect(req, res) {
+        let signinCode = req.query.code, 
+            email, firstname, lastname, access_token, linkedin_access_token
+        
         axios({
             method: 'GET',
-            url: linkedinRequestAuth + `/?grant_type=authorization_code&code=${req.body.token}&redirect_uri=http://localhost:8080&client_id=${process.env.LINKEDIN_CLIENTID}&client_secret=${process.env.LINKEDIN_SECRET}`
+            url: linkedinRequestAuth + `/?grant_type=authorization_code&code=${signinCode}&redirect_uri=http://localhost:8080/login/linkedin&client_id=${process.env.LINKEDIN_CLIENT_ID}&client_secret=${process.env.LINKEDIN_SECRET}`
         })
         .then(({data}) => {
             console.log('linkedin access token...',data);
-            
+            linkedin_access_token = data.access_token
+
+            //after getting access token, get: 1. email addresspersonal, 2. first and last name
+            axios({
+                method: 'GET',
+                url: `https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))`,
+                headers: {'Authorization': `Bearer ${linkedin_access_token}`}
+            })
+            .then(({data}) => {
+                let elements = data.elements
+                elements.forEach(x => {
+                    if(x.type === 'EMAIL') {
+                        email = x['handle~'].emailAddress
+                        console.log('got the email...',email);
+                    }
+                })
+
+                //get firstname & lastname
+                axios({
+                    method: 'GET',
+                    url: `https://api.linkedin.com/v2/me`,
+                    headers: {'Authorization': `Bearer ${linkedin_access_token}`}
+                })
+                .then(({data}) => {
+                    firstname = data.localizedFirstName
+                    lastname = data.localizedLastName
+
+                    console.log('fname -- ', firstname);
+                    console.log('lname -- ', lastname);
+                    
+                    //all data gathered, so we send our app access_token to client
+                    User.findOne({email: email})
+                        .then(found => {
+                            if(found) {
+                                access_token = jwt.sign({
+                                    firstname: found.firstname,
+                                    lastname: found.lastname,
+                                    email: found.email,
+                                    role: found.role,
+                                    _id: found._id
+                                })
+
+                                res.status(200).json({access_token: access_token, user: found})
+                            }
+                            else {
+                                return User.create({email: email, password: process.env.DEFAULT_PWD, firstname: firstname, lastname: lastname})
+                            }
+                        })
+                        .then(function(created) {
+                            access_token = jwt.sign({
+                                email: created.email,
+                                firstname: created.firstname,
+                                lastname: created.lastname,
+                                role: created.role
+                            })
+
+                            res.status(200).json({access_token: access_token, user: created})
+                        })
+                        .catch(err => {
+                            res.status(500).json(err.message)
+                        })
+                    
+                })
+                .catch(({response}) => {
+                    console.log(response.data);
+                })
+            })
+            .catch(({response}) => {
+                console.log(response.data);
+            })
         })
         .catch(err => {
-            console.log('linkedin error ----', err.message);
+            console.log('linkedin error ----', err.response.data);
         })
     }
 

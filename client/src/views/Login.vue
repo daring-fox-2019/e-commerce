@@ -68,9 +68,26 @@ export default {
     data() {
         return {
             isGoogleLogin: false,
+            linkedinCode: null,
         }
     },
     mounted() {
+      this.linkedinCode = this.$route.query.code;
+      console.log('linkedin arrive...', this.$route.query);
+      if(this.linkedinCode) {
+        api.get('/auth/linkedin/redirect/?code='+this.linkedinCode)
+          .then(({data}) => {
+            swal.fire('Great!', `Welcome, ${data.user.firstname}`, 'success')
+            localStorage.setItem('ecomm_token', data.access_token)
+            this.$emit('success', data.user)
+            this.$router.push('/')
+          })
+          .catch(({response}) => {
+            swal.fire('Oops!', response.data, 'error')
+          })
+      }
+      
+
       gapi.signin2.render('google-signin-button', {
           'scope': 'profile email',
           'width': 200,
@@ -79,6 +96,7 @@ export default {
           'theme': 'dark',
           'onsuccess': this.onSignIn
       })
+
     },
     computed: {
       linkedInCodeRequestURL() {

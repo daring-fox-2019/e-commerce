@@ -52,7 +52,6 @@
 
 <script>
 import api from './api/backend.js'
-import { close } from 'fs';
 
 export default {
   name: "App",
@@ -86,9 +85,11 @@ export default {
   },
   mounted() {
     //load Google Logout client
-    gapi.load('auth2', function() {
-        gapi.auth2.init();
-    });
+    if(gapi) {
+      gapi.load('auth2', function() {
+          gapi.auth2.init();
+      });
+    }
 
     if(localStorage.getItem('ecomm_token')) {
       this.getUserData()
