@@ -1,13 +1,10 @@
 <template>
-  <HelloWorld />
+  <v-container fluid fill-height>
+    HOME PAGE
+  </v-container>
 </template>
 
 <script>
-  import HelloWorld from '../components/HelloWorld'
-
   export default {
-    components: {
-      HelloWorld
-    }
   }
 </script>

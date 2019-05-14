@@ -19,10 +19,9 @@ class AuthController {
     static googleSignIn(req, res) {
         let access_token;
         const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
         async function verify() {
             const ticket = await client.verifyIdToken({
-                idToken: req.headers.body,
+                idToken: req.body.token,
                 audience: process.env.GOOGLE_CLIENT_ID,
             });
             const payload = ticket.getPayload();
@@ -55,7 +54,7 @@ class AuthController {
                         role: created.role
                     })
 
-                    res.status(200).json({access_token: access_token, user: found})
+                    res.status(200).json({access_token: access_token, user: created})
                 })
                 .catch(err => {
                     res.status(500).json(err.message)
