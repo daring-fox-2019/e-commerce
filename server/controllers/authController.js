@@ -12,7 +12,6 @@ class AuthController {
                 res.status(201).json(created)
             })
             .catch(err => {
-                console.log(`User create error --- ${err}`);
                 res.status(500).json(err.message)
             })
     }
@@ -93,10 +92,10 @@ class AuthController {
                 if(user) {
                     if(comparePassword(password, user.password)) {
                         let access_token = jwt.sign({
-                            email: created.email,
-                            firstname: created.firstname,
-                            lastname: created.lastname,
-                            role: created.role
+                            email: user.email,
+                            firstname: user.firstname,
+                            lastname: user.lastname,
+                            role: user.role
                         })
                         res.status(200).json({access_token: access_token})
                     }

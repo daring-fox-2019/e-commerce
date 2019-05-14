@@ -15,7 +15,7 @@ const userSchema = new Schema({
             },
             {
                 validator: function(value) {
-                    User.findOne({email: value, _id: {$ne: this._id}})
+                    return User.findOne({email: value, _id: {$ne: this._id}})
                         .then(user => {
                             if(user) {
                                 return false
