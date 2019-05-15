@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const product = require('../controllers/product')
 const gcs = require('../helpers/gcs')
-const { authentication } = require('../middleware/auth')
+const { authentication, authorization } = require('../middleware/auth')
 
 router.get('/', product.findAll)
 router.get('/:id', product.findOne)

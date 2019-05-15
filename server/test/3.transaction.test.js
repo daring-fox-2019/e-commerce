@@ -4,6 +4,7 @@ const app = require('../app')
 const modelUser = require('../models/user')
 const modelProduct = require('../models/product')
 const modelCart = require('../models/cart')
+const clearTransaction = require('../helpers/clearTransaction')
 const { compare } = require('../helpers/bcrypt')
 const { sign } = require('../helpers/jwt')
 
@@ -15,6 +16,10 @@ let cartId = null
 let product = null
 let userId = null
 let transactionId = null
+
+before(function (done) {
+  clearTransaction(done)
+});
 
 let user = {
   name: 'prasetio',
@@ -60,14 +65,12 @@ before(function (done) {
     })
 });
 
-describe.only('Transaction', function () {
+describe('Transaction', function () {
   describe('POST /', function () {
     it('should send a new object of transaction', function (done) {
       let newTransaction = {
-        userId: userId,
         cart: [cartId],
-        delFee: 5000000,
-        status: false
+        totalPrice: 5000000,
       }
       chai
         .request(app)
@@ -83,7 +86,7 @@ describe.only('Transaction', function () {
           res.body.userId.should.be.a('string');
           res.body.should.have.property('cart');
           res.body.cart.should.be.a('array');
-          res.body.should.have.property('delFee');
+          res.body.should.have.property('totalPrice');
           res.body.totalPrice.should.be.a('number');
           res.body.should.have.property('status');
           res.body.status.should.be.a('boolean');
@@ -103,17 +106,17 @@ describe.only('Transaction', function () {
         .set('token', token)
         .end(function (err, res) {
           res.should.to.have.status(200);
-          res.body.should.be.a('object');
-          res.body.should.have.property('_id');
-          res.body.userId.should.be.a('string');
-          res.body.should.have.property('userId');
-          res.body.userId.should.be.a('string');
-          res.body.should.have.property('cart');
-          res.body.cart.should.be.a('array');
-          res.body.should.have.property('delFee');
-          res.body.totalPrice.should.be.a('number');
-          res.body.should.have.property('status');
-          res.body.status.should.be.a('boolean');
+          res.body.should.be.a('array');
+          res.body[0].should.have.property('_id');
+          res.body[0].userId.should.be.a('string');
+          res.body[0].should.have.property('userId');
+          res.body[0].userId.should.be.a('string');
+          res.body[0].should.have.property('cart');
+          res.body[0].cart.should.be.a('array');
+          res.body[0].should.have.property('totalPrice');
+          res.body[0].totalPrice.should.be.a('number');
+          res.body[0].should.have.property('status');
+          res.body[0].status.should.be.a('boolean');
 
           done();
         })
@@ -144,7 +147,7 @@ describe.only('Transaction', function () {
     it('should send object with id transaction that has been deleted', function (done) {
       chai
         .request(app)
-        .post(`/transaction/${transactionId}`)
+        .delete(`/transaction/${transactionId}`)
         .set('token', token)
         .end(function (err, res) {
           res.should.to.have.status(200);

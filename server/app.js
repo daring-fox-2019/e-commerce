@@ -7,7 +7,7 @@ const port = 3000
 
 let app= express()
 
-mongoose.connect('mongodb://localhost/newEcommerce'+process.env.NODE_ENV, {useNewUrlParser: true})
+mongoose.connect('mongodb://localhost/newEcommerce'+(process.env.NODE_ENV === 'test' ? '_test' : ''), {useNewUrlParser: true})
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 app.use(cors())

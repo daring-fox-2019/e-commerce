@@ -36,7 +36,7 @@ before(function (done) {
     .then(userFound => {
       if (userFound) {
         if (compare(user.password, userFound.password)) {
-          token = sign({ _id: userFound._id, name: userFound.name, email: userFound.email })          
+          token = sign({ _id: userFound._id, name: userFound.name, email: userFound.email })
         }
       }
       done()
@@ -46,6 +46,7 @@ before(function (done) {
 describe('Product', function () {
   describe('POST /', function () {
     it('should send a new object product', function (done) {
+      
       this.timeout(10000)
       chai
         .request(app)

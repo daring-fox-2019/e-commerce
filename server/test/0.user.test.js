@@ -6,7 +6,7 @@ const clearUser = require('../helpers/clearUser')
 chai.should()
 chai.use(chaiHttp)
 
-before(function(done) {
+before(function (done) {
   clearUser(done)
 });
 
