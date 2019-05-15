@@ -68,7 +68,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     ```json
       {
         "message": "login success",
-        "token": "<accessToken>",
+        "token": "<accessToken>"
       }
     ```
   - Error responses:
@@ -88,7 +88,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     ```json
       {
         "message": "login success",
-        "token": "<accessToken>",
+        "token": "<accessToken>"
       }
     ```
   - Error responses:
@@ -113,14 +113,14 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     ```json
       {
         "message": "login success",
-        "token": "<accessToken>",
+        "token": "<accessToken>"
       }
     ```
   - Error responses:
     - status: `400`:
       ```json
       {
-        "message": "<errorMessage>",
+        "message": "<errorMessage>"
       }
       ```
       Notes:
@@ -148,7 +148,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
             "stock": "<stock>",
             "imageURL": "<imageURL>",
             "created": "<createdAt>",
-            "updated": "<updatedAt>",
+            "updated": "<updatedAt>"
           }, 
           {
             "..."
@@ -161,7 +161,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `404`:
       ```json
         {
-          "message": "data empty",
+          "message": "data empty"
         }
       ```
 
@@ -191,7 +191,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
           "stock": "<stock>",
           "imageURL": "<imageURL>",
           "created": "<createdAt>",
-          "updated": "<updatedAt>",
+          "updated": "<updatedAt>"
         }
       }
     ```
@@ -199,7 +199,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `400`:
       ```json
       {
-        "message": "<errorMessage>",
+        "message": "<errorMessage>"
       }
       ```
       Notes:
@@ -212,7 +212,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `401`:
       ```json
       {
-        "message": "unauthorized to access",
+        "message": "unauthorized to access"
       }
       ```
     
@@ -232,7 +232,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
           "stock": "<stock>",
           "imageURL": "<imageURL>",
           "created": "<createdAt>",
-          "updated": "<updatedAt>",
+          "updated": "<updatedAt>"
         }
       }
     ```
@@ -240,7 +240,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `404`:
       ```json
         {
-          "message": "data not found",
+          "message": "data not found"
         }
       ```
 
@@ -274,7 +274,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
           "stock": "<stock>",
           "imageURL": "<imageURL>",
           "created": "<createdAt>",
-          "updated": "<updatedAt>",
+          "updated": "<updatedAt>"
         },
         "info": "<info-optional>"
       }
@@ -295,17 +295,17 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `401`:
       ```json
       {
-        "message": "unauthorized to access",
+        "message": "unauthorized to access"
       }
       ```
     - status: `404`:
       ```json
         {
-          "message": "data not found",
+          "message": "data not found"
         }
       ```
 
-- **DELETE ARTICLE BY ID**
+- **DELETE PRODUCT BY ID**
   - Notes:
     - Authorization: only admin can access
   - URL(s):
@@ -325,15 +325,15 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
           "stock": "<stock>",
           "imageURL": "<imageURL>",
           "created": "<createdAt>",
-          "updated": "<updatedAt>",
-        },
+          "updated": "<updatedAt>"
+        }
       }
     ```
   - Error responses:
     - status: `400`:
       ```json
       {
-        "message": "<authentication message>",
+        "message": "<authentication message>"
       }
       ```
       Notes:
@@ -344,13 +344,13 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `401`:
       ```json
       {
-        "message": "unauthorized to access",
+        "message": "unauthorized to access"
       }
       ```
     - status: `404`:
       ```json
         {
-          "message": "data not found",
+          "message": "data not found"
         }
       ```
 
@@ -380,6 +380,6 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `404`:
       ```json
         {
-          "message": "data empty",
+          "message": "data empty"
         }
       ```

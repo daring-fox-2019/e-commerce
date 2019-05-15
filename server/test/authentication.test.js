@@ -14,7 +14,7 @@ after(function(done) {
 describe('AUTHENTICATION', function() {
   describe('POST /register', function() {
     describe('SUCCESS', function() {
-      it('response an object (message and newUser with role: admin)with status 201', function(done) {
+      it('should response an object (message and newUser with role: admin)with status 201', function(done) {
         const register = {
           name: 'Admin',
           email: 'admin@mail.com',
@@ -43,7 +43,7 @@ describe('AUTHENTICATION', function() {
             console.log(err);
           })
       })
-      it('response an object (message and newUser with role: customer)with status 201', function(done) {
+      it('should response an object (message and newUser with role: customer)with status 201', function(done) {
         const register = {
           name: 'New User',
           email: 'user@mail.com',
@@ -73,7 +73,7 @@ describe('AUTHENTICATION', function() {
       })
     })
     describe('ERROR', function() {
-      it('response an object (message) with status 400', function(done) {
+      it('should response an object (message) with status 400', function(done) {
         const register = {};
         chai
           .request(app)
@@ -94,7 +94,7 @@ describe('AUTHENTICATION', function() {
 
   describe('POST /login', function() {
     describe('SUCCESS', function() {
-      it('response an object (message and token)with status 200', function(done) {
+      it('should response an object (message and token)with status 200', function(done) {
         const login = {
           email: 'user@mail.com',
           password: '123456',
@@ -119,7 +119,7 @@ describe('AUTHENTICATION', function() {
       afterEach(function(done) {
         clearUser(done);
       })
-      it('response an object (message) with status 400', function(done) {
+      it('should response an object (message) with status 400', function(done) {
         const login = {
           email: 'user@mail.com',
           password: 'secret',
