@@ -145,7 +145,7 @@ describe('Cart', function () {
   });
 
   describe('DELETE /:id ', function () {
-    it('should send a object deleted ', function (done) {
+    it('should send object with id cart that has been deleted ', function (done) {
       chai
         .request(app)
         .delete(`/cart/${cartId}`)

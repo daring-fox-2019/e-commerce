@@ -150,7 +150,7 @@ describe('Product', function () {
   });
 
   describe('DELETE /:id ', function () {
-    it('should send string "Delete Success"', function (done) {
+    it('should send object with id product that has been deleted', function (done) {
       chai
         .request(app)
         .delete(`/products/${productId}`)

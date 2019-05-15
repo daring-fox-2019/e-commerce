@@ -1,9 +1,10 @@
 <template>
   <div>
     <v-toolbar app fixed clipped-left>
-      <v-toolbar-title>Application</v-toolbar-title>
+      <v-toolbar-title to="/">Application</v-toolbar-title>
       <router-link to="/signin">Signin</router-link>
       <router-link to="/signup">Signup</router-link>
+      <router-link to="/admin/addProduct">Add Product</router-link>
       <v-spacer></v-spacer>
       <v-text-field  label="Search" prepend-icon="search"></v-text-field>
       <v-spacer></v-spacer>

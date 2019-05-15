@@ -4,6 +4,8 @@ import Home from './views/Home.vue';
 import Product from './views/Product.vue';
 import Signin from './views/Signin.vue';
 import Signup from './views/Signup.vue';
+import AddProduct from './views/AddProduct.vue';
+
 
 Vue.use(Router);
 
@@ -27,6 +29,10 @@ export default new Router({
       path: '/signup',
       name: 'signup',
       component: Signup,
+    }, {
+      path: '/admin/addProduct',
+      name: 'addProduct',
+      component: AddProduct,
     },
     {
       path: '/about',

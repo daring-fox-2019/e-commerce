@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <v-app dark>
+    <v-app>
       <Header/>
       <v-content >
-        <v-container fill-height id="container">
+        <v-container fluid fill-height id="container">
           <v-layout justify-center>
             <v-flex>
               <router-view/>
@@ -32,7 +32,7 @@ export default {
 </script>
 <style>
 #container{
-  padding-top:0;
+  padding:0;
 }
 #app {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;

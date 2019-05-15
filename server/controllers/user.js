@@ -1,9 +1,9 @@
 const modelUser = require('../models/user')
-const { hash, compare } = require('../helpers/bcrypt')
+const { compare } = require('../helpers/bcrypt')
 const { sign } = require('../helpers/jwt')
 
 class userController {
-  static create(req, res) {
+  static signup(req, res) {
     let newUser = {
       name: req.body.name,
       email: req.body.email,
@@ -24,7 +24,7 @@ class userController {
         if (userFound) {
           if (compare(req.body.password, userFound.password)) {
             let token = sign({ _id: userFound._id, name: userFound.name, email: userFound.email })
-            res.status(200).json({ token })
+            res.status(200).json({ token, name: userFound.name})
           } else {
             res.status(400).json({ msg: "Bad request1" })
           }

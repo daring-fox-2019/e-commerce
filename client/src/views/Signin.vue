@@ -42,26 +42,36 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
       signin: {
-        email: "",
-        password: ""
+        email: '',
+        password: '',
       },
       emailRules: [
-        v => !!v || "E-mail is required",
-        v => /.+@.+/.test(v) || "E-mail must be valid"
-      ]
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid',
+      ],
     };
   },
-  methods:{
-    showSignup(){
-
+  methods: {
+    signIn() {
+      axios
+        .post('http://localhost:3000/user/signin', this.signin)
+        .then(({ data }) => {
+          this.signin.email = '';
+          this.signin.password = '';
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('name', data.name);
+          console.log('LOGIN SUKSES');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    signIn(){
-      
-    }
-  }
+  },
 };
 </script>
