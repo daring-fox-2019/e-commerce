@@ -2,22 +2,28 @@ const chai = require('chai')
 const chaihttp = require('chai-http')
 const { expect } = chai
 const app = require('../app')
-const { Product, User } = require('../models')
+const { Product, User, Cart } = require('../models')
+const { sign, verify } = require('../helpers/jwt')
 
 chai.use(chaihttp)
 
 let createdID
 let hookUserId
 let hookProductId
+let hookCartId
+let token
 
 before(done => {
   let newUser = {
-    name: 'ucup',
+    name: 'ucup2',
     email: 'ucup2@mail.com',
     password: '12345'
   }
   User.create(newUser)
     .then(res => {
+      // console.log({res, dari: 'hook create'})
+      let { _id, name, email, role } = res
+      token = sign({ _id, name, email, role })
       let newProduct = {
         name: 'Geforce GTX 2080 Ti',
         description: 'Graphic card',
@@ -30,6 +36,7 @@ before(done => {
       return Product.create(newProduct)
     })
     .then(res => {
+      hookProductId = res._id
       done()
     })
     .catch(err => {
@@ -38,7 +45,11 @@ before(done => {
 })
 
 after(done => {
-  User.deleteMany({})
+  Promise.all([
+    User.deleteMany({}),
+    Product.deleteMany({}),
+    Cart.deleteMany({})
+  ])
     .then(res => {
       done()
     })
@@ -102,6 +113,7 @@ describe('User CRUD test:', function (done) {
     chai
       .request(app)
       .put(`/users/${createdID}`)
+      .set('token', token)
       .send(updateData)
       .then(res => {
         expect(res).to.have.status(200)
@@ -127,6 +139,7 @@ describe('User CRUD test:', function (done) {
     chai
       .request(app)
       .delete(`/users/${createdID}`)
+      .set('token', token)
       .then(res => {
         expect(res).to.have.status(200) //! 200 atau 204?
         expect(res.body).to.be.an('object')
@@ -138,41 +151,37 @@ describe('User CRUD test:', function (done) {
   })
 })
 
+describe('Authentication')
+
 describe('Cart test:' , function(done) {
-  it('ADD: Should return status code 200 with updated user\'s cart', res => {
+  it('ADD: Should return status code 200 with updated user\'s cart', done => {
     chai
       .request(app)
-      .put(`/users/cart/${hookProductId}`)
-      .send({ method: 'add'})
+      .post(`/cart`)
+      .set('token', token)
+      .send({ productId: hookProductId })
       .then(res => {
-        expect(res).to.have.status(200)
+        hookCartId = res.body._id
+        expect(res).to.have.status(201)
         expect(res.body).to.be.an('object')
         expect(res.body).to.have.property('_id')
-        expect(res.body).to.have.property('name')
-        expect(res.body).to.have.property('email')
-        expect(res.body).to.have.property('carts')
-
-        expect(res.body.carts.length).to.not.equal(0)
+        expect(res.body).to.have.property('user')
+        expect(res.body).to.have.property('product')
         done()
       })
       .catch(err => {
         console.log({ err, dari: 'Test Add to cart'})
       })
   })
-  it('REMOVE: Should return status code 200 with updated user\'s cart', res => {
+  it('REMOVE: Should return status code 200 with updated user\'s cart', done => {
     chai
       .request(app)
-      .put(`/users/cart${hookProductId}`)
-      .send({ method: 'remove' })
+      .delete(`/cart/${hookCartId}`)
+      .set('token', token)
+      .send({ productId: hookProductId })
       .then(res => {
         expect(res).to.have.status(200)
         expect(res.body).to.be.an('object')
-        expect(res.body).to.have.property('_id')
-        expect(res.body).to.have.property('name')
-        expect(res.body).to.have.property('email')
-        expect(res.body).to.have.property('carts')
-
-        expect(res.body.carts.length).to.equal(0)
         done()
       })
       .catch(err => {

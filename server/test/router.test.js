@@ -6,11 +6,11 @@ const { Product } = require('../models')
 
 chai.use(chaihttp)
 
-describe('Error', (done) => {
+describe('Route Error:', (done) => {
   it('Should return status 404 with object message \'Not Found :(\'', (done) => {
     chai
       .request(app)
-      .get('/items')
+      .get('/wakwaw')
       .then(res => {
         expect(res).to.have.status(404)
         expect(res.body).to.be.an('object')
