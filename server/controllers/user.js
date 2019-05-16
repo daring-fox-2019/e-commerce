@@ -107,15 +107,16 @@ class ControllerUser {
   static cart(req, res, next) {
     User.findOne({ _id: req.user._id })
       .then(user => {
-        let isInCart = false
-        user.carts.forEach(item => {
-          if (item.toString() == req.params.productId.toString()) {
-            isInCart = true
-          }
-        })
-        if (!isInCart) {
-          return User.findOneAndUpdate({ _id: req.user._id }, { $addToSet: { carts: req.params.productId } }, { new: true })
-        } else {
+        // let isInCart = false
+        // user.carts.forEach(item => {
+        //   if (item.toString() == req.params.productId.toString()) {
+        //     isInCart = true
+        //   }
+        // })
+        console.log({ body: req.body, params: req.params, user, masuk: 'cart'})
+        if (req.body.method == 'add') {
+          return User.findOneAndUpdate({ _id: req.user._id }, { $push: { carts: req.params.productId } }, { new: true })
+        } else if((req.body.method == 'remove')) {
           return User.findOneAndUpdate({ _id: req.user._id }, { $pull: { carts: req.params.productId } }, { new: true })
         }
       })

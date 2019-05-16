@@ -15,6 +15,7 @@ let productSchema = new mongoose.Schema({
   },
   stock: {
     type: Number,
+    min: 0,
     default: 0
   },
   tags: {
@@ -22,7 +23,8 @@ let productSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
-    required: [true, 'Product price required.']
+    required: [true, 'Product price required.'],
+    min: 0
   }
 })
 

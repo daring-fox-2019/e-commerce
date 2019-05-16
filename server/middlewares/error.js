@@ -1,6 +1,6 @@
 module.exports = (err, req, res, next) => {
   let { status, message, origin } = err
-  // console.log({err, dari: origin})
+  console.log({err, dari: origin})
   if (status !== undefined) {
     res.status(status).json({ message })
   } else {
