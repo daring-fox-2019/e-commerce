@@ -90,7 +90,6 @@ class AuthController {
             url: linkedinRequestAuth + `/?grant_type=authorization_code&code=${signinCode}&redirect_uri=http://localhost:8080/login/linkedin&client_id=${process.env.LINKEDIN_CLIENT_ID}&client_secret=${process.env.LINKEDIN_SECRET}`
         })
         .then(({data}) => {
-            console.log('linkedin access token...',data);
             linkedin_access_token = data.access_token
 
             //after getting access token, get: 1. email addresspersonal, 2. first and last name
@@ -104,7 +103,6 @@ class AuthController {
                 elements.forEach(x => {
                     if(x.type === 'EMAIL') {
                         email = x['handle~'].emailAddress
-                        console.log('got the email...',email);
                     }
                 })
 
@@ -118,8 +116,6 @@ class AuthController {
                     firstname = data.localizedFirstName
                     lastname = data.localizedLastName
 
-                    console.log('fname -- ', firstname);
-                    console.log('lname -- ', lastname);
                     
                     //all data gathered, so we send our app access_token to client
                     User.findOne({email: email})
@@ -132,24 +128,26 @@ class AuthController {
                                     role: found.role,
                                     _id: found._id
                                 })
-
                                 res.status(200).json({access_token: access_token, user: found})
+                                return
                             }
                             else {
                                 return User.create({email: email, password: process.env.DEFAULT_PWD, firstname: firstname, lastname: lastname})
                             }
                         })
-                        .then(function(created) {
-                            access_token = jwt.sign({
-                                email: created.email,
-                                firstname: created.firstname,
-                                lastname: created.lastname,
-                                role: created.role
-                            })
-
-                            res.status(200).json({access_token: access_token, user: created})
+                        .then((created) => {
+                            if(created) {
+                                access_token = jwt.sign({
+                                    email: created.email,
+                                    firstname: created.firstname,
+                                    lastname: created.lastname,
+                                    role: created.role
+                                })
+                                res.status(200).json({access_token: access_token, user: created})
+                            }
                         })
                         .catch(err => {
+                            console.log(err);
                             res.status(500).json(err.message)
                         })
                     
@@ -192,6 +190,7 @@ class AuthController {
                 }
             })
             .catch(err => {
+                console.log(err);
                 res.status(500).json(err.message)
             })
     }

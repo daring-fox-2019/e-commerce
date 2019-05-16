@@ -2,7 +2,7 @@
   <v-app dark>
     <v-navigation-drawer fixed v-model="drawer" app>
       <v-list dense>
-        <v-list-tile @click>
+        <v-list-tile>
           <v-list-tile-action>
             <v-icon>home</v-icon>
           </v-list-tile-action>
@@ -10,7 +10,7 @@
             <v-list-tile-title>Home</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click>
+        <v-list-tile>
           <v-list-tile-action>
             <v-icon>settings</v-icon>
           </v-list-tile-action>
@@ -52,14 +52,13 @@
 
 <script>
 import api from './api/backend.js'
+import {mapState} from 'vuex'
 
 export default {
   name: "App",
   data() {
     return {
       drawer: false,
-      isLogin: false,
-      user: null,
     };
   },
   computed: {
@@ -81,42 +80,48 @@ export default {
       else {
         return 'default_user'
       }
-    }
+    },
+    ...mapState([
+      'isLogin',
+      'user',
+    ])
   },
   mounted() {
     //load Google Logout client
+    console.log('app.vue: mounted....');
     if(gapi) {
-      gapi.load('auth2', function() {
+      gapi.load('auth2', () => {
           gapi.auth2.init();
+          if(localStorage.getItem('ecomm_token')) {
+            this.getUserData()
+          }
       });
     }
-
-    if(localStorage.getItem('ecomm_token')) {
-      this.getUserData()
-    }
     else {
-      this.$router.push('/login')
+      if(localStorage.getItem('ecomm_token')) {
+        this.getUserData()
+      }
+      else {
+        // this.$router.push('/login')
+      }
     }
+
   },
   methods: {
     getUserData() {
       api.get('/auth/user/', {headers: {'Authorization': localStorage.getItem('ecomm_token')}})
         .then(({data}) => {
-          this.user = data
-          this.isLogin = true
+          this.$store.commit('setIsLogin', true)
+          this.$store.commit('setUser', data)
         })
         .catch(({response}) => {
           swal.fire('Error', response.data, 'error')
         })
     },
-    onSuccessLogin(user) {
-      this.isLogin = true;
-      this.user = user
-    },
     processSignOut() {
       localStorage.removeItem('ecomm_token');
-      this.user = null;
-      this.isLogin = false;
+      this.$store.commit('setIsLogin', false)
+      this.$store.commit('setUser', null)
       this.$router.push('/');
       console.log('User signed out.');
     },

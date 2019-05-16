@@ -10,18 +10,19 @@
             <v-flex xs12 sm12 md12>
               <v-card-text>
                 <v-form>
-                  <v-text-field prepend-icon="person" name="login" label="Login" type="text"></v-text-field>
+                  <v-text-field prepend-icon="person" name="login" label="Login" type="text" v-model="formData.email"></v-text-field>
                   <v-text-field
                     prepend-icon="lock"
                     name="password"
                     label="Password"
                     id="password"
                     type="password"
+                    v-model="formData.password"
                   ></v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-btn color="yellow" light>Login</v-btn>
+                <v-btn color="yellow" light @click="processSignIn">Login</v-btn>
                 <v-btn light to="/">Back</v-btn>
               </v-card-actions>
             </v-flex>
@@ -38,7 +39,7 @@
                       <div id="google-signin-button" style="width: 100%;"></div>
                     </v-flex>
                     <v-flex px-3 pb-3>
-                      <v-btn class="linkedInButton" color="blue lighten-2" :href="linkedInCodeRequestURL" block>
+                      <v-btn class="linkedInButton" color="blue" :href="linkedInCodeRequestURL" block>
                         <v-icon>fab fa-linkedin</i></v-icon>&nbsp;&nbsp;LinkedIn
                       </v-btn>
                     </v-flex>
@@ -69,11 +70,21 @@ export default {
         return {
             isGoogleLogin: false,
             linkedinCode: null,
+            formData: {
+              email: '',
+              password: '',
+            }
         }
     },
     mounted() {
       this.linkedinCode = this.$route.query.code;
       console.log('linkedin arrive...', this.$route.query);
+      
+      /**
+       * handle callback from Linkedin when request code is available
+       * then we request our backend to get access token from Linkedin 
+       * */
+      
       if(this.linkedinCode) {
         api.get('/auth/linkedin/redirect/?code='+this.linkedinCode)
           .then(({data}) => {
@@ -86,15 +97,13 @@ export default {
             swal.fire('Oops!', response.data, 'error')
           })
       }
-      
-
       gapi.signin2.render('google-signin-button', {
           'scope': 'profile email',
           'width': 200,
           'height': 50,
           'font-size': 12,
           'theme': 'dark',
-          'onsuccess': this.onSignIn
+          'onsuccess': this.onGoogleSignIn
       })
 
     },
@@ -104,7 +113,26 @@ export default {
       }
     },
     methods: {
-        onSignIn (user) {
+        processSignIn() {
+          api.post('/auth/login', this.formData)
+                .then(({data}) => {
+                    swal.fire('Nice!', `Welcome, ${data.user.firstname}`, 'success')
+                    localStorage.setItem('ecomm_token', data.access_token)
+                    this.$store.commit('setUser', data.user)
+                    this.$store.commit('setIsLogin', true)
+                    this.$router.push('/')
+                })
+                .catch((err) => {
+                    if(err.response) {
+                      swal.fire('Oops!', err.response.data, 'error')
+                    }
+                    else {
+                      swal.fire('Oops!', err, 'error')
+
+                    }
+                })
+        },
+        onGoogleSignIn (user) {
             const profile = user.getBasicProfile()
             const idToken = user.getAuthResponse().id_token;
             this.isGoogleLogin = true
@@ -114,7 +142,8 @@ export default {
                 .then(({data}) => {
                     swal.fire('Nice!', `Welcome, ${profile.getName()}`, 'success')
                     localStorage.setItem('ecomm_token', data.access_token)
-                    this.$emit('success', data.user)
+                    this.$store.commit('setUser', data.user)
+                    this.$store.commit('setIsLogin', true)
                     this.$router.push('/')
                 })
                 .catch(({response}) => {
