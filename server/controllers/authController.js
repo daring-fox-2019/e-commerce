@@ -63,14 +63,15 @@ class AuthController {
                     }
                 })
                 .then(function(created) {
-                    access_token = jwt.sign({
-                        email: created.email,
-                        firstname: created.firstname,
-                        lastname: created.lastname,
-                        role: created.role
-                    })
-
-                    res.status(200).json({access_token: access_token, user: created})
+                    if(created) {
+                        access_token = jwt.sign({
+                            email: created.email,
+                            firstname: created.firstname,
+                            lastname: created.lastname,
+                            role: created.role
+                        })
+                        res.status(200).json({access_token: access_token, user: created})
+                    }
                 })
                 .catch(err => {
                     res.status(500).json(err.message)

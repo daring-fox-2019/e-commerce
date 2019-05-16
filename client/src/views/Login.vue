@@ -8,23 +8,23 @@
           </v-toolbar>
           <v-layout>
             <v-flex xs12 sm12 md12>
-              <v-card-text>
-                <v-form>
-                  <v-text-field prepend-icon="person" name="login" label="Login" type="text" v-model="formData.email"></v-text-field>
-                  <v-text-field
-                    prepend-icon="lock"
-                    name="password"
-                    label="Password"
-                    id="password"
-                    type="password"
-                    v-model="formData.password"
-                  ></v-text-field>
-                </v-form>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn color="yellow" light @click="processSignIn">Login</v-btn>
-                <v-btn light to="/">Back</v-btn>
-              </v-card-actions>
+              <v-form @submit.prevent="processSignIn">
+                <v-card-text>
+                    <v-text-field prepend-icon="person" name="login" label="Login" type="text" v-model="formData.email"></v-text-field>
+                    <v-text-field
+                      prepend-icon="lock"
+                      name="password"
+                      label="Password"
+                      id="password"
+                      type="password"
+                      v-model="formData.password"
+                    ></v-text-field>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn color="yellow" type="submit" light>Login</v-btn>
+                  <v-btn light to="/">Back</v-btn>
+                </v-card-actions>
+              </v-form>
             </v-flex>
             <v-flex>
                 <v-divider vertical></v-divider>
@@ -90,7 +90,8 @@ export default {
           .then(({data}) => {
             swal.fire('Great!', `Welcome, ${data.user.firstname}`, 'success')
             localStorage.setItem('ecomm_token', data.access_token)
-            this.$emit('success', data.user)
+            this.$store.commit('setUser', data.user)
+            this.$store.commit('setIsLogin', true)
             this.$router.push('/')
           })
           .catch(({response}) => {

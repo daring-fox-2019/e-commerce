@@ -1,8 +1,22 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer fixed v-model="drawer" app>
-      <v-list dense>
-        <v-list-tile>
+    <v-navigation-drawer fixed temporary v-model="drawer" app>
+      <v-list class="pa-1" v-if="isLogin">
+        <v-list-tile to="/user" avatar tag="div">
+          <v-list-tile-avatar>
+            <img :src="user.image ? user.image : 'http://www.clker.com/cliparts/j/h/A/z/H/9/yellow-user-icon-md.png'">
+          </v-list-tile-avatar>
+
+          <v-list-tile-content>
+            <v-list-tile-title>{{user.firstname + ' ' + user.lastname}}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+
+      <v-list class="pt-0" dense>
+        <v-divider light></v-divider>
+        <v-list-tile to="/">
+          <!-- Home -->
           <v-list-tile-action>
             <v-icon>home</v-icon>
           </v-list-tile-action>
@@ -10,12 +24,22 @@
             <v-list-tile-title>Home</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile>
+        <!-- Products -->
+        <v-list-tile to="/products">
           <v-list-tile-action>
-            <v-icon>settings</v-icon>
+            <v-icon>assignment</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Products</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <!-- Products -->
+        <v-list-tile to="/cart" v-if="isLogin">
+          <v-list-tile-action>
+            <v-icon>shopping_cart</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Cart</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -28,7 +52,7 @@
       <v-spacer />
       <v-toolbar-items v-if="!isLogin">
         <v-btn flat to="register">Register</v-btn>
-        <v-btn flat to="login" color="yellow lighten-3">Login</v-btn>
+        <v-btn light to="login" color="yellow">Login</v-btn>
       </v-toolbar-items>
       <v-toolbar-items v-else>
         <v-btn flat to="/user" class="navtitle">
@@ -37,12 +61,12 @@
           </v-avatar>
           &nbsp;{{userDisplayName}}
         </v-btn>
-        <v-btn flat @click="signOut">Logout</v-btn>
+        <v-btn color="yellow" light @click="signOut">Logout</v-btn>
       </v-toolbar-items>
       
     </v-toolbar>
     <v-content>
-      <router-view :user="user" @success="onSuccessLogin" />
+      <router-view :user="user"/>
     </v-content>
     <v-footer app inset>
       <span class="white--text">&copy; 2019 - Andre Suchitra</span>
@@ -88,7 +112,6 @@ export default {
   },
   mounted() {
     //load Google Logout client
-    console.log('app.vue: mounted....');
     if(gapi) {
       gapi.load('auth2', () => {
           gapi.auth2.init();
@@ -123,7 +146,7 @@ export default {
       this.$store.commit('setIsLogin', false)
       this.$store.commit('setUser', null)
       this.$router.push('/');
-      console.log('User signed out.');
+      swal.fire('Success', 'Bye!', 'success')
     },
     signOut() {
       var auth2 = gapi.auth2.getAuthInstance();
@@ -138,6 +161,9 @@ export default {
 </script>
 
 <style scoped>
+.newanchor{
+  color: #FFF000;
+}
 .navtitle {
   color: white;
 }
