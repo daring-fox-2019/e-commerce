@@ -14,6 +14,11 @@ export default new Router({
       component: Home,
     },
     {
+      path: '/products',
+      name: 'products',
+      component: () => import(/* webpackChunkName: "products" */ './views/Products.vue'),
+    },
+    {
       path: '/login/linkedin',
       name: 'linkedin-redirect',
       component: () => import(/* webpackChunkName: "login" */ './views/Login.vue'),

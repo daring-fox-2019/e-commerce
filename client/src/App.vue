@@ -1,10 +1,10 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer fixed temporary v-model="drawer" app>
+    <v-navigation-drawer fixed temporary v-model="drawer" app class="navDrawer">
       <v-list class="pa-1" v-if="isLogin">
         <v-list-tile to="/user" avatar tag="div">
           <v-list-tile-avatar>
-            <img :src="user.image ? user.image : 'http://www.clker.com/cliparts/j/h/A/z/H/9/yellow-user-icon-md.png'">
+            <img :src="userPic">
           </v-list-tile-avatar>
 
           <v-list-tile-content>
@@ -44,12 +44,19 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar fixed app dense>
+    <v-toolbar fixed app dense class="topNav">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        <v-toolbar-title>
-          <router-link to="/" class="navtitle">CHEAPSHOP</router-link>
-        </v-toolbar-title>
-      <v-spacer />
+      <v-toolbar-title>
+        <router-link to="/" class="navtitle">BUKUBERKAH | &nbsp;</router-link>
+      </v-toolbar-title>
+      <span class="text-truncate">Pusat Buku Islam</span>
+      <v-spacer/>
+      <v-text-field class="mr-2"
+        clearable
+        placeholder="Cari Buku"
+        solo
+        prepend-inner-icon="search"
+      ></v-text-field>
       <v-toolbar-items v-if="!isLogin">
         <v-btn flat to="register">Register</v-btn>
         <v-btn light to="login" color="yellow">Login</v-btn>
@@ -57,13 +64,20 @@
       <v-toolbar-items v-else>
         <v-btn flat to="/user" class="navtitle">
           <v-avatar>
-            <img :src="userPic" :alt="user.firstname" >
+            <img :src="userPic" :alt="user.firstname">
           </v-avatar>
           &nbsp;{{userDisplayName}}
         </v-btn>
+        <v-btn to="/cart">
+          <v-badge right overlap class="black--text" color="red">
+          <template v-slot:badge>
+            <span>6</span>
+          </template>
+          <v-icon color="grey lighten-1">shopping_cart</v-icon>
+        </v-badge>
+        </v-btn>
         <v-btn color="yellow" light @click="signOut">Logout</v-btn>
       </v-toolbar-items>
-      
     </v-toolbar>
     <v-content>
       <router-view :user="user"/>
@@ -75,84 +89,78 @@
 </template>
 
 <script>
-import api from './api/backend.js'
-import {mapState} from 'vuex'
+import api from "./api/backend.js";
+import { mapState } from "vuex";
 
 export default {
   name: "App",
   data() {
     return {
-      drawer: false,
+      drawer: false
     };
   },
   computed: {
     userPic() {
-      if(this.user && this.user.image) {
-        return this.user.image
-      }
-      else {
-        return require('./assets/logo.png')
+      if (this.user && this.user.image) {
+        return this.user.image;
+      } else {
+        return require("./assets/logo.png");
       }
     },
     userDisplayName() {
-      if(this.user.firstname) {
-        return this.user.firstname
-      }
-      else if(this.user.lastname){
-        return this.user.lastname
-      }
-      else {
-        return 'default_user'
+      if (this.user.firstname) {
+        return this.user.firstname;
+      } else if (this.user.lastname) {
+        return this.user.lastname;
+      } else {
+        return "default_user";
       }
     },
-    ...mapState([
-      'isLogin',
-      'user',
-    ])
+    ...mapState(["isLogin", "user"])
   },
   mounted() {
     //load Google Logout client
-    if(gapi) {
-      gapi.load('auth2', () => {
-          gapi.auth2.init();
-          if(localStorage.getItem('ecomm_token')) {
-            this.getUserData()
-          }
+    if (gapi) {
+      gapi.load("auth2", () => {
+        gapi.auth2.init();
+        if (localStorage.getItem("ecomm_token")) {
+          this.getUserData();
+        }
       });
-    }
-    else {
-      if(localStorage.getItem('ecomm_token')) {
-        this.getUserData()
-      }
-      else {
+    } else {
+      if (localStorage.getItem("ecomm_token")) {
+        this.getUserData();
+      } else {
         // this.$router.push('/login')
       }
     }
-
   },
   methods: {
     getUserData() {
-      api.get('/auth/user/', {headers: {'Authorization': localStorage.getItem('ecomm_token')}})
-        .then(({data}) => {
-          this.$store.commit('setIsLogin', true)
-          this.$store.commit('setUser', data)
+      api
+        .get("/auth/user/", {
+          headers: { Authorization: localStorage.getItem("ecomm_token") }
         })
-        .catch(({response}) => {
-          swal.fire('Error', response.data, 'error')
+        .then(({ data }) => {
+          this.$store.commit("setIsLogin", true);
+          this.$store.commit("setUser", data);
         })
+        .catch(({ response }) => {
+          swal.fire("Error", response.data, "error");
+        });
     },
     processSignOut() {
-      localStorage.removeItem('ecomm_token');
-      this.$store.commit('setIsLogin', false)
-      this.$store.commit('setUser', null)
-      this.$router.push('/');
-      swal.fire('Success', 'Bye!', 'success')
+      localStorage.removeItem("ecomm_token");
+      this.$store.commit("setIsLogin", false);
+      this.$store.commit("setUser", null);
+      this.$router.push("/");
+      swal.fire("Success", "Bye!", "success");
     },
     signOut() {
       var auth2 = gapi.auth2.getAuthInstance();
-      const self = this
+      const self = this;
 
-      auth2.signOut().then(function () {
+      auth2.signOut().then(function() {
         self.processSignOut();
       });
     }
@@ -161,8 +169,8 @@ export default {
 </script>
 
 <style scoped>
-.newanchor{
-  color: #FFF000;
+.newanchor {
+  color: #fff000;
 }
 .navtitle {
   color: white;
@@ -172,5 +180,16 @@ export default {
 }
 .navtitle:visited {
   text-decoration: none;
+}
+
+.navSearch {
+  font-size: 1em;
+}
+
+.topNav {
+  z-index: 8;
+}
+.navDrawer {
+  z-index: 10;
 }
 </style>

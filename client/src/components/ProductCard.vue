@@ -1,0 +1,43 @@
+<template>
+  <v-hover>
+    <v-card slot-scope="{ hover }" class="mx-auto" color="grey lighten-4" max-width="600">
+      <v-img :aspect-ratio="16/9" src="https://cdn.vuetifyjs.com/images/cards/kitchen.png">
+        <v-expand-transition>
+          <div
+            v-if="hover"
+            class="d-flex transition-fast-in-fast-out yellow darken-2 v-card--reveal display-3 white--text"
+            style="height: 100%;"
+          >$14.99</div>
+        </v-expand-transition>
+      </v-img>
+      <v-card-text class="pt-4" style="position: relative;">
+        <v-btn absolute color="yellow" class="grey--text" fab large right top>
+          <v-icon>shopping_cart</v-icon>
+        </v-btn>
+        <div class="font-weight-light grey--text title mb-2">Fiqh</div>
+        <h3 class="display-1  grey--text mb-2">Sifat Shalat Nabi</h3>
+        <div class="font-weight-light black--text mb-2 text-truncate">
+          Our Vintage kitchen utensils delight any chef.Made of bamboo by hand
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-hover>
+</template>
+<script>
+export default {
+    
+}
+</script>
+
+<style scoped>
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: .5;
+  position: absolute;
+  width: 100%;
+}
+</style>
+
+
