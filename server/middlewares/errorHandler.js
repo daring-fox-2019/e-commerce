@@ -1,7 +1,7 @@
 module.exports = (err, req, res, next) => {
   const { error, status, message, register_token, name } = err;
   if (error) {
-    console.log({ message: 'ERROR AT TRY CATCH', error });
+    // console.log({ message: 'ERROR AT TRY CATCH', error });
   }
   if (status) {
     if (register_token) {

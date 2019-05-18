@@ -73,8 +73,48 @@ describe('AUTHENTICATION', function() {
       })
     })
     describe('ERROR', function() {
-      it('should response an object (message) with status 400', function(done) {
+      it('should response an object (message: User validation failed: name, email, password required) with status 400', function(done) {
         const register = {};
+        chai
+          .request(app)
+          .post('/register')
+          .send(register)
+          .then(res => {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message');
+            done();
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      })
+      it('should response an object (message: User validation failed: email: not unique) with status 400', function(done) {
+        const register = {
+          name: 'New User',
+          email: 'user@mail.com',
+          password: '123456'
+        }
+        chai
+          .request(app)
+          .post('/register')
+          .send(register)
+          .then(res => {
+            expect(res).to.have.status(400);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message');
+            done();
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      })
+      it('should response an object (message: User validation failed: email: not valid) with status 400', function(done) {
+        const register = {
+          name: 'Second User',
+          email: 'secondUser',
+          password: '123456'
+        }
         chai
           .request(app)
           .post('/register')
@@ -94,7 +134,7 @@ describe('AUTHENTICATION', function() {
 
   describe('POST /login', function() {
     describe('SUCCESS', function() {
-      it('should response an object (message and token)with status 200', function(done) {
+      it('should response an object (message and token) with status 200', function(done) {
         const login = {
           email: 'user@mail.com',
           password: '123456',
