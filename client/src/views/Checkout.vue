@@ -61,12 +61,16 @@
                 <td class="text-xs-right">Rp. {{this.cost}}</td>
               </tr>
               <tr>
-                <td class="text-xs-left"><b>Grand Total</b></td>
-                <td class="text-xs-right"><b>Rp. {{ this.grandTotal }}</b></td>
+                <td class="text-xs-left">
+                  <b>Grand Total</b>
+                </td>
+                <td class="text-xs-right">
+                  <b>Rp. {{ this.grandTotal }}</b>
+                </td>
               </tr>
             </tbody>
           </table>
-          <v-btn color="success" to="/checkout">Buy</v-btn>
+          <v-btn color="success" @click="buyin">Buy</v-btn>
         </v-flex>
       </v-layout>
     </v-container>
@@ -79,7 +83,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      products: [],
+      products: this.$store.state.cartCustomer,
       totalPrice: this.$store.state.totalPrice,
       province: [],
       selectedProvince: null,
@@ -135,22 +139,25 @@ export default {
           console.log(err);
         });
     },
-    cost(val) {
-      this.totalPrice += val;
-    }
   },
   methods: {
-    renderin() {
+    buyin() {
       axios
-        .get("https://api.rajaongkir.com/starter/province", {
-          headers: {
-            key: "5931fafbedf7e1090ab6788abe7fec9f"
+        .post(
+          "http://localhost:3000/transaction",
+          { 
+            cart: this.products,
+            totalPrice: this.grandTotal
+           },
+          {
+            headers: {
+              token: localStorage.token
+            }
           }
-        })
+        )
         .then(({ data }) => {
+          this.$router.push('/transaction')
           console.log(data);
-
-          // context.commit("setcartCustomer", data);
         })
         .catch(err => {
           console.log(err);

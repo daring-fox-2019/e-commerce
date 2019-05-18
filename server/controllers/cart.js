@@ -58,7 +58,7 @@ class Cart {
   }
 
   static findCart(req, res) {
-    Model.find({ userId: req.userId })
+    Model.find({ userId: req.userId, status: false})
       .populate('userId')
       .populate('productId')
       .then(data => {

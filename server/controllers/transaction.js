@@ -1,4 +1,5 @@
 const Model = require('../models/transaction')
+const modelCart = require('../models/cart')
 
 class Product {
   static findAll(req, res) {
@@ -12,15 +13,21 @@ class Product {
   }
 
   static create(req, res) {
+    let newData = null
     let newTransaction = new Model({
       userId: req.userId,
       cart: req.body.cart,
       totalPrice: req.body.totalPrice,
-      status: false
+      status: 0
     })
     Model.create(newTransaction)
       .then(data => {
-        res.status(201).json(data)
+        newData = data
+
+        return modelCart.updateMany({ userId: req.userId }, { $set: { status: true } })
+      })
+      .then(data=>{
+        res.status(201).json(newData)
       })
       .catch(err => {
         res.status(500).json(err)
