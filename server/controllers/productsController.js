@@ -20,9 +20,26 @@ class ProductController {
             })
     }
     static create(req, res) {
-        Product.create({...req.body})
-            .then(product => {
-                res.status(201).json(product)
+        console.log(req.body);
+
+        let product = {}
+
+        for(let key of Object.keys(req.body)) {
+            if(key !== '_id') {
+                product[key] = req.body[key]
+            }
+        }
+
+        if(req.file) {
+            product.image = req.file.cloudStoragePublicUrl
+        }
+        else {
+            product.image = "https://storage.googleapis.com/miniwp-images/user.png"
+        }
+
+        Product.create(product)
+            .then(newProd => {
+                res.status(201).json(newProd)
             })
             .catch(err => {
                 res.status(500).json(err.message)

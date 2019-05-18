@@ -1,8 +1,8 @@
 <template>
     <div class="quantity-toggle">
-        <button @click="decrement">&mdash;</button>
+        <button type="button" @click="decrement">&mdash;</button>
             <input style="min-width: 60px;" v-model="finalquantity" type="text"  @change="updateQty">
-        <button @click="increment">&#xff0b;</button>
+        <button type="button" @click="increment">&#xff0b;</button>
     </div>
 </template>
 <script>
