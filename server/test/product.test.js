@@ -4,11 +4,13 @@ const expect = chai.expect
 const app = require('../app')
 const User = require('../models/user')
 const Product = require('../models/product')
+const Category = require('../models/category')
 const jwt = require('../helpers/jwt')
 
 chai.use(chaiHttp)
 let token = null;
 let productId = null;
+let categoryId = null;
 
 describe ('Product END POINT test AS ADMIN', function() {
 
@@ -24,15 +26,30 @@ describe ('Product END POINT test AS ADMIN', function() {
         .then((user) =>{
             let {name,email,_id} = user
             jwt.sign({id : _id, email, name}, 'paulina')
+        })
+        .catch(err => {
+            done()
+        })
+
+        Category.create({name : 'Hewani'})
+        .then(cat => {
+            let { _id } = cat
+            categoryId = _id
+            
             done()
         })
         .catch(err => {
             done()
+            
         })
     })
 
     after(function (done) {
         Product.deleteMany({})
+        .then(() => {})
+        .catch(err => {done()})
+
+        Category.deleteMany({})
         .then(() => {})
         .catch(err => {done()})
 
@@ -71,14 +88,15 @@ describe ('Product END POINT test AS ADMIN', function() {
 
     describe('POST /products', function() {
         describe('success create product', function() {
-            it ('app should return status 201 as an object of new product', function (done) {
+            it('app should return status 201 as an object of new product', function (done) {
+
                 let newProduct = {
                     price: 20000,
                     name: 'Cacing',
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 10,
                     description : 'Cacing kremi',
-                    category : 'Hewani'
+                    category : categoryId
                 }
 
                 chai
@@ -87,7 +105,6 @@ describe ('Product END POINT test AS ADMIN', function() {
                 .send(newProduct)
                 .set('token', token)
                 .then(res => {
-                    console.log(res.body, 'kebuat hehe');
                     
                     expect(res).to.have.status(201)
                     expect(res.body).to.be.an('object')
@@ -99,9 +116,8 @@ describe ('Product END POINT test AS ADMIN', function() {
                     expect(res.body).to.have.property('stock')
                     expect(res.body.name).to.equal('Cacing');
                     expect(res.body.price).to.equal(20000)
-                    expect(res.body.image).to.equal('http://imageurl.cacing.com')
-                    expect(res.body.description).to.equal('Cacing kremi')
-                    expect(res.body.category).to.equal('Hewani')
+                    expect(res.body.image).to.eql( ['http://imageurl.cacing.com'])
+                    expect(res.body.description).to.eql('Cacing kremi')
                     productId = res.body._id
                     done()
                 })
@@ -116,10 +132,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: '',
                     price: 20000,
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 10,
                     description : 'Cacing kremi',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 
                 chai
@@ -142,10 +158,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: '',
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 10,
                     description : 'Cacing kremi',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 
                 chai
@@ -168,10 +184,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: 20202,
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: '',
                     description : 'Cacing kremi',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 
                 chai
@@ -195,10 +211,9 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: 20202,
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 2,
                     description : 'Cacing kremi',
-                    category : ''
                 }
                 
                 chai
@@ -207,13 +222,15 @@ describe ('Product END POINT test AS ADMIN', function() {
                 .send(newProduct)
                 .set('token', token)
                 .then(res => {
+                    // console.log(res, 'apa salahanya');
+                    
                     expect(res).to.have.status(400)
                     expect(res.body).to.be.an('object')
                     expect(res.body.errors.category.message).to.include('Category cannot be empty')
                     done()
                 })
                 .catch(err => {
-                    console.log(err)
+                    done()
                 })
             })
 
@@ -221,10 +238,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: 20202,
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 2,
                     description : '',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 
                 chai
@@ -243,40 +260,15 @@ describe ('Product END POINT test AS ADMIN', function() {
                 })
             })
         
-            it ('app should return status 400 and msg image must be filled', function (done) {
-                let newProduct = {
-                    name: 'Cuacing',
-                    price: 20202,
-                    image: '',
-                    stock: 2,
-                    description : 'Cacing kremi',
-                    category : 'Hewani'
-                }
-                
-                chai
-                .request(app)
-                .post('/products')
-                .send(newProduct)
-                .set('token', token)
-                .then(res => {
-                    expect(res).to.have.status(400)
-                    expect(res.body).to.be.an('object')
-                    expect(res.body.errors.image.message).to.include('Image cannot be empty')
-                    done()
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-            })
 
             it ('app should return status 400 and msg price minimum is 0 due to negative number input', function (done) {
                 let newProduct = {
                     name: 'Cuacing',
                     price: -1000,
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 2,
                     description : 'Cacing kremi',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 
                 chai
@@ -299,10 +291,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: 21000,
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: -1000,
                     description : 'Cacing kremi',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 
                 chai
@@ -325,10 +317,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: 'sdfghjk',
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 2,
                     description : 'Cacing kremi',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 chai
                 .request(app)
@@ -336,7 +328,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 .send(newProduct)
                 .set('token', token)
                 .then(res => {   
-                    console.log(res,'HEHEHEEHEH');
+                    // console.log(res,'HEHEHEEHEH');
                                                          
                     expect(res).to.have.status(400)
                     expect(res.body).to.be.an('object')
@@ -353,10 +345,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: 1200,
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 'asdakdad',
                     description : 'Cacing kremi',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 chai
                 .request(app)
@@ -415,9 +407,8 @@ describe ('Product END POINT test AS ADMIN', function() {
                     expect(res.body).to.have.property('stock')
                     expect(res.body.name).to.equal('Cacing');
                     expect(res.body.price).to.equal(20000)
-                    expect(res.body.image).to.equal('http://imageurl.cacing.com')
+                    expect(res.body.image).to.eql(['http://imageurl.cacing.com'])
                     expect(res.body.description).to.equal('Cacing kremi')
-                    expect(res.body.category).to.equal('Hewani')
                     done()
                 })
                 .catch(err => {
@@ -456,6 +447,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Ancylostoma duodenale',
                     price: 1000,
+                    image : ['http://imageurl.cacing.com']
                 }
 
                 chai
@@ -474,9 +466,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                     expect(res.body).to.have.property('stock')
                     expect(res.body.name).to.equal('Ancylostoma duodenale');
                     expect(res.body.price).to.equal(1000)
-                    expect(res.body.image).to.equal('http://imageurl.cacing.com')
-                    expect(res.body.description).to.equal('Cacing kremi')
-                    expect(res.body.category).to.equal('Hewani')
+                    expect(res.body.image).to.eql(['http://imageurl.cacing.com'])
                     done()
                 })
                 .catch(err => {
@@ -543,9 +533,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 .patch(`/products/${productId}`)
                 .send(newProduct)
                 .set('token', token)
-                .then((res) => {     
-                    console.log(res, 'YOOOOOW');
-                                   
+                .then((res) => {                                        
                     expect(res).to.have.status(400)
                     expect(res.body.errors.price.message).to.include('Price cannot be empty')
                     done()
@@ -560,10 +548,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 20202,
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: '',
                     description : 'Cacing kremi',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 chai
                 .request(app)
@@ -584,10 +572,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 20202,
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 12,
                     description : '',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 chai
                 .request(app)
@@ -608,7 +596,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 20202,
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 12,
                     description : 'Hehe cacing....',
                     category : ''
@@ -632,10 +620,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 20202,
-                    image: '',
+                    image: [],
                     stock: 12,
                     description : 'Hehe cacing....',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 chai
                 .request(app)
@@ -656,10 +644,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: -101010,
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 12,
                     description : 'Hehe cacing....',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 chai
                 .request(app)
@@ -680,10 +668,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 1000,
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: -12,
                     description : 'Hehe cacing....',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 chai
                 .request(app)
@@ -704,10 +692,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 1000,
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 'xxxxxxxx',
                     description : 'Hehe cacing....',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 chai
                 .request(app)
@@ -728,10 +716,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 'asasdasdsad',
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 15,
                     description : 'Hehe cacing....',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 chai
                 .request(app)
@@ -752,10 +740,10 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 122,
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 15,
                     description : 'Hehe cacing....',
-                    category : 'Hewani'
+                    category : categoryId
                 }
                 chai
                 .request(app)
@@ -829,7 +817,7 @@ describe ('Product END POINT test AS ADMIN', function() {
             })
         })
 
-    })
+        })
 
     })
 
@@ -852,11 +840,23 @@ describe('Product END POINT test AS CUSTOMER', function() {
         .then((user) =>{
             let {name,email,_id} = user
             jwt.sign({id : _id, email, name}, 'paulina')
-            done()
         })
         .catch(err => {
             done()
         })
+
+        Category.create({name : 'Hewani'})
+        .then(cat => {
+            let { _id } = cat
+            categoryId = _id
+            
+            done()
+        })
+        .catch(err => {
+            done()
+            
+        })
+
     })
 
     after(function (done) {
@@ -903,10 +903,10 @@ describe('Product END POINT test AS CUSTOMER', function() {
                 let newProduct = {
                     price: 20000,
                     name: 'Cacing',
-                    image: 'http://imageurl.cacing.com',
+                    image: ['http://imageurl.cacing.com'],
                     stock: 10,
                     description : 'Cacing kremi',
-                    category : 'Hewani'
+                    category : categoryId
                 }
 
                 chai

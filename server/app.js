@@ -13,14 +13,14 @@ const uri = `mongodb://localhost/ECOMMERCEKEDUARUN`
 
 
 // ON TESTING. PLEASE RUN THIS DATABASE
-// mongoose.connect(url, {useNewUrlParser : true, useCreateIndex : true})
-// .then(() => {console.log('===> MONGO DB TEST CONNECTED <===')})
-// .catch((err) => console.log(err))
+mongoose.connect(url, {useNewUrlParser : true, useCreateIndex : true})
+.then(() => {console.log('===> MONGO DB TEST CONNECTED <===')})
+.catch((err) => console.log(err))
 
 // UPON USING THE APPLICATION RUN THIS DATABASE INSTEAD
-mongoose.connect(uri, {useNewUrlParser : true, useCreateIndex : true})
-.then(() => {console.log('===> MONGO DB LOCAL CONNECTED <===')})
-.catch((err) => console.log(err))
+// mongoose.connect(uri, {useNewUrlParser : true, useCreateIndex : true})
+// .then(() => {console.log('===> MONGO DB LOCAL CONNECTED <===')})
+// .catch((err) => console.log(err))
 
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))

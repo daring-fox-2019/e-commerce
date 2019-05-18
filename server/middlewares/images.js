@@ -13,44 +13,50 @@ console.log('masuk google cloud bucket');
 const sendUploadToGCS = async (req, res, next) => {
   const bucket = storage.bucket(CLOUD_BUCKET)
   let promises = []
-  for (let i = 0; i < req.files.length; i++) {
-    console.log(req.files[i], '=====', i);
-
-    const gcsname = Date.now() + req.files[i].originalname
-    const file = bucket.file(gcsname)
-
-    console.log(file, 'apa it filllee');
-
-    const newPromise = new Promise((resolve, reject) => {
-      file.createWriteStream({
-          metadata: {
-            contentType: file.mimetype
-          }
-        })
-        .on('finish', async response => {
-          req.files[i].cloudStorageObject = gcsname
-          console.log(gcsname, 'sumpah ya');
-
-          await file.makePublic()
-            .then(async () => {
-              req.files[i].cloudStoragePublicUrl = await getPublicUrl(gcsname)
+  if (!req.files) {
+    next()
+  } else {
+    
+      for (let i = 0; i < req.files.length; i++) {
+        console.log(req.files[i], '=====', i);
+    
+        const gcsname = Date.now() + req.files[i].originalname
+        const file = bucket.file(gcsname)
+    
+        console.log(file, 'apa it filllee');
+    
+        const newPromise = new Promise((resolve, reject) => {
+          file.createWriteStream({
+              metadata: {
+                contentType: file.mimetype
+              }
             })
-          resolve(response)
-          console.log(response, 'kepana undefined tolong');
-        }).on('error', err => {
-          reject(err)
-        }).end(req.files[i].buffer)
-    })
-    promises.push(newPromise)
-    console.log(promises, 'URL/??!!!!!!????');
-  }
+            .on('finish', async response => {
+              req.files[i].cloudStorageObject = gcsname
+              console.log(gcsname, 'sumpah ya');
+    
+              await file.makePublic()
+                .then(async () => {
+                  req.files[i].cloudStoragePublicUrl = await getPublicUrl(gcsname)
+                })
+              resolve(response)
+              console.log(response, 'kepana undefined tolong');
+            }).on('error', err => {
+              reject(err)
+            }).end(req.files[i].buffer)
+        })
+        promises.push(newPromise)
+        console.log(promises, 'URL/??!!!!!!????');
+      }
+    
+      await Promise.all(promises).then((data) => {
+          next()
+        })
+        .catch((err) => {
+          res.status(500).json(err)
+        });
 
-  await Promise.all(promises).then((data) => {
-      next()
-    })
-    .catch((err) => {
-      res.status(500).json(err)
-    });
+  }
 }
 
 

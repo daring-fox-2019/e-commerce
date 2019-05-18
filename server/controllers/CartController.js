@@ -9,7 +9,7 @@ class CartController {
             let found = await Cart.find({userId : req.authenticatedUser.id}).populate('productId')
             res.status(200).json(found)
         } catch (error) {
-            console.log(error, 'dari findall cart');      
+            // console.log(error, 'dari findall cart');      
             if (error.errors) res.status(400).json(error)
             else res.status(500).json(error)
         }
@@ -17,10 +17,10 @@ class CartController {
 
     static async createCart(req, res) {
         try {
-            let foundorcreated = await Cart.findOneAndUpdate({productId : req.body.productId, userId : req.authenticatedUser.id}, {amount : req.body.amount}, {upsert : true, new : true})
+            let foundorcreated = await Cart.findOneAndUpdate({productId : req.body.productId, userId : req.authenticatedUser.id}, {amount : req.body.amount}, {upsert : true, runValidators: true, new : true})
             foundorcreated ? res.status(200).json(foundorcreated) : res.status(404).json({message : 'Cart not found'})
         } catch (error) {
-            console.log('error bag createcart', error);
+            // console.log('error bag createcart', error);
             if (error.errors) res.status(400).json(error)
             else res.status(500).json(error)
         }
@@ -37,7 +37,7 @@ class CartController {
                 data.sold += +cart.amount
                 await data.save()
                 console.log('HAI MAU NGECEK ARRAY PRODUK KENAPA GAK MASUK HUHU //////////');
-                console.log(productListFromTrans);
+                // console.log(productListFromTrans);
             })
 
             carts.forEach(cart => {
@@ -56,7 +56,7 @@ class CartController {
             res.status(200).json(carts)
             
         } catch (error) {
-            console.log(error, 'HOIIIII');
+            // console.log(error, 'HOIIIII');
             
             if (error.errors) res.status(400).json(error)
             else res.status(500).json(error)
@@ -68,14 +68,14 @@ class CartController {
             let deleted = await Cart.findByIdAndDelete(req.params.id)
             deleted ? res.status(200).json(deleted) : res.status(404).json({message : 'Cart not deleted'})
         } catch (error) {
-            console.log('error bag DELET CART', error);
+            // console.log('error bag DELET CART', error);
             if (error.errors) res.status(400).json(error)
             else res.status(500).json(error)
         }
     }
 
     static async updateCartQty(req,res) {
-        console.log(req.headers, '???');
+        // console.log(req.headers, '???');
         
         try {
             if (req.body.type == 'inc') {         
@@ -84,9 +84,13 @@ class CartController {
             } else if (req.body.type == 'dec') {
                 let decremented =  await Cart.findOneAndUpdate({_id : req.params.id}, { $inc : { amount : -1} }, {new : true})
                 decremented ? res.status(200).json(decremented) : res.status(404).json({message : 'Cart not found and updated'})
+            } else {
+                let updated =  await Cart.findOneAndUpdate({_id : req.params.id}, { $set : {...req.body} }, {new : true})
+                updated ? res.status(200).json(updated) : res.status(404).json({message : 'Cart not found and updated'})
+
             }
         } catch (error) {
-            console.log('error bag update cart qty', error);
+            // console.log('error bag update cart qty', error);
             if (error.errors) res.status(400).json(error)
             else res.status(500).json(error)
         }

@@ -5,7 +5,6 @@ class ProductController {
 
     static async create(req, res) {
         try {
-            console.log(req.files, 'UDAH DAPAT YA ??');
             let urls = []
             if (req.files) {
                 req.files.forEach(img => {
@@ -18,7 +17,9 @@ class ProductController {
                 res.status(201).json(created)
                 // res.status(200).json(req.files)
             } else {
-                let created = await Product.create({...req.body, image : urls})
+                // console.log('PAK EKO');
+                let created = await Product.create({...req.body})
+                res.status(201).json(created)
             }
         } catch (error) {                        
             if (error.errors) res.status(400).json(error)
@@ -111,7 +112,7 @@ class ProductController {
             // console.log(newArr);
             
             
-            console.log(newArr, 'TERGABUNG SUDAH YA?????');
+            // console.log(newArr, 'TERGABUNG SUDAH YA?????');
             
             let updated = await Product.findByIdAndUpdate(req.params.id, 
                 {$set : {
@@ -124,7 +125,7 @@ class ProductController {
             if (updated) res.status(200).json(updated)
             else res.status(404).json({msg : 'Product not found'})       
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             
             if (error.errors) res.status(400).json(error)
             else {

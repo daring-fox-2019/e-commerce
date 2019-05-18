@@ -6,7 +6,7 @@ module.exports = {
         try {
             let cartId = req.headers.cartid
             let userId = req.authenticatedUser.id
-            console.log('apasih', cartId, userId, 'LALALAAL');
+            // console.log('apasih', cartId, userId, 'LALALAAL');
             
             let found = await Cart.findById(cartId)
             if (!found) {
