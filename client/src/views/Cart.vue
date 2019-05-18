@@ -4,7 +4,12 @@
     <v-container>
       <v-layout>
         <v-flex>
-          <v-layout align-center justify-center v-for="product in products" :key="product._id">
+          <v-layout
+            align-center
+            justify-center
+            v-for="product in this.$store.state.cartCustomer"
+            :key="product._id"
+          >
             <v-flex xs3>
               <v-img :src="product.productId.image" aspect-ratio="4"></v-img>
             </v-flex>
@@ -24,8 +29,8 @@
         <v-flex xs3>
           <div id="boxResume">
             <h2>Total Harga</h2>
-            <h3>Rp. {{ this.totalPrice }}</h3>
-            <v-btn color="success" @click="checkout">Checkout</v-btn>
+            <h3>Rp. {{ this.$store.state.totalPrice }}</h3>
+            <v-btn color="success" to="/checkout">Checkout</v-btn>
           </div>
         </v-flex>
       </v-layout>
@@ -39,34 +44,14 @@ import axios from "axios";
 export default {
   data() {
     return {
-      products: [],
       totalPrice: null
     };
   },
   created() {
-    this.loadData();
+    this.$store.dispatch("loadCartCustomer");
+    
   },
   methods: {
-    loadData() {
-      axios
-        .get("http://localhost:3000/cart", {
-          headers: {
-            token: localStorage.token
-          }
-        })
-        .then(({ data }) => {
-          this.products = data;
-          console.log(data);
-          data.forEach(element => {
-            console.log(element);
-            this.totalPrice +=
-              Number(element.productId.price) * Number(element.quantity);
-          });
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
     remove(id) {
       swal({
         title: "Are you sure to delete this item?",
@@ -90,9 +75,6 @@ export default {
             });
         }
       });
-    },
-    checkout(){
-      
     }
   }
 };

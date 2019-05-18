@@ -5,7 +5,7 @@ let transactionSchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: 'User' }, 
     cart: [{ type: Schema.Types.ObjectId, ref: 'Products' }],
     totalPrice: Number,
-    status: Boolean
+    status: String,
 })
 
 let Transaction = mongoose.model('Transaction',transactionSchema)

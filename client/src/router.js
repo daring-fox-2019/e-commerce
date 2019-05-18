@@ -10,7 +10,7 @@ import Cart from './views/Cart.vue';
 import AddProduct from './views/AddProduct.vue';
 import ListProduct from './views/ListProduct.vue';
 import ListTransaction from './views/ListTransaction.vue';
-
+import Checkout from './views/Checkout.vue';
 
 Vue.use(Router);
 
@@ -64,6 +64,10 @@ export default new Router({
       path: '/cart',
       name: 'cart',
       component: Cart,
+    }, {
+      path: '/checkout',
+      name: 'checkout',
+      component: Checkout,
     }, {
       path: '/transaction',
       name: 'transaction',

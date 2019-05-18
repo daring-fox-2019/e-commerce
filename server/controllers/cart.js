@@ -1,6 +1,6 @@
 const Model = require('../models/cart')
 const Product = require('../models/product')
-
+const axios = require('axios')
 class Cart {
   static create(req, res) {
     Model.find({ $and: [{ userId: req.userId }, { productId: req.body.productId }, { status: 0 }] })
@@ -11,7 +11,7 @@ class Cart {
             .then(productFound => {
               let newQuantity = Number(data.quantity) + 1;
 
-              return Model.findOneAndUpdate({ _id: data._id }, { $set: { quantity: newQuantity} }, { new: true })
+              return Model.findOneAndUpdate({ _id: data._id }, { $set: { quantity: newQuantity } }, { new: true })
             })
         } else {
           return Product.findById(req.body.productId)
@@ -37,7 +37,7 @@ class Cart {
   static update(req, res) {
     Product.findById(req.body.productId)
       .then(data => {
-        return Model.findOneAndUpdate({ _id: req.params.id }, { $set: { quantity: req.body.quantity } }, { useFindAndModify: false , new: true })
+        return Model.findOneAndUpdate({ _id: req.params.id }, { $set: { quantity: req.body.quantity } }, { useFindAndModify: false, new: true })
       })
       .then(data => {
         res.status(200).json(data)
@@ -62,7 +62,7 @@ class Cart {
       .populate('userId')
       .populate('productId')
       .then(data => {
-        res.status(200).json(data)
+          res.status(200).json(data)
       })
       .catch(err => {
         res.status(500).json(err)
