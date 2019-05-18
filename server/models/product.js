@@ -28,7 +28,10 @@ const productSchema = new Schema({
         type: Schema.Types.ObjectId,
         required : [true, 'Category cannot be empty'],
         ref: 'Category'
-
+    },
+    sold : {
+        type : Number,
+        default : 0
     }
 
 })

@@ -28,27 +28,36 @@ class CartController {
 
     static async checkoutDelete(req, res) {
         try {
-            let populated = []
+            let productListFromTrans = []
             let carts = await Cart.find({userId : req.authenticatedUser.id})
 
-            await carts.forEach(async cart => {
+            carts.forEach(async cart => {
                 let data = await Product.findById(cart.productId)
                 data.stock -= +cart.amount
+                data.sold += +cart.amount
                 await data.save()
+                console.log('HAI MAU NGECEK ARRAY PRODUK KENAPA GAK MASUK HUHU //////////');
+                console.log(productListFromTrans);
             })
 
+            carts.forEach(cart => {
+                productListFromTrans.push({productId : cart.productId, amount : cart.amount})
+            })
+            
             await Transaction.create({
                 userId : req.authenticatedUser.id, 
-                carts : populated, 
+                carts : productListFromTrans, 
                 total : req.body.total,
                 deliverPrice : req.body.deliverPrice,
                 address : req.body.address,
                 recipientName : req.body.recipientName
             })
             let deleted = await Cart.deleteMany({userId : req.authenticatedUser.id})
-            res.status(200).json(deleted)
+            res.status(200).json(carts)
             
         } catch (error) {
+            console.log(error, 'HOIIIII');
+            
             if (error.errors) res.status(400).json(error)
             else res.status(500).json(error)
         }

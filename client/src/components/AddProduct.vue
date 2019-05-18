@@ -53,6 +53,12 @@
       </div> -->
     </div>
 
+    <div class="row">
+      <ul class="text-center col-md-2" v-for="(link, idx) in currentProduct.image" :key="idx" >
+        <li><img style="max-height:10vh;" :src="link"  id="blah"><button v-on:click.prevent="spliceMe(idx)" class="btn"> <i style="font-size:0.8rem" class="fas fa-trash-alt"></i></button></li>
+      </ul>
+    </div>
+
     <label for="comment">Description</label>
     <textarea v-model="description" class="form-control" rows="3" id="description"></textarea>
 
@@ -94,19 +100,33 @@ export default {
             this.price = this.currentProduct.price
             this.description = this.currentProduct.description
             this.category = this.currentProduct.category
-            this.image = this.currentProduct.image
+            this.images = this.currentProduct.image
         }
+    },
+    images() {
+     if(this.$route.params.id == undefined) {
+        this.images = this.currentProduct.image
+     }
     }
   },
   methods: {
+    spliceMe(idx) {
+      console.log(idx, 'brp ya?');
+      this.images.splice(idx,1)
+
+    },
     editProduct(id) {
       let formData = new FormData();
       formData.append("name", this.name);
       formData.append("description", this.description);
       formData.append("stock", this.stock);
       formData.append("price", this.price);
-      formData.append("image", this.image);
       formData.append("category", this.category);
+        for (let i = 0; i < this.images.length; i++) {
+          formData.append("image", this.images[i]) 
+          console.log(this.images[i]);
+          console.log(formData);
+      }
 
       this.axios
       .patch(`/products/${id}`, formData, {
@@ -121,7 +141,7 @@ export default {
           this.stock = "";
           this.price = "";
           this.description = "";
-          this.image = "";
+          this.images = []
           this.category = "";
 
         this.swal.fire(
@@ -197,6 +217,9 @@ export default {
 </script>
 
 <style>
+
+.btnremove
+
 .admin-left {
   border-right: 1px solid grey;
 }

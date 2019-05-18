@@ -9,6 +9,6 @@ router.get('/', ProductController.findAll)
 router.get('/:id', ProductController.findOne)
 router.post('/', authenticate, isadmin, images.multer.array('image'), images.sendUploadToGCS, ProductController.create)
 router.delete('/:id', authenticate, isadmin, ProductController.delete)
-router.patch('/:id', authenticate, isadmin,  images.multer.single('image'), images.sendUploadToGCS, ProductController.update)
+router.patch('/:id', authenticate, isadmin,  images.multer.array('image'), images.sendUploadToGCS, ProductController.update)
 
 module.exports = router

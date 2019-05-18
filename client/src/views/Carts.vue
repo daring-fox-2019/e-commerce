@@ -85,22 +85,22 @@
                 <h6 class="my-0">Estimated Sales Tax (Included)</h6>
                 <small class="text-muted">Packing and product-care</small>
               </div>
-              <span class="text-muted">IDR 27500</span>
+              <span class="text-muted">IDR 27,500</span>
             </li>
             <li class="list-group-item d-flex justify-content-between">
               <span>Subtotal (IDR)</span>
-              <strong>{{getTotalCart}}</strong>
+              <strong>{{getTotalCart.toLocaleString()}}</strong>
             </li>
             <li class="list-group-item d-flex justify-content-between bg-light">
               <div class="text-success">
                 <h6 class="my-0">Delivery Price</h6>
                 <small style="text-transform:uppercase;">{{chosenKurir}}</small>
               </div>
-              <span class="text-success">IDR {{deliverPrice}}</span>
+              <span class="text-success">IDR {{deliverPrice.toLocaleString()}}</span>
             </li>
             <li class="list-group-item d-flex justify-content-between">
               <span>Total (IDR)</span>
-              <strong>{{getTotalCart + deliverPrice}}</strong>
+              <strong>{{calcTotal(getTotalCart, deliverPrice)}}</strong>
             </li>
           </ul>
         </div>
@@ -346,6 +346,9 @@ export default {
     }
   },
   methods: {
+    calcTotal(a,b) {
+      return (+a + +b).toLocaleString()
+    },
     pushDeliveryState(val) {
       if (this.deliverPrice.length >= 3) {
           this.deliveryState.pop()

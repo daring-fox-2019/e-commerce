@@ -23,6 +23,11 @@ export default new Router({
       component: () => import(/* webpackChunkName: "Register" */ './views/Register.vue')
     },
     {
+      path: '/user',
+      name: 'user',
+      component: () => import(/* webpackChunkName: "User" */ './views/User.vue')
+    },
+    {
       path: '/carts',
       name: 'carts',
       component: () => import(/* webpackChunkName: "Cart" */ './views/Carts.vue')
@@ -31,6 +36,11 @@ export default new Router({
       path: '/checkout',
       name: 'checkout',
       component: () => import(/* webpackChunkName: "Checkout" */ './views/Checkout.vue')
+    },
+    {
+      path: '/chart',
+      name: 'chart',
+      component: () => import(/* webpackChunkName: "Checkout" */ './components/Chart.vue')
     },
     {
       path: '/products',

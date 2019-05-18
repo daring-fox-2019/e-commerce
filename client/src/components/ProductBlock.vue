@@ -18,8 +18,10 @@
   <div class="row px-3">
     <div 
     v-for="(img, index) in product.image" 
-    class="col-lg-2">
-      <img style="max-width:3vh;  border:1px solid black; border-radius:50%; padding:3px; " :src="img">
+    class="col-lg-2"
+    v-bind:key="index"
+    >
+      <img  style="max-width:3vh;  border:1px solid black; border-radius:50%; padding:3px; " :src="img" >
     </div>
   </div>
 </div>

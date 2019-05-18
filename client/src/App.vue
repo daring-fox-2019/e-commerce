@@ -18,6 +18,9 @@
             <router-link class="nav-link active" to="/carts">Cart</router-link>
           </li>
           <li class="nav-item">
+            <router-link class="nav-link active" to="/user">User</router-link>
+          </li>
+          <li class="nav-item">
             <router-link class="nav-link active" to="/admin">Admin</router-link>
           </li>
           <li v-if="isLogin" @click="signOut" class="nav-item">
@@ -71,6 +74,7 @@ export default {
   data() {
     return {
       isLogin: false,
+      role : "",
       categoryList : [],
       productList: [],
     };

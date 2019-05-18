@@ -97,7 +97,7 @@ export default {
           localStorage.setItem("name", data.name);
 
           this.swal.fire("Logged in", "Have a nice day", "success");
-          this.$emit("loginsuccess");
+          this.$emit("loginsuccess", data.role);
         })
         .catch(err => {
           this.swal.fire("Error", "Cannot login", "error");

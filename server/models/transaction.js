@@ -10,8 +10,11 @@ const transactionSchema = new Schema({
         type : String
     },
     carts: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Product'
+        productId : {
+            type: Schema.Types.ObjectId,
+            ref: 'Product'
+        },
+        amount : Number
     }],
     address: {
         type: String,

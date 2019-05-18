@@ -5,7 +5,7 @@ class ProductController {
 
     static async create(req, res) {
         try {
-            console.log(req.files, 'UDAH DAPAjhASJHasjhaST YA ??');
+            console.log(req.files, 'UDAH DAPAT YA ??');
             let urls = []
             if (req.files) {
                 req.files.forEach(img => {
@@ -33,7 +33,7 @@ class ProductController {
             console.log('hii mau cari semua barang');
            let found = await Product.find({}).populate('category')
            res.status(200).json(found) 
-           console.log('apa temuan', found);
+        //    console.log('apa temuan', found);
            
         } catch (error) {
             if (error.errors) res.status(400).json(error)
@@ -41,6 +41,29 @@ class ProductController {
                 res.status(500).json(error)
             } 
         }
+    }
+
+    static countByProduct(req, res) {
+        try {
+            
+        } catch (error) {
+            
+        }
+    }
+
+
+    static deductStock(id, amount) {
+        Product.findById(id)
+        .then(foundProduct => {
+            // console.log(foundProduct, 'apakah dapat produk tsb');
+            // console.log('====================-=', foundProduct.stock, '///////' ,amount);
+            foundProduct.stock -= +amount
+            return foundProduct.save()
+            
+        })
+        .catch(err => {
+            res.status(400).json(err)
+        })
     }
 
     static async findOne(req, res) {
@@ -71,11 +94,37 @@ class ProductController {
 
     static async update(req, res) {
         try {
-            let url = req.file ? req.file.cloudStoragePublicUrl : req.body.image;
-            let updated = await Product.findByIdAndUpdate(req.params.id, {$set : {...req.body, image : url}}, {useFindAndModify : false, runValidators: true, new : true})
+            // console.log(req.body,'MAAASUK'); 
+            let urls = []
+            if (req.files) {
+                req.files.forEach(img => {
+                    // console.log(img.cloudStoragePublicUrl, 'IMG APA SIH');
+                    urls.push(img.cloudStoragePublicUrl)                    
+                })
+            } else {
+                // console.log(req.body)
+                urls = req.body.image
+            }
+
+            let newArr = [...req.body.image, ...urls]
+            // console.log(...req.body.image, '//////', urls);
+            // console.log(newArr);
+            
+            
+            console.log(newArr, 'TERGABUNG SUDAH YA?????');
+            
+            let updated = await Product.findByIdAndUpdate(req.params.id, 
+                {$set : {
+                    name : req.body.name, 
+                    description : req.body.description, 
+                    stock : req.body.stock, 
+                    price: req.body.price,
+                    category : req.body.category,
+                    image : newArr}}, {useFindAndModify : false, runValidators: true, new : true})
             if (updated) res.status(200).json(updated)
             else res.status(404).json({msg : 'Product not found'})       
         } catch (error) {
+            console.log(error);
             
             if (error.errors) res.status(400).json(error)
             else {

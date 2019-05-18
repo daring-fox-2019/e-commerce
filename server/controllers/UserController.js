@@ -20,7 +20,7 @@ class UserController {
                 if (!bcrypt.compareSync (req.body.password, found.password)) {
                     res.status(400).json({message : 'Username/Password Invalid'})
                 } else {
-                    let {email, _id, name} = found
+                    let {email, _id, name, role} = found
                     let token = jwt.sign({
                         id : _id,
                         email,
@@ -28,7 +28,7 @@ class UserController {
                     }, process.env.JWT_SECRET)
                     req.headers.token = token
 
-                    res.status(200).json({token, _id, name})
+                    res.status(200).json({token, _id, name, role})
                 }
             } else {
                 res.status(400).json({message : 'Username/Password Invalid'})
