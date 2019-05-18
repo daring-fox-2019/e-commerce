@@ -4,6 +4,7 @@ const { generateToken } = require(`../helpers/token`);
 
 class cUser {
   static register(req, res) {
+    console.log("register")
     User.create(req.body)
       .then(created => {
         res.status(201).json(created);

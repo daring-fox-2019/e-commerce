@@ -35,7 +35,7 @@ describe(`POST /register`, function() {
   describe(`Correct Input`, function() {
     it(`should return ${JSON.stringify(
       userDummy1
-    )} with status 201`, function() {
+    )} with status 201`, function(done) {
       chai
         .request(app)
         .post(`/register`)
@@ -44,14 +44,29 @@ describe(`POST /register`, function() {
           expect(err).to.be.null;
           expect(res).to.have.status(201);
           expect(res.body).to.be.an(`object`);
-          expect(res.body).to.have.property(`token`);
           expect(res.body).to.have.property(`email`);
-          expect(res.body).to.have.property(`id`);
+          expect(res.body).to.have.property(`_id`);
+          done();
+        });
+    });
+  });
+  describe(`Unique Validation`, function() {
+    it(`should return {{ message }}get status 400`, function(done) {
+      chai
+        .request(app)
+        .post(`/register`)
+        .send(userDummy1)
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an(`object`);
+          expect(res.body).to.have.property(`message`);
+          done();
         });
     });
   });
   describe(`Wrong Input : email validation`, function() {
-    it(`should return { message: "" } with status 400`, function() {
+    it(`should return { message: "" } with status 400`, function(done) {
       chai
         .request(app)
         .post(`/register`)
@@ -62,21 +77,23 @@ describe(`POST /register`, function() {
           expect(res.body).to.be.an(`object`);
           expect(res.body).to.have.property(`message`);
           expect(res.body.message).to.have.be.an(`string`);
+          done();
         });
     });
   });
   describe(`Wrong Input : password validation`, function() {
-    it(`should return { message: "" } with status 400`, function() {
+    it(`should return { message: "" } with status 400`, function(done) {
       chai
         .request(app)
         .post(`/login`)
         .send(userDummy3)
         .end(function(err, res) {
           expect(err).to.be.null;
-          expect(res).to.have.status(500);
+          expect(res).to.have.status(400);
           expect(res.body).to.be.an(`object`);
           expect(res.body).to.have.property(`message`);
           expect(res.body.message).to.have.be.an(`string`);
+          done();
         });
     });
   });
@@ -84,7 +101,7 @@ describe(`POST /register`, function() {
 
 describe(`POST /login`, function() {
   describe(`Correct Input`, function() {
-    it(`should return { token, email, id }`, function() {
+    it(`should return { token, email, id }`, function(done) {
       chai
         .request(app)
         .post(`/login`)
@@ -96,11 +113,12 @@ describe(`POST /login`, function() {
           expect(res.body).to.have.property(`token`);
           expect(res.body).to.have.property(`email`);
           expect(res.body).to.have.property(`id`);
+          done();
         });
     });
   });
   describe(`Wrong Email`, function() {
-    it(`should return { message: "" } with status 400`, function() {
+    it(`should return { message: "" } with status 400`, function(done) {
       chai
         .request(app)
         .post(`/login`)
@@ -111,11 +129,12 @@ describe(`POST /login`, function() {
           expect(res.body).to.be.an(`object`);
           expect(res.body).to.have.property(`message`);
           expect(res.body.message).to.have.be.an(`string`);
+          done();
         });
     });
   });
   describe(`Wrong Password`, function() {
-    it(`should return { message: "" } with status 400`, function() {
+    it(`should return { message: "" } with status 400`, function(done) {
       chai
         .request(app)
         .post(`/login`)
@@ -126,6 +145,7 @@ describe(`POST /login`, function() {
           expect(res.body).to.be.an(`object`);
           expect(res.body).to.have.property(`message`);
           expect(res.body.message).to.have.be.an(`string`);
+          done();
         });
     });
   });
