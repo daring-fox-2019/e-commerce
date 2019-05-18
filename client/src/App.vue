@@ -25,14 +25,33 @@
           </v-list-tile-content>
         </v-list-tile>
         <!-- Products -->
-        <v-list-tile to="/products">
-          <v-list-tile-action>
-            <v-icon>assignment</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Products</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+        <v-list-group
+          prepend-icon="assignment"
+          value="true">
+          <template v-slot:activator>
+            <v-list-tile>
+              <v-list-tile-content>
+                <v-list-tile-title>Products</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </template>
+          <v-list-tile class="ml-4" to="/products">
+            <v-list-tile-action>
+              <v-icon>assignment</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Products List</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-list-tile class="ml-4" to="/addproduct">
+            <v-list-tile-action>
+              <v-icon>add</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Add Product</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list-group>
         <!-- Products -->
         <v-list-tile to="/cart" v-if="isLogin">
           <v-list-tile-action>
@@ -43,6 +62,7 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
+
     </v-navigation-drawer>
     <v-toolbar fixed app dense class="topNav">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>

@@ -1,6 +1,6 @@
 <template>
   <v-hover>
-    <v-card slot-scope="{ hover }" class="mx-auto" color="grey lighten-4" max-width="600">
+    <v-card slot-scope="{ hover }" class="mx-auto" color="grey lighten-4" max-width="300">
       <v-img :aspect-ratio="16/9" src="https://cdn.vuetifyjs.com/images/cards/kitchen.png">
         <v-expand-transition>
           <div
@@ -15,11 +15,17 @@
           <v-icon>shopping_cart</v-icon>
         </v-btn>
         <div class="font-weight-light grey--text title mb-2">Fiqh</div>
-        <h3 class="display-1  grey--text mb-2">Sifat Shalat Nabi</h3>
+        <h3 class="grey--text mb-2">Sifat Shalat Nabi</h3>
         <div class="font-weight-light black--text mb-2 text-truncate">
           Our Vintage kitchen utensils delight any chef.Made of bamboo by hand
         </div>
       </v-card-text>
+      <v-layout row v-if="$store.state.user && $store.state.user.role === 'admin'">
+        <v-flex>
+          <v-btn color="blue" small>Update</v-btn>
+          <v-btn color="red" small>Delete</v-btn>
+        </v-flex>
+      </v-layout>
     </v-card>
   </v-hover>
 </template>
