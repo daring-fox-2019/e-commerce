@@ -1,8 +1,8 @@
 const router = require(`express`).Router();
 
-const user = require(`../controllers/user`);
-const product = require(`../controllers/product`);
-const cart = require(`../controllers/cart`);
+const user = require("../controllers/userc");
+const product = require(`../controllers/productc`);
+const cart = require("../controllers/cartc");
 
 const {
   authentication,
@@ -11,25 +11,24 @@ const {
 } = require(`../middlewares/auth`);
 
 const { sendUploadToGCS, multer } = require(`../middlewares/uploadtogcs`);
-adminAccess;
 
-router.post(`/register`, user.register); // request data { email, password } // response on success {id, name, email, password}
-router.post(`/login`, user.login); // request data : {email, password} // response on success {id, name, email, token}
+router.post("/register", user.register);
+router.post(`/login`, user.login);
 
 router.use(authentication);
-router.post(`/cart`, cart.post);
+router.post(`/cart`, cart.create);
 router.get(`/carts`, cart.carts);
 
-router.get(`/cart/:id`, authorization, cart.detail); // request headers : token // response on success [{},{}]
+router.get(`/cart/:id`, authorization, cart.detail);
 router.delete(`/cart/:id`, authorization, cart.delete);
-router.update(`/cart/:id`, authorization, cart.update);
+router.put(`/cart/:id`, authorization, cart.update);
 
 router.get(`/products`, product.products);
 router.post(`/product`, adminAccess, product.create);
 
-router.get(`/product/:id`, product.detail); // request headers : token // response on success [{},{}]
+router.get(`/product/:id`, product.detail);
 router.delete(`/product/:id`, adminAccess, product.delete);
-router.update(`/product/:id`, product.update);
+router.put(`/product/:id`, product.update);
 
 router.post(
   `/uploadimg`,
@@ -44,4 +43,5 @@ router.post(
     }
   }
 );
+
 module.exports = router;

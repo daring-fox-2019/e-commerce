@@ -70,3 +70,5 @@ class cProduct {
       })
   }
 }
+
+module.exports = cProduct
