@@ -16,11 +16,11 @@ function authentication(req, res, next){
     .catch(err=>{
         res.status(500).json({message: 'Unauthorized'})
     })
-    
+    process.env.VUE_APP_asdad
 }
 
 function authorization(req, res, next){
-    Cart.findOne({_id:req.params.id})
+    Cart.findById(req.params.id)
     .then(data=>{
         if(String(data.userId)===String(req.userId)){
             next()

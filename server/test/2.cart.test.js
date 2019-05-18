@@ -76,8 +76,6 @@ describe('Cart', function () {
           res.body.productId.should.be.a('string');
           res.body.should.have.property('quantity');
           res.body.quantity.should.be.a('number');
-          res.body.should.have.property('totalPrice');
-          res.body.totalPrice.should.be.a('number');
           res.body.should.have.property('status');
           res.body.status.should.be.a('boolean');
           cartId = res.body._id
@@ -104,8 +102,6 @@ describe('Cart', function () {
           res.body[0].productId.should.be.an('object');
           res.body[0].should.have.property('quantity');
           res.body[0].quantity.should.be.a('number');
-          res.body[0].should.have.property('totalPrice');
-          res.body[0].totalPrice.should.be.a('number');
           res.body[0].should.have.property('status');
           res.body[0].status.should.be.a('boolean');
           done();
@@ -135,8 +131,6 @@ describe('Cart', function () {
           res.body.productId.should.be.a('string');
           res.body.should.have.property('quantity');
           res.body.quantity.should.be.a('number');
-          res.body.should.have.property('totalPrice');
-          res.body.totalPrice.should.be.a('number');
           res.body.should.have.property('status');
           res.body.status.should.be.a('boolean');
           done();

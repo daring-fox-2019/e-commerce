@@ -13,7 +13,8 @@ before(function (done) {
 let newUser = {
   name: 'tio',
   email: 'tio@gmail.com',
-  password: '123'
+  password: '123',
+  role: 'admin'
 }
 
 let userLogin = {
@@ -41,6 +42,9 @@ describe('User', function () {
           res.body.should.have.property('password');
           res.body.password.should.be.a('string');
           res.body.password.should.not.equal(newUser.password);
+          res.body.should.have.property('role');
+          res.body.role.should.be.a('string');
+          res.body.role.should.not.equal(newUser.role);
           done();
         })
     })

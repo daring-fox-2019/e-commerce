@@ -10,9 +10,8 @@ class Cart {
           return Product.findById(req.body.productId)
             .then(productFound => {
               let newQuantity = Number(data.quantity) + 1;
-              let newTotal = Number(data.totalPrice) + Number(productFound.price);
 
-              return Model.findOneAndUpdate({ _id: data._id }, { $set: { quantity: newQuantity, totalPrice: newTotal } }, { new: true })
+              return Model.findOneAndUpdate({ _id: data._id }, { $set: { quantity: newQuantity} }, { new: true })
             })
         } else {
           return Product.findById(req.body.productId)
@@ -21,7 +20,6 @@ class Cart {
                 userId: req.userId,
                 productId: req.body.productId,
                 quantity: 1,
-                totalPrice: data.price,
                 status: 0,
               })
               return Model.create(newCart)
@@ -39,9 +37,7 @@ class Cart {
   static update(req, res) {
     Product.findById(req.body.productId)
       .then(data => {
-        let total = req.body.quantity * data.price
-
-        return Model.findOneAndUpdate({ _id: req.params.id }, { $set: { quantity: req.body.quantity, totalPrice: total } }, { useFindAndModify: false , new: true })
+        return Model.findOneAndUpdate({ _id: req.params.id }, { $set: { quantity: req.body.quantity } }, { useFindAndModify: false , new: true })
       })
       .then(data => {
         res.status(200).json(data)

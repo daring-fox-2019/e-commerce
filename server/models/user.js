@@ -22,6 +22,7 @@ let userSchema = new Schema({
     }]
   },
   password: String,
+  role: String,
 })
 
 userSchema.pre('save', function (next) {
