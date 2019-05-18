@@ -1,7 +1,7 @@
 <template>
   <v-container fluid fill-height>
     <v-layout align-center justify-center>
-      <v-flex xs12 sm8 md4>
+      <v-flex>
         <v-card class="elevation-12">
           <v-toolbar dark color="dark">
             <v-toolbar-title>Add Product</v-toolbar-title>
@@ -81,12 +81,7 @@ export default {
   },
   methods: {
     reset() {
-      (this.product.name = ''),
-      (this.product.price = ''),
-      (this.product.stock = ''),
-      (this.product.imageFile = ''),
-      (this.product.imageName = ''),
-      (this.product.imageUrl = '');
+      (this.product.name = '')(this.product.price = '')(this.product.stock = '')(this.product.imageFile = '')(this.product.imageName = '')(this.product.imageUrl = '');
     },
 
     pickFile() {
@@ -127,7 +122,7 @@ export default {
         .post('http://localhost:3000/products', data, {
           headers: { token: localStorage.token },
         })
-        .then(({ data }) => {
+        .then(() => {
           console.log('ADD SUKSES');
         })
         .catch((err) => {

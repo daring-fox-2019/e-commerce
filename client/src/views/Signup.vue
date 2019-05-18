@@ -65,16 +65,14 @@ export default {
   },
   methods: {
     reset() {
-      (this.signup.name = ''),
-      (this.signup.email = ''),
-      (this.signup.password = '');
+      (this.signup.name = '')(this.signup.email = '')(this.signup.password = '');
     },
     signUp() {
       console.log('MASUK');
 
       axios
         .post('http://localhost:3000/user/signup', this.signup)
-        .then(({ data }) => {
+        .then(() => {
           this.reset();
           console.log('REGISTER SUKSES');
         })

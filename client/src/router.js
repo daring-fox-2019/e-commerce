@@ -4,7 +4,12 @@ import Home from './views/Home.vue';
 import Product from './views/Product.vue';
 import Signin from './views/Signin.vue';
 import Signup from './views/Signup.vue';
+import Detail from './views/Detail.vue';
+import Admin from './views/Admin.vue';
+import Cart from './views/Cart.vue';
 import AddProduct from './views/AddProduct.vue';
+import ListProduct from './views/ListProduct.vue';
+import ListTransaction from './views/ListTransaction.vue';
 
 
 Vue.use(Router);
@@ -21,6 +26,13 @@ export default new Router({
       path: '/product',
       name: 'product',
       component: Product,
+      children: [
+        {
+          path: ':id',
+          name: 'detail',
+          component: Detail,
+        },
+      ],
     }, {
       path: '/signin',
       name: 'signin',
@@ -30,11 +42,29 @@ export default new Router({
       name: 'signup',
       component: Signup,
     }, {
-      path: '/admin/addProduct',
-      name: 'addProduct',
-      component: AddProduct,
-    },
-    {
+      path: '/admin',
+      name: 'admin',
+      component: Admin,
+      children: [
+        {
+          path: 'addProduct',
+          name: 'addProduct',
+          component: AddProduct,
+        }, {
+          path: 'listProduct',
+          name: 'listProduct',
+          component: ListProduct,
+        }, {
+          path: 'listTransaction',
+          name: 'listTransaction',
+          component: ListTransaction,
+        },
+      ],
+    }, {
+      path: '/cart',
+      name: 'cart',
+      component: Cart,
+    }, {
       path: '/about',
       name: 'about',
       // route level code-splitting

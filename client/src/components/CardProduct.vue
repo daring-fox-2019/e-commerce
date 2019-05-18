@@ -10,34 +10,31 @@
 
     <v-card-actions>
       <v-btn flat color="orange" @click="addCart">Add Cart</v-btn>
-      <v-btn flat color="orange" to="">See More</v-btn>
+      <v-btn flat color="orange" to>See More</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  props: ["product"],
+  props: ['product'],
   methods: {
     addCart() {
-      console.log(this.product._id);
-
       axios
         .post(
-          "http://localhost:3000/cart",
+          'http://localhost:3000/cart',
           { productId: this.product._id },
-          { headers: { token: localStorage.token } }
+          { headers: { token: localStorage.token } },
         )
-        .then(({ data }) => {
-            console.log("ADD CART SUCCESS");
-            
+        .then(() => {
+          console.log('ADD CART SUCCESS');
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
-    }
-  }
+    },
+  },
 };
 </script>
