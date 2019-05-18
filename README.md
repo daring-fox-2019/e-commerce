@@ -199,7 +199,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `400`:
       ```json
       {
-        "message": "<errorMessage>"
+        "message": "<authentication message>"
       }
       ```
       Notes:
@@ -207,8 +207,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
         - no token assigned
         - not allowed to access
         - not recognized input data
-        - Validation Error
-      - ERROR `400` is caused by entering *empty name* or *empty price* or *empty stock* or *negative value price* or or *negative value stock*
+      - ERROR `400` is also Validation Error caused by entering *empty name* or *empty price* or *empty stock* or *negative value price* or or *negative value stock*
     - status: `401`:
       ```json
       {
@@ -283,7 +282,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
     - status: `400`:
       ```json
       {
-        "message": "<errorMessage>",
+        "message": "<authemtication message>"
       }
       ```
       Notes:
@@ -291,7 +290,7 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
         - no token assigned
         - not allowed to access
         - not recognized input data
-        - Validation Error
+      - ERROR `400` is also Validation Error caused by entering *empty name* or *empty price* or *empty stock* or *negative value price* or or *negative value stock*
     - status: `401`:
       ```json
       {
