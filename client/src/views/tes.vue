@@ -44,8 +44,6 @@ export default {
 </script>
 
 <style scoped>
-
-
 .middle {
   transition: 0.5s ease;
   opacity: 0;

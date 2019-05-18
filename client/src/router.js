@@ -65,6 +65,10 @@ export default new Router({
       name: 'cart',
       component: Cart,
     }, {
+      path: '/transaction',
+      name: 'transaction',
+      component: ListTransaction,
+    }, {
       path: '/about',
       name: 'about',
       // route level code-splitting

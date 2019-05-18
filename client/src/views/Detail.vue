@@ -1,22 +1,17 @@
 <template>
   <div class="home">
     <v-layout>
-      <v-flex xs4 id="list">
-        <v-card>
-          <v-flex>
-            <v-card>
-              <v-img :src="product.image" aspect-ratio="2.75" left></v-img>
-              <v-card-title primary-title>
-                <div>
-                  <h3 class="headline mb-0">{{product.name}}</h3>
-                </div>
-              </v-card-title>
-              <v-card-actions>
-                <v-btn flat color="orange" @click="addCart">Add Cart</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-flex>
-        </v-card>
+      <v-flex id="list">
+        <v-img :src="product.image" aspect-ratio="2.75"></v-img>
+        <v-card-title primary-title class="detailProduct">
+          <h1>{{product.name}}</h1>
+        </v-card-title>
+        <v-card-title class="detailProduct">
+          <h3>{{priceProduct}}</h3>
+        </v-card-title>
+        <v-card-actions>
+          <v-btn flat color="orange" @click="addCart">Add Cart</v-btn>
+        </v-card-actions>
       </v-flex>
     </v-layout>
   </div>
@@ -32,11 +27,25 @@ export default {
   data() {
     return {
       product: {},
+      priceProduct: '',
     };
   },
   watch: {
     $route() {
       this.fetchData();
+    },
+    product(val) {
+      let rupiah = '';
+      const angkarev = val.price
+        .toString()
+        .split('')
+        .reverse()
+        .join('');
+      for (let i = 0; i < angkarev.length; i++) if (i % 3 === 0) rupiah += `${angkarev.substr(i, 3)}.`;
+      this.priceProduct = `Rp. ${rupiah
+        .split('', rupiah.length - 1)
+        .reverse()
+        .join('')}`;
     },
   },
   created() {
@@ -72,8 +81,8 @@ export default {
 </script>
 
 <style scoped>
-.car {
-  margin-bottom: 15px;
+.detailProduct {
+  margin-left: 30px;
 }
 
 #list {

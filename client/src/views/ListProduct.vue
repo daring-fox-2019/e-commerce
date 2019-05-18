@@ -5,7 +5,7 @@
         <v-container fluid>
           <v-layout row wrap>
             <v-flex v-for="product in listProduct" :key="product._id" xs6>
-                <Product :product="product"/>
+              <Product :product="product"/>
             </v-flex>
           </v-layout>
         </v-container>
@@ -15,23 +15,23 @@
 </template>
 
 <script>
-import axios from "axios";
-import Product from "@/components/Product";
+import axios from 'axios';
+import Product from '@/components/Product.vue';
 
 export default {
   components: {
-    Product
+    Product,
   },
   data() {
     return {
-      listProduct: []
+      listProduct: [],
     };
   },
   created() {
-    axios.get("http://localhost:3000/products").then(({ data }) => {
+    axios.get('http://localhost:3000/products').then(({ data }) => {
       this.listProduct = data;
     });
-  }
+  },
 };
 </script>
 

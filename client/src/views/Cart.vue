@@ -1,53 +1,46 @@
 <template>
   <div id="container">
     <h3>My Cart</h3>
-    <b-row class="list" v-for="product in products" :key="product._id">
-      <b-col></b-col>
-      <b-col cols="8">
-        <b-row id="card">
-          <b-col id="left">
-            <!-- {{ product.image }} -->
-            <b-img :src="product.productId.image" style="width:100px; height:100px;"></b-img>
-          </b-col>
-          <b-col cols="6" id="center">
-            <h3>{{ product.productId.name }}</h3>
-            <h6>Rp. {{ product.productId.price }}</h6>
-          </b-col>
-          <b-col id="right">
-            <h4>Quantity :  {{ product.quantity }}</h4>
-          </b-col>
-          <b-col id="right" >
-            <div id="right1">
-              <h3>Total</h3>
-              <h6>Rp.{{ product.productId.price*product.quantity }}</h6>
-            </div>
-            <div id="right2">
-              <i class="fas fa-trash-alt" @click="remove(product._id)"></i>
-            </div>
-          </b-col>
-        </b-row>
-      </b-col>
-      <b-col></b-col>
-    </b-row>
-    <div id="resume">
-      <!-- <div style="border: 1px solid black; width: 150px;"> -->
-      <div id="boxResume">
-        <h4>Total Harga</h4>
-        <h5>Rp. {{ this.totalPrice }}</h5>
-        <b-button size="sm" class="my-2 my-sm-0" variant="success">Checkout</b-button>
-      </div>
-    </div>
+    <v-container>
+      <v-layout>
+        <v-flex>
+          <v-layout align-center justify-center v-for="product in products" :key="product._id">
+            <v-flex xs3>
+              <v-img :src="product.productId.image" aspect-ratio="4"></v-img>
+            </v-flex>
+            <v-flex>
+              <h2>{{ product.productId.name }}</h2>
+              <h3>Price : {{ product.productId.price }}</h3>
+            </v-flex>
+            <v-flex xs2>
+              <h3>Quantity : {{ product.quantity }}</h3>
+            </v-flex>
+            <v-flex xs1>
+              <v-icon class="mr-2" @click="remove(product._id)">delete</v-icon>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+
+        <v-flex xs3>
+          <div id="boxResume">
+            <h2>Total Harga</h2>
+            <h3>Rp. {{ this.totalPrice }}</h3>
+            <v-btn color="success" @click="checkout">Checkout</v-btn>
+          </div>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
     return {
       products: [],
-      totalPrice: null,
+      totalPrice: null
     };
   },
   created() {
@@ -55,41 +48,53 @@ export default {
   },
   methods: {
     loadData() {
-      console.log(localStorage.token);
       axios
-        .get('http://localhost:3000/cart', {
+        .get("http://localhost:3000/cart", {
           headers: {
-            auth: localStorage.token,
-          },
+            token: localStorage.token
+          }
         })
         .then(({ data }) => {
           this.products = data;
           console.log(data);
-          data.forEach((element) => {
+          data.forEach(element => {
             console.log(element);
-            this.totalPrice += Number(element.productId.price) * Number(element.quantity);
+            this.totalPrice +=
+              Number(element.productId.price) * Number(element.quantity);
           });
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     },
     remove(id) {
-      axios
-        .delete(`http://localhost:3000/cart/${id}`, {
-          headers: {
-            auth: localStorage.token,
-          },
-        })
-        .then(({ data }) => {
-          this.loadData();
-          swal('Delete Cart Success', '', 'success');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      swal({
+        title: "Are you sure to delete this item?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+      }).then(willDelete => {
+        if (willDelete) {
+          axios
+            .delete(`http://localhost:3000/cart/${id}`, {
+              headers: {
+                token: localStorage.token
+              }
+            })
+            .then(({ data }) => {
+              this.loadData();
+              swal("Delete Cart Success", "success");
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      });
     },
-  },
+    checkout(){
+      
+    }
+  }
 };
 </script>
 
@@ -103,7 +108,6 @@ export default {
 #boxResume {
   padding: 20px;
   border: 1px solid black;
-  width: 300px;
 }
 #container {
   padding: 20px;
@@ -130,17 +134,16 @@ export default {
 #card:hover {
   box-shadow: 1px 1px 1px 1px;
 }
-#right{
+#right {
   display: flex;
   flex-direction: row;
-  align-items: center
-
+  align-items: center;
 }
-#right1{
+#right1 {
   width: 80%;
 }
-#right2{
+#right2 {
   display: flex;
-  align-items: center
+  align-items: center;
 }
 </style>

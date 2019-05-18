@@ -2,7 +2,7 @@
   <div id="app">
     <v-app>
       <Header/>
-      <v-content >
+      <v-content>
         <v-container fluid fill-height id="container">
           <v-layout justify-center>
             <v-flex>
@@ -28,11 +28,16 @@ export default {
     Header,
     Footer,
   },
+  created(){
+    if(localStorage.token){
+      this.$store.commit('setLogin', true)
+    }
+  }
 };
 </script>
 <style>
-#container{
-  padding:0;
+#container {
+  padding: 0;
 }
 #app {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;

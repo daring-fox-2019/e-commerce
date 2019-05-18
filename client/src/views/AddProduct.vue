@@ -81,7 +81,11 @@ export default {
   },
   methods: {
     reset() {
-      (this.product.name = '')(this.product.price = '')(this.product.stock = '')(this.product.imageFile = '')(this.product.imageName = '')(this.product.imageUrl = '');
+      (this.product.name = '')((this.product.price = ''))(
+        (this.product.stock = ''),
+      )((this.product.imageFile = ''))((this.product.imageName = ''))(
+        (this.product.imageUrl = ''),
+      );
     },
 
     pickFile() {

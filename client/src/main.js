@@ -4,6 +4,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import 'vuetify/dist/vuetify.min.css';
+import swal from 'sweetalert';
 
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
@@ -11,5 +12,6 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
+  swal,
   render: h => h(App),
 }).$mount('#app');

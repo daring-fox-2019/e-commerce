@@ -32,7 +32,6 @@
             <span>
               <router-link to="/signup">Not Registered?</router-link>
             </span>
-            <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
             <v-btn flat @click="signIn">Signin</v-btn>
           </v-card-actions>
         </v-card>
@@ -66,7 +65,12 @@ export default {
           this.signin.password = '';
           localStorage.setItem('token', data.token);
           localStorage.setItem('name', data.name);
-          console.log('LOGIN SUKSES');
+          this.$store.commit('setLogin', true); 
+          if (data.role) {
+            this.$store.commit('setAdmin', true);
+          }
+          swal('Welcome back!', 'Login Success', 'success');
+          this.$router.push('/');
         })
         .catch((err) => {
           console.log(err);

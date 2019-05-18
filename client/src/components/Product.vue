@@ -15,26 +15,26 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  props: ["product"],
+  props: ['product'],
   methods: {
     addCart() {
       axios
         .post(
-          "http://localhost:3000/cart",
+          'http://localhost:3000/cart',
           { productId: this.product._id },
-          { headers: { token: localStorage.token } }
+          { headers: { token: localStorage.token } },
         )
         .then(() => {
-          console.log("ADD CART SUCCESS");
+          console.log('ADD CART SUCCESS');
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

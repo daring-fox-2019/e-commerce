@@ -27,7 +27,10 @@ export default {
         },
         { text: 'Stock', value: 'calories', width: '1%' },
         {
-          text: 'Action', align: 'center', value: 'carbs', width: '1%',
+          text: 'Action',
+          align: 'center',
+          value: 'carbs',
+          width: '1%',
         },
       ],
       desserts: [

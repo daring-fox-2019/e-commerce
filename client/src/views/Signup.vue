@@ -65,7 +65,9 @@ export default {
   },
   methods: {
     reset() {
-      (this.signup.name = '')(this.signup.email = '')(this.signup.password = '');
+      (this.signup.name = '')((this.signup.email = ''))(
+        (this.signup.password = ''),
+      );
     },
     signUp() {
       console.log('MASUK');
