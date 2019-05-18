@@ -1,7 +1,7 @@
 const Cart = require(`../models/cart`);
 
 class cCart {
-  static post(req, res) {
+  static create(req, res) {
     Cart.create(req.body)
       .then(created => {
         res.status(201).json(created);

@@ -1,4 +1,4 @@
-const { Storage } = require("@google-cloud/storage");
+const { Storage } = require(`@google-cloud/storage`);
 const CLOUD_BUCKET = process.env.CLOUD_BUCKET;
 
 const storage = new Storage({
@@ -24,12 +24,12 @@ const sendUploadToGCS = (req, res, next) => {
     }
   });
 
-  stream.on("error", err => {
+  stream.on(`error`, err => {
     req.file.cloudStorageError = err;
     next(err);
   });
 
-  stream.on("finish", () => {
+  stream.on(`finish`, () => {
     req.file.cloudStorageObject = gcsname;
     file.makePublic().then(() => {
       req.file.cloudStoragePublicUrl = getPublicUrl(gcsname);
@@ -40,7 +40,7 @@ const sendUploadToGCS = (req, res, next) => {
   stream.end(req.file.buffer);
 };
 
-const Multer = require("multer");
+const Multer = require(`multer`);
 const multer = Multer({
   storage: Multer.MemoryStorage,
   limits: {

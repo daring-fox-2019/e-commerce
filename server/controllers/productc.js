@@ -1,7 +1,7 @@
 const Product = require(`../models/product`);
 
 class cProduct {
-  static post(req, res) {
+  static create(req, res) {
     Product.create(req.body)
       .then(created => {
         res.status(201).json(created);
