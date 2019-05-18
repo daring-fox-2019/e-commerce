@@ -20,9 +20,16 @@
           v-bind:value="product.description"
           placeholder="Enter your product description"
         ></v-textarea>
-        <v-flex py-3>
-          <h2 class="mb-2">Stock Quantity</h2>
-          <Quantity :quantity="product.stock" @updatequantity="updateProductStock"></Quantity>
+        <v-flex xs12 md6 lg4>
+            <v-layout>
+                <v-flex>
+                    <h2 class="mb-2">Stock Quantity</h2>
+                    <Quantity :quantity="product.stock" @updatequantity="updateProductStock"></Quantity>
+                </v-flex>
+                <v-flex lg6>
+                    <v-text-field class="mt-3" v-model="product.price" label="Unit Price"></v-text-field>
+                </v-flex>
+            </v-layout>
         </v-flex>
         <v-flex py-3 mb-5>
           <h2>Product Image</h2>
@@ -59,7 +66,8 @@ export default {
       name: "",
       description: "",
       image: "",
-      stock: 0
+      stock: 0,
+      price: 0,
     },
     nameRules: [v => !!v || "Name is required"],
   }),

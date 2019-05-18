@@ -1,7 +1,7 @@
 <template>
   <v-hover>
     <v-card slot-scope="{ hover }" class="mx-auto" color="grey lighten-4" max-width="300">
-      <v-img :aspect-ratio="16/9" src="https://cdn.vuetifyjs.com/images/cards/kitchen.png">
+      <v-img :aspect-ratio="16/9" :src="product.image">
         <v-expand-transition>
           <div
             v-if="hover"
@@ -31,7 +31,7 @@
 </template>
 <script>
 export default {
-    
+    props: ['product']
 }
 </script>
 
