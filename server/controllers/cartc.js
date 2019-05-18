@@ -27,7 +27,7 @@ class cCart {
         if (found) {
           res.status(200).json(found);
         } else {
-          res.status(200).json({ message: `that is not exists` });
+          res.status(400).json({ message: `that is not exists` });
         }
       })
       .catch(err => {
@@ -45,18 +45,20 @@ class cCart {
               result.push(cart);
             }
           });
-          res.status(200).json(result)
+          res.status(200).json(result);
         } else {
           res.status(200).json(founds);
         }
       })
-      .catch(err => {});
+      .catch(err => {
+        res.status(500).json({ message: `internal server error` });
+      });
   }
 
   static update(req, res) {
     Cart.findByIdAndUpdate(req.params.id, req.body)
       .then(updated => {
-        res.status(201).json(updated);
+        res.status(200).json(updated);
       })
       .catch(err => {
         res.status(500).json({ message: `internal server error` });
@@ -64,4 +66,4 @@ class cCart {
   }
 }
 
-module.exports = cCart
+module.exports = cCart;
