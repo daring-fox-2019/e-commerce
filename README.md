@@ -372,36 +372,7 @@ Error Example
     "message" : "please include valid access token"
 }
 ```
-```sh
-GET /products
-```
-* Headers : none
-* Body    : none
-* Success : Status:200, dataTypes:{}
-* Error : Status:500 , dataTypes:{}
 
-Example Output
-```javascript
-[
-    {
-        "items": [
-            "5ce020f975608d3afde47097"
-        ],
-        "status": "waiting for payment",
-        "_id": "5ce038f287efec3ed3975a29",
-        "user": "5ce016ffc07e47377880c344",
-        "created_at": "2019-05-18T16:55:14.055Z",
-        "updatedAt": "2019-05-18T16:55:14.055Z",
-        "__v": 0
-    }
-]
-```
-Error Example
-```javascript
-{
-    "message" : "please include valid access token"
-}
-```
 ### Find Specific Transaction
 ```sh
 GET /transactions/:transaction_id
