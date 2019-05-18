@@ -2,6 +2,7 @@ const Product = require(`../models/product`);
 
 class cProduct {
   static create(req, res) {
+    console.log(req.body)
     Product.create(req.body)
       .then(created => {
         res.status(201).json(created);
@@ -27,7 +28,7 @@ class cProduct {
         if (found) {
           res.status(200).json(found);
         } else {
-          res.status(200).json({ message: `that is not exists` });
+          res.status(400).json({ message: `that is not exists` });
         }
       })
       .catch(err => {
@@ -36,9 +37,9 @@ class cProduct {
   }
 
   static products(req, res) {
-    Product.find({})
+    Product.find()
       .then(founds => {
-        if (req.query.status == "ready") {
+        if (req.query.status == "ready" && founds.length >=1) {
           let ready = [];
           founds.forEach(item => {
             if (item.stock > 0) {
@@ -53,6 +54,17 @@ class cProduct {
           } else {
             res.status(200).json(asc);
           }
+        } else if (founds.length >= 1) {
+          let result = founds.sort((a, b) => {
+            return a.price - b.price;
+          });
+          if (req.query.sort == "desc") {
+            res.status(200).json(result.reverse());
+          } else {
+            res.status(200).json(result);
+          }
+        } else {
+          res.status(200).json(founds);
         }
       })
       .catch(err => {
@@ -61,14 +73,14 @@ class cProduct {
   }
 
   static update(req, res) {
-      Product.findByIdAndUpdate(req.params.id, req.body)
-      .then(updated=>{
-        res.status(201).json(updated);
+    Product.findByIdAndUpdate(req.params.id, req.body)
+      .then(updated => {
+        res.status(200).json(updated);
       })
-      .catch(err=>{
+      .catch(err => {
         res.status(500).json({ message: `internal server error` });
-      })
+      });
   }
 }
 
-module.exports = cProduct
+module.exports = cProduct;

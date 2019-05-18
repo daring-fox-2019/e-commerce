@@ -1,6 +1,6 @@
 const jwt = require(`jsonwebtoken`);
 const Cart = require(`../models/cart`);
-const decodeToken = require(`../helpers/token`);
+const {decodeToken} = require(`../helpers/token`);
 
 function authentication(req, res, next) {
   try {
@@ -38,6 +38,7 @@ function authorization(req, res, next) {
 }
 
 function adminAccess(req, res, next) {
+  console.log("disini")
   if (decodeToken(req.headers.token).email == "admin@myos.com") {
     next();
   } else {

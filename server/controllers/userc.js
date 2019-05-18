@@ -19,9 +19,9 @@ class cUser {
         if (user) {
           if (comparePassword(req.body.password, user.password) === true) {
             let token = generateToken(user._id, user.email);
-            let id = user._id;
+            let _id = user._id;
             let email = user.email;
-            res.status(200).json({ token, id, email });
+            res.status(200).json({ token, _id, email });
           } else {
             res.status(400).json({ message: `password / email wrong :()` });
           }

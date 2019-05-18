@@ -11,7 +11,7 @@ app.use(cors());
 app.use(
   express.urlencoded({
     extended: false,
-    // limit : "2mb"
+    limit : "2mb"
   })
 );
 
@@ -29,6 +29,8 @@ db.once("open", function callback() {
 
 app.use("/", routes);
 
+
+// listen dipake untuk testing di env dev aja ya
 // app.listen(port, ()=>{
 //   console.log("listen")
 // })
