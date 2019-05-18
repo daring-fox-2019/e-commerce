@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 
 function hashPassword(str) {
+  console.log(str)
   return bcrypt.hashSync(str, 5);
 }
 

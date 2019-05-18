@@ -17,7 +17,7 @@ app.use(
 
 app.use(express.json());
 
-mongoose.connect(process.env.MINIWP_DB + process.env.NODE_ENV + "?retryWrites=true", {
+mongoose.connect("mongodb+srv://novi:novi@phase2-porto-novi-l3m3t.gcp.mongodb.net/ecommerce" + process.env.NODE_ENV + "?retryWrites=true", {
   useNewUrlParser: true
 });
 
@@ -29,6 +29,4 @@ db.once("open", function callback() {
 
 app.use("/", routes);
 
-app.listen(port, () => {
-  console.log("listening on port", port);
-});
+module.exports = app

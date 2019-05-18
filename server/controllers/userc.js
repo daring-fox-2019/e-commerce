@@ -9,27 +9,27 @@ class cUser {
         res.status(201).json(created);
       })
       .catch(err => {
-        res.status(500).json({ message: `internal server error` });
+        res.status(400).json({ message: `bad request \n ${err}` });
       });
   }
   static login(req, res) {
-    User.findOne(req.body)
-      .then(User => {
+    User.findOne({ email: req.body.email })
+      .then(user => {
         if (user) {
           if (comparePassword(req.body.password, user.password) === true) {
             let token = generateToken(user._id, user.email);
             let id = user._id;
-            let email = user.email
+            let email = user.email;
             res.status(200).json({ token, id, email });
           } else {
-            res.status(200).json({ message: `password / email wrong` });
+            res.status(400).json({ message: `password / email wrong :()` });
           }
         } else {
-          res.status(200).json({ message: `password / email wrong` });
+          res.status(400).json({ message: `password / email wrong` });
         }
       })
       .catch(err => {
-          res.status(500).json({message : `internal server error`})
+        res.status(500).json({ message: `internal server error` });
       });
   }
 }
