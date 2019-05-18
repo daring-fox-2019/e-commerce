@@ -38,8 +38,8 @@ class Controller {
     }
     Product.create({
       name, description,
-      price: price || 100,
-      stock: stock || 0,
+      price: price,
+      stock: stock,
       imageURL: imageURL || './assets/noPhoto.png',
       created: new Date(),
       updated: new Date()
@@ -76,20 +76,37 @@ class Controller {
   }
 
   static updatePut(req, res, next) {
-    const { title, text, status } = req.body
+    const { name, description, price, stock } = req.body
+
+    if (!name || !price || !stock) {
+      const err = {
+        status: 400,
+        message: 'Product validation failed: name or price or stock: required'
+      }
+      return next(err);
+    }
+    if(price < 0 || stock < 0) {
+      const err = {
+        status: 400,
+        message: 'Product validation failed: price or stock: minimum 0'
+      }
+      return next(err);
+    }
+
     let updatedProduct = req.product;
     let imageURL = null;
     
     if (req.file) {
       imageURL = req.file.cloudStoragePublicUrl;
     }
-    updatedProduct.title = title;
-    updatedProduct.text = text;
-    updatedProduct.imageURL = imageURL;
-    updatedProduct.status = status;
+    updatedProduct.name = name;
+    updatedProduct.description = description;
+    updatedProduct.imageURL = imageURL || './assets/noPhoto.png';
+    updatedProduct.price = price;
+    updatedProduct.stock = stock;
     updatedProduct.updated = new Date();
     updatedProduct.updateOne({
-      title, text, status, imageURL, updated: updatedProduct.updated
+      name, description, price, stock, imageURL: updatedProduct.imageURL, updated: updatedProduct.updated
     })
       .then(info => {
         res.status(201).json({ message: 'data updated', updatedProduct, info });
@@ -100,17 +117,27 @@ class Controller {
   }
 
   static updatePatch(req, res, next) {
-    const { title, text, status } = req.body
+    const { name, description, price, stock } = req.body
+
+    if(price < 0 || stock < 0) {
+      const err = {
+        status: 400,
+        message: 'Product validation failed: price or stock: minimum 0'
+      }
+      return next(err);
+    }
+
     let { product } = req;
     let imageURL = null;
     
     if (req.file) {
       imageURL = req.file.cloudStoragePublicUrl;
     }
-    product.title = title || product.title;
-    product.text = text || product.text;
+    product.name = name || product.name;
+    product.description = description || product.description;
     product.imageURL = imageURL || product.imageURL;
-    product.status = status || product.status;
+    product.price = price || product.price;
+    product.stock = stock || product.stock;
     product.updated = new Date();
     product.save()
       .then(updatedProduct => {
