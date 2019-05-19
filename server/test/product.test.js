@@ -13,7 +13,9 @@ before(function(done) {
 
     const newProduct = {
         name: 'Initial Data',
-        price: 100000
+        price: 100000,
+        stock: 5,
+        detail: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit a, impedit recusandae expedita sunt ratione temporibus, repudiandae tempora distinctio possimus est quibusdam, excepturi molestias quos! Sequi quam laborum aliquam ex.'
     };
     
     chai
@@ -45,13 +47,29 @@ describe('Product tests', function() {
         });
     });
 
+    describe('GET /products/category?q= ', function() {
+        it('should send an array with 200 status code', function(done) {
+        chai
+            .request(app)
+            .get(`/products/category?q=${category}`)
+            .end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            done();
+            });
+        });
+    });
+
         
     describe('POST /products', function() {
         it('should send an object of inserted product with 201 status code', function(done) {
             // this.timeout(500);
             const newProduct = {
                 name: 'White Album',
-                price: 1000000000
+                price: 1000000000,
+                stock: 2,
+                detail: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit a, impedit recusandae expedita sunt ratione temporibus, repudiandae tempora distinctio possimus est quibusdam, excepturi molestias quos! Sequi quam laborum aliquam ex.'
             };
             chai
                 .request(app)
@@ -64,8 +82,12 @@ describe('Product tests', function() {
                     expect(res.body).to.have.property('_id');
                     expect(res.body).to.have.property('name');
                     expect(res.body).to.have.property('price');
+                    expect(res.body).to.have.property('stock');
+                    expect(res.body).to.have.property('detail');
                     expect(res.body.name).to.equal(newProduct.name);
                     expect(res.body.price).to.equal(newProduct.price);
+                    expect(res.body.stock).to.equal(newProduct.stock);
+                    expect(res.body.detail).to.equal(newProduct.detail);
                     userId=res.body._id
                     done();
             });
@@ -77,7 +99,9 @@ describe('Product tests', function() {
         it('should send an object of updated product with 201 status code', function(done) {
         const newProduct = {
             name: 'One',
-            price: 1000000000
+            price: 1000000000,
+            stock: 3,
+            detail: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit a, impedit recusandae expedita sunt ratione temporibus, repudiandae tempora distinctio possimus est quibusdam, excepturi molestias quos! Sequi quam laborum aliquam ex.'
         };
         chai
             .request(app)
@@ -90,8 +114,12 @@ describe('Product tests', function() {
                 expect(res.body).to.have.property('_id');
                 expect(res.body).to.have.property('name');
                 expect(res.body).to.have.property('price');
+                expect(res.body).to.have.property('stock');
+                expect(res.body).to.have.property('detail');
                 expect(res.body.name).to.equal(newProduct.name);
                 expect(res.body.price).to.equal(newProduct.price);
+                expect(res.body.stock).to.equal(newProduct.stock);
+                expect(res.body.detail).to.equal(newProduct.detail);
                 done();
             });
         });
@@ -111,6 +139,8 @@ describe('Product tests', function() {
                 expect(res.body).to.have.property('_id');
                 expect(res.body).to.have.property('name');
                 expect(res.body).to.have.property('price');
+                expect(res.body).to.have.property('stock');
+                expect(res.body).to.have.property('detail');
                 expect(res.body._id).to.equal(`${productId}`);
                 done();
             });
