@@ -75,6 +75,23 @@ class TransactionController {
             res.status(400).json(err)
         })
     }
+
+    static changeStatusToDelivered(req, res) {
+        const user = Helper.verifyJWT(req.headers.token)
+
+        Transaction
+        .findOneAndUpdate({
+            userId: user.id
+        }, {
+            status: 'delivered'
+        })
+        .then(transactions=>{
+            res.status(200).json(stat)
+        })
+        .catch(err => {
+            res.status(400).json(err)
+        })
+    }
 }
 
 

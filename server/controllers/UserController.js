@@ -77,6 +77,17 @@ class UserController {
             res.status(400).json({message:err})
         })
     }
+
+    static findOne(req, res) {
+        User
+        .findById(req.params.id)
+        .then(user=> {
+            res.status(200).json(user)
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+    }
 }
 
 module.exports = UserController
