@@ -1,0 +1,36 @@
+{
+  "name": "e-commerce",
+  "version": "1.0.0",
+  "description": "### Add Product : ```sh http://localhost:3000/products METHOD : POST Authenticated Required : YES Authorized Required : NO",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sukmaranggapradeta/e-commerce.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sukmaranggapradeta/e-commerce/issues"
+  },
+  "homepage": "https://github.com/sukmaranggapradeta/e-commerce#readme",
+  "dependencies": {
+    "@google-cloud/storage": "^2.5.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.7",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^6.1.4"
+  }
+}
