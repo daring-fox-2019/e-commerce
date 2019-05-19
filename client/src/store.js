@@ -8,7 +8,11 @@ export default new Vuex.Store({
     token: '',
     isLoggedIn:false,
     isAdmin:false,
-    cart: 0
+    cart: 0,
+    user: {
+      id:'',
+      name:'',
+    }
   },
   mutations: {
     setCart(state, payload) {

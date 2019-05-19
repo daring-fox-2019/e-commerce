@@ -7,6 +7,10 @@ import Cart from '@/views/Cart.vue'
 import Shipment from '@/views/Shipment.vue'
 import Checkout from '@/views/Checkout.vue'
 
+import User from '@/views/User.vue'
+import UserProfile from '@/components/UserProfile.vue'
+import UserTransaction from '@/components/UserTransaction.vue'
+
 import HomePage from '@/views/HomePage.vue'
 
 import Product from '@/views/Product.vue'
@@ -95,6 +99,21 @@ const router = new Router({
         path: '/checkout',
         name: 'checkout',
         component: Checkout
+    },
+    {
+        path: '/user/:id',
+        component: User,
+        children: 
+        [
+            {
+              path: 'profile',
+              component: UserProfile
+            },
+            {
+              path: 'transaction',
+              component: UserTransaction
+            }
+        ]
     },
     {
         path: '/404',

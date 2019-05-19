@@ -132,8 +132,13 @@
             'Success!',
             'success'
           )
+
           this.$store.dispatch('signIn')
+          this.$store.state.user.id=data.id
+          this.$store.state.user.name=data.name
+          this.$store.state.token=data.token
           localStorage.token = data.token
+          localStorage.id = data.id
 
           if(data.role==='Admin') {
             this.$store.dispatch('isAdminTrue')

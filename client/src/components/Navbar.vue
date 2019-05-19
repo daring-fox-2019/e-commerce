@@ -55,7 +55,7 @@ margin-left: -258px;">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -6em;">
                         
-                    <span class="dropdown-item" href="#">Edit Profile</span>
+                    <router-link class="dropdown-item" :to="`user/${userId}`">Edit Profile</router-link>
                     <div class="dropdown-divider"></div>
                     <span class="dropdown-item" @click="clickLogout">Logout</span>
                     </div>
@@ -101,7 +101,10 @@ import api from '@/api/localapi'
 
 export default {
     data() {
-        return { cart: 0 }
+        return { 
+            cart: 0,
+            id: '' 
+        }
     },
     computed: {
         isLoggedIn() {
@@ -112,11 +115,15 @@ export default {
         },
         isAdmin() {
             return this.$store.state.isAdmin
+        },
+        userId() {
+            return this.$store.state.user.id
         }
     },
     mounted() {
         this.getCart()
         this.cart = this.$store.state.cart
+        this.id = localStorage.id
     },
     methods: {
         clickLogout() {
