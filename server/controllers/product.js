@@ -40,7 +40,7 @@ class Controller {
       name, description,
       price: price,
       stock: stock,
-      imageURL: imageURL || './assets/noPhoto.png',
+      imageURL: imageURL,
       created: new Date(),
       updated: new Date()
     })
@@ -101,7 +101,7 @@ class Controller {
     }
     updatedProduct.name = name;
     updatedProduct.description = description;
-    updatedProduct.imageURL = imageURL || './assets/noPhoto.png';
+    updatedProduct.imageURL = imageURL;
     updatedProduct.price = price;
     updatedProduct.stock = stock;
     updatedProduct.updated = new Date();

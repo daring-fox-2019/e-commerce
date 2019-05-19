@@ -4,18 +4,40 @@
       <v-toolbar-title class="teal--text">+plusOne</v-toolbar-title>
     </router-link>
 
+    <v-dialog
+      v-model="loginWindow"
+      max-width="30%"
+    >
+      <LoginForm/>
+    </v-dialog>
+
+    <v-dialog
+      v-model="registerWindow"
+      max-width="30%"
+    >
+      <RegisterForm/>
+    </v-dialog>
+
     <v-spacer></v-spacer>
     <v-toolbar-items>
-      <v-btn color="teal" flat>
+      <v-btn 
+        color="teal"
+        flat
+        @click.stop="loginWindow = true"
+      >
         LOGIN
       </v-btn>
-      <v-btn color="teal" flat>
+      <v-btn
+        color="teal"
+        flat
+        @click.stop="registerWindow = true"
+      >
         REGISTER
       </v-btn>
     </v-toolbar-items>
 
-
     <v-text-field
+      v-model="search"
       color="teal"
       hide-details
       prepend-icon="search"
@@ -39,7 +61,32 @@
 </style>
 
 <script>
+import { mapActions } from 'vuex';
+import LoginForm from '@/components/LoginForm.vue';
+import RegisterForm from '@/components/RegisterForm.vue';
+
 export default {
   name: 'headBar',
+  components: {
+    LoginForm,
+    RegisterForm,
+  },
+  watch: {
+    search(val) {
+      this.login(val);
+    },
+  },
+  data() {
+    return {
+      search: '',
+      loginWindow: false,
+      registerWindow: false,
+    };
+  },
+  methods: {
+    ...mapActions([
+      'login'
+    ])
+  }
 };
 </script>
