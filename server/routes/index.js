@@ -14,6 +14,7 @@ const { sendUploadToGCS, multer } = require(`../middlewares/uploadtogcs`);
 
 router.post("/register", user.register);
 router.post(`/login`, user.login);
+router.put(`/user/:id`, user.update);
 
 router.use(authentication);
 router.post(`/cart`, cart.create);

@@ -121,6 +121,7 @@ export default {
       if (localStorage.getItem('token')) {
         this.isLogin = true
         this.userId = localStorage.getItem('user')
+        let id = localStorage.getItem('user')
         if(id === '5ce158d52edb972b1e4dc5c4'){
         this.isAdmin = true
         }

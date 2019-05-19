@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "phase2-porto-novi",
+  "private_key_id": "027bb8ad52f233553906588224a0f9d0cac839f7",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyb1aak1/xfpo1\nu0kfbKb1GBQPz8O49Z8mCrF0tUk8twROY5NAIGZ14bE8Yqt+YHGS/itc4IWHyAVQ\nDApnj3GUeShbKGYvcf/OY4BjczStEUupnMl9k4D0Hr+9PfOwKAGKj4yc/REAT+vV\n+VdNgy3NgjfC/8qpvbbKDwGDEQP6283twNAGsxmjtOKGo+cZ7V2l9Zbz+6yi2e4S\nWuO9VZccFTBMXD0Vy+vj/0uaIiZkhkD8VZalU9/JljYAynHGl9+3ky0B8DqhS6tS\nZVXnCFhYmLGJ7MMdhXYr6JcQuf0/QGfP/CBKviyqfSsb1/XeXSwqMiR3V8gyk2Jg\ngdGSltVrAgMBAAECggEAMYbKzHvUeRTRW9GgkbrYOpZU1zCtXDS82FPGfqTk75fC\n97kWwYlctyKOTbr7a8f8LjcjNRPSrGX954J4DteXSIU6iNbVSh0Dyjb/B1uORu1S\niYENwi/Dbr7sLGw6K+5mwx1mA5sQcXw9cvZS355mA7E9pf/WsjeIuVvh6Q27g5Cx\nV1quXQC9Y4mdUrepYPjEXtZogWcc3fJcZ2CB2RA+Ns95X2QJ9Iy14hH2+D2LO2Ws\ny61I0ATT99iLLKc7pvbV+Ep8Kv4NbUoNg5efhi+yXiPsYzB2MYzrGFgFI3eTN2Bj\n62mOic7qA8tetllGW7B8sM12hKoSGNV9U3C/gBbEYQKBgQDYh1Dy/CK7hNicvFUG\ngRscSOZQuTFA8Unc+G8IwEham2W+0P6nuhSrDM8OfLXMOdyEuoaS7mg/sCA3Jw4a\nExV0DrCJJVYBHG/Dcc5ldz0fKVvxrytuIH5zaaQhBZr9FUTQ47yVy7Qvq2XNc6dm\nIdTuIkGrpWHPf71BpMHNh6BCYQKBgQDS9lCYuhsE5iqLCkrhEQiAxOqjAqowZuwC\nd/7SssWLC36V15T8LSi6IlztiOEsxiyQni89ny8QkhcB829Qsm0NG0miznoPs9Qw\neOcc8GgMV6FsGIZjQGFqXNb1CKtZ01bQvuW7qcQjVg8IzI/wsd+1nVid4yvThLBd\n9AHH88RDSwKBgQCfbVKe9iKkqzXKgaig92J8uvhJq3GmfYKDHrCyYtFjVVPe4Yb+\n/DXHk9DIu+4nhtrlJ2l6uessKYQu16S8chyzrTUyZbkjbEqmPx9W+iqYzR0ToIR7\nu5UfaUMdxUDO42Ad5fCu4qOzDaIRWfyBaJudEsADn+uamlVBBgxkRl4rQQKBgDii\ne7ykqcBE8kLlfnixk/DN7JfajUn1N4LqJ/T0nWfYrCEaARs6HGbr9rqmNp1Ijoo8\njT4j0ATI03honAez/ua33qrgd5BjnKFus8znFWfK1sEoTFu02vIs/mBF9Ypl3Daq\nKQ6aYteBsQORt0rM1dvx4+pvJELiql5utVOys4vFAoGAD/5e5L3mSy9Ra6c3QlQl\nCQnvCPJSGeRZAEwZh9pqywHXCTHM5SHgFDGxKLqFiifR4ohXbmGJ9q+8sWDBC9tm\n3lWZ4CIlXF9/YRxCYRz+zW8lUd9zZt5A57L1mOILTr7wT6PNttqkqxwjcqbZwCw2\n084EbvmfYM/R4BLLK86Zv3A=\n-----END PRIVATE KEY-----\n",
+  "client_email": "miniwp@phase2-porto-novi.iam.gserviceaccount.com",
+  "client_id": "114654973478849601250",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/miniwp%40phase2-porto-novi.iam.gserviceaccount.com"
+}

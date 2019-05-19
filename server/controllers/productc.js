@@ -73,12 +73,13 @@ class cProduct {
   }
 
   static update(req, res) {
+    console.log("disini", req.params.id, req.headers.id)
     Product.findByIdAndUpdate(req.params.id, req.body)
       .then(updated => {
         res.status(200).json(updated);
       })
       .catch(err => {
-        res.status(500).json({ message: `internal server error` });
+        res.status(500).json({ message: `internal server error ${err}` });
       });
   }
 }

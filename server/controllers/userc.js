@@ -33,6 +33,17 @@ class cUser {
         res.status(500).json({ message: `internal server error` });
       });
   }
+
+  static update(req, res) {
+    console.log("disini", req.params.id, req.headers.id)
+    User.findByIdAndUpdate(req.params.id, req.body)
+      .then(updated => {
+        res.status(200).json(updated);
+      })
+      .catch(err => {
+        res.status(500).json({ message: `internal server error ${err}` });
+      });
+  }
 }
 
 module.exports = cUser;
