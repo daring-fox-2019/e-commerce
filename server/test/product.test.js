@@ -168,7 +168,9 @@ describe('PRODUCT', function() {
             expect(res.body.newProduct).to.have.property('imageURL');
             expect(res.body.newProduct).to.have.property('created');
             expect(res.body.newProduct).to.have.property('updated');
+            expect(res.body.newProduct.price).to.be.a('number');
             expect(res.body.newProduct.price >= 0).to.equal(true);
+            expect(res.body.newProduct.stock).to.be.a('number');
             expect(res.body.newProduct.stock >= 0).to.equal(true);
             done();
           })

@@ -83,44 +83,44 @@ class Controller {
       })
   }
 
-  static gregister(req, res, next) {
-    if (req.headers.hasOwnProperty('register_token')) {
-      try {
-        const { register_token } = req.headers;
-        const { password } = req.body;
-        const decoded = jwt.verify(register_token);
-        User.create({
-          name: decoded.name,
-          email: decoded.email,
-          password,
-        })
-          .then(newUser => {
-            let token = jwt.sign({
-              id: newUser._id,
-              name: newUser.name,
-              email: newUser.email
-            })
-            res.status(200).json({ message: 'login success', token, user: newUser.name });
-          })
-          .catch(err => {
-            next(err);
-          })
-      } catch (error) {
-        const err = {
-          error,
-          status: 400,
-          message: 'not allowed to access'
-        }
-        next(err);
-      }
-    } else {
-      const err = {
-        status: 400,
-        message: 'no token assigned'
-      }
-      next(err);
-    }
-  }
+  // static gregister(req, res, next) {
+  //   if (req.headers.hasOwnProperty('register_token')) {
+  //     try {
+  //       const { register_token } = req.headers;
+  //       const { password } = req.body;
+  //       const decoded = jwt.verify(register_token);
+  //       User.create({
+  //         name: decoded.name,
+  //         email: decoded.email,
+  //         password,
+  //       })
+  //         .then(newUser => {
+  //           let token = jwt.sign({
+  //             id: newUser._id,
+  //             name: newUser.name,
+  //             email: newUser.email
+  //           })
+  //           res.status(200).json({ message: 'login success', token, user: newUser.name });
+  //         })
+  //         .catch(err => {
+  //           next(err);
+  //         })
+  //     } catch (error) {
+  //       const err = {
+  //         error,
+  //         status: 400,
+  //         message: 'not allowed to access'
+  //       }
+  //       next(err);
+  //     }
+  //   } else {
+  //     const err = {
+  //       status: 400,
+  //       message: 'no token assigned'
+  //     }
+  //     next(err);
+  //   }
+  // }
 }
 
 module.exports = Controller;

@@ -3,16 +3,16 @@
     <v-img
       class="white--text"
       aspect-ratio="1"
-      src="https://cdn2.techadvisor.co.uk/cmsdata/features/3647841/samsung_note_809.jpg"
+      :src="product.imageURL"
     >
       <v-container fill-height style="background:rgba(0, 0, 0, 0.3)" fluid>
         <v-layout>
           <v-flex xs12>
-            <span :class="style[iStyle].header">Samsung Note 10</span>
+            <span :class="style[iStyle].header">{{ product.name }}</span>
           </v-flex>
         </v-layout>
         <footer>
-          <router-link to="/">
+          <router-link :to="`/products/${product._id}`">
             <span :class="style[iStyle].detail">
               see here
               <v-icon :small="style[iStyle].small" color="white">
@@ -53,6 +53,13 @@ export default {
           small: true,
         },
       ],
+      product: {
+        _id: '1',
+        name: 'Samsung Note 10',
+        imageURL: 'https://cdn2.techadvisor.co.uk/cmsdata/features/3647841/samsung_note_809.jpg',
+        created: null,
+        updated: null,
+      },
     };
   },
 };

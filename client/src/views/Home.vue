@@ -8,7 +8,7 @@
         <h1 class="display-2 mb-1">New!</h1>
         <v-layout row>
           <v-flex v-for="index in 3" :key="index" sm4 class="px-1">
-            <ProductCard :ratio="2"/>
+            <ProductCard :ratio="2" trunc/>
           </v-flex>
         </v-layout>
       </v-flex>
@@ -36,7 +36,7 @@
     <router-link to="/products"><h1 class="display-2">all products</h1></router-link>
     <v-layout row wrap class="mb-3">
       <v-flex v-for="index in 6" :key="index" sm2 class="pa-2">
-        <ProductCard :ratio="2" />
+        <ProductCard :ratio="2" trunc/>
       </v-flex>
     </v-layout>
   </v-container>

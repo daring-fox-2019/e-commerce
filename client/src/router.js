@@ -20,8 +20,12 @@ export default new Router({
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "products" */ './views/Products.vue'),
       children: [
-        {}
-      ]
+        {
+          path: ':id',
+          name: 'detailProduct',
+          component: () => import(/* webpackChunkName: "detailProduct" */ './views/Product.vue'),
+        },
+      ],
     },
   ],
 });
