@@ -1,43 +1,50 @@
 <template>
   <div class="container-fluid p-4">
-    <div class="container">
+    <div class="container ">
       <div class="row px-2">
         <div class="col-3 col-md-3 col-sm-12">
           <UserCart :pic="pic2" :text="text2"></UserCart>
         </div>
-
-        <div class="col-md-9 col-sm-12">
+        <div class="col-md-1 col-sm-12"></div>
+        <div class="col-md-8 col-sm-12">
           <div v-if="transList.length == 0">
-          <div>
-            <h3 class="tls">This page looks empty. You might want to <router-link to="/products">browse</router-link> more products</h3>
-        </div>
+            <div>
+              <div class="container my-5 py-5 text-center">
+                <h3 class="tls">
+                  This page looks empty. You might want to
+                  <router-link to="/products">browse</router-link>more products
+                </h3>
+              </div>
+            </div>
           </div>
           <div v-else>
-            <ul class="list-group mb-6">
-              <li
-                v-for="(trans, index) in transList"
-                :key="index"
-                class="list-group-item d-flex justify-content-between lh-condensed"
-              >
-                <div>
-                  <h6 class="tls my-0">{{trans._id}}</h6>
-                  <small class="text-muted">Recipient's Name : {{trans.recipientName}}</small>
-                  <br>
-                  <div v-if="!trans.status">
-                    <a
-                      href="#"
-                      @click.prevent="changeStat(trans._id)"
-                      class="conf text-muted"
-                    >Confirm Product Arrival</a>
+            <div class=" col-12">
+              <ul class="list-group mb-6">
+                <li
+                  v-for="(trans, index) in transList"
+                  :key="index"
+                  class="list-group-item d-flex justify-content-between lh-condensed"
+                >
+                  <div>
+                    <h6 class="tls my-0">{{trans._id}}</h6>
+                    <small class="text-muted">Recipient's Name : {{trans.recipientName}}</small>
+                    <br>
+                    <div v-if="!trans.status">
+                      <a
+                        href="#"
+                        @click.prevent="changeStat(trans._id)"
+                        class="conf text-muted"
+                      >Confirm Product Arrival</a>
+                    </div>
+                    <div v-else-if="trans.status">
+                      <span href class="conf text-muted">Arrival Confirmed</span>
+                    </div>
                   </div>
-                  <div v-else-if="trans.status">
-                    <span href class="conf text-muted">Arrival Confirmed</span>
-                  </div>
-                </div>
-                <span :style="color" class="text-muted">{{getViewStatus(trans.status)}}</span>
-                <span class="text-muted">IDR {{trans.total.toLocaleString()}}</span>
-              </li>
-            </ul>
+                  <span :style="color" class="stattxt text-muted">{{getViewStatus(trans.status)}}</span>
+                  <span class="text-muted">IDR {{trans.total.toLocaleString()}}</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -75,7 +82,7 @@ export default {
       }
     },
     getUserTrans() {
-      let uid = localStorage.getItem('userId')
+      let uid = localStorage.getItem("userId");
       this.axios
         .get(`/transactions/${uid}`, {
           headers: { token: localStorage.getItem("token") }
@@ -128,6 +135,12 @@ export default {
   font-family: "Lato", sans-serif;
   font-size: 0.8rem;
   color: darkcyan !important;
+}
+
+.stattxt {
+  height: 0.2rem;
+  font-family: "Lato", sans-serif;
+  font-size: 0.7rem;
 }
 
 .tls {

@@ -5,23 +5,16 @@ class ProductController {
 
     static async create(req, res) {
         try {
-            let urls = []
-            if (req.files) {
-                req.files.forEach(img => {
-                    urls.push(img.cloudStoragePublicUrl)
-                })
-                let created = await Product.create({...req.body, image : urls})
-                console.log(created._id);
-                
-                await Category.findByIdAndUpdate(req.body.category, {$push : {products : created._id}})
-                res.status(201).json(created)
-                // res.status(200).json(req.files)
-            } else {
-                // console.log('PAK EKO');
-                let created = await Product.create({...req.body})
-                res.status(201).json(created)
-            }
-        } catch (error) {                        
+            // console.log(req.body, 'dapet dari test');
+            
+            let url = req.file ? req.file.cloudStoragePublicUrl : '';
+            let created = await Product.create({...req.body, image : url})
+            await Category.findByIdAndUpdate(req.body.category, {$push : {products : created._id}})
+            res.status(201).json(created)
+
+        } catch (error) {   
+            // console.log(error);
+                                 
             if (error.errors) res.status(400).json(error)
             else {
                 res.status(500).json(error)
@@ -31,7 +24,7 @@ class ProductController {
 
     static async findAll(req, res) {
         try {
-            console.log('hii mau cari semua barang');
+            // console.log('hii mau cari semua barang');
            let found = await Product.find({}).populate('category')
            res.status(200).json(found) 
         //    console.log('apa temuan', found);
@@ -43,15 +36,6 @@ class ProductController {
             } 
         }
     }
-
-    static countByProduct(req, res) {
-        try {
-            
-        } catch (error) {
-            
-        }
-    }
-
 
     static deductStock(id, amount) {
         Product.findById(id)
@@ -95,25 +79,8 @@ class ProductController {
 
     static async update(req, res) {
         try {
-            // console.log(req.body,'MAAASUK'); 
-            let urls = []
-            if (req.files) {
-                req.files.forEach(img => {
-                    // console.log(img.cloudStoragePublicUrl, 'IMG APA SIH');
-                    urls.push(img.cloudStoragePublicUrl)                    
-                })
-            } else {
-                // console.log(req.body)
-                urls = req.body.image
-            }
-
-            let newArr = [...req.body.image, ...urls]
-            // console.log(...req.body.image, '//////', urls);
-            // console.log(newArr);
-            
-            
-            // console.log(newArr, 'TERGABUNG SUDAH YA?????');
-            
+            let url = req.file ? req.file.cloudStoragePublicUrl : req.body.image;
+                        
             let updated = await Product.findByIdAndUpdate(req.params.id, 
                 {$set : {
                     name : req.body.name, 
@@ -121,12 +88,10 @@ class ProductController {
                     stock : req.body.stock, 
                     price: req.body.price,
                     category : req.body.category,
-                    image : newArr}}, {useFindAndModify : false, runValidators: true, new : true})
+                    image : url}}, {useFindAndModify : false, runValidators: true, new : true})
             if (updated) res.status(200).json(updated)
             else res.status(404).json({msg : 'Product not found'})       
-        } catch (error) {
-            // console.log(error);
-            
+        } catch (error) {            
             if (error.errors) res.status(400).json(error)
             else {
                 res.status(500).json(error)

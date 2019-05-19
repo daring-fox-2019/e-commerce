@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="my-2 addproduct productpic producttext border-0 card bg-dark text-white">
-    <img :src="product.image[0]" class="card-img " alt="...">
+    <img :src="product.image" class="card-img " alt="...">
     <div  v-on:click.prevent="getSinglePage(product._id)" class="ovl px-3 py-3 card-img-overlay">
       <div class="row no-gutters">
         <div class="col-9">
@@ -9,21 +9,10 @@
           <br>
           <p class="producttext text-dark card-text">{{product.price}}</p>
         </div>
-        <!-- <div class="col-3" style="display:flex; flex-direction: column; align-content: flex-end">
-          <button class=" btn btn-responsive">+ ADD</button>
-        </div> -->
       </div>
     </div>
   </div>
-  <div class="row px-3">
-    <div 
-    v-for="(img, index) in product.image" 
-    class="col-lg-2"
-    v-bind:key="index"
-    >
-      <img  style="max-width:3vh;  border:1px solid black; border-radius:50%; padding:3px; " :src="img" >
-    </div>
-  </div>
+
 </div>
 </template>
 

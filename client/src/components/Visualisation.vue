@@ -21,6 +21,7 @@ export default {
     };
   },
   mounted() {
+    this.iterate()
     this.fillData();
   },
   methods: {
@@ -38,18 +39,25 @@ export default {
         datasets: [
           {
             label: "Sold Product",
-            backgroundColor: "#A5CC82",
+            borderColor: "#A5CC82",
+            fill: false,
             data: this.prodSold
           },
           {
             label: "Stocks",
-            backgroundColor: "#f87979",
+            borderColor : "#f87979",
+            fill: false,
             data: this.prodStock
           },
         ]
       };
     }
-  }
+  },
+  watch: {
+    productList() {
+      this.iterate()
+    }
+  },
 };
 </script>
     <style>

@@ -90,7 +90,25 @@ static async update(req, res) {
   }
 }
 
+static async aggregateMo(req,res) {
+  try {
+    let data = await Transaction.aggregate([
+      {
+        $group: 
+        { 
+          _id : {$month : "$createdAt"},
+          revenue : {$sum: "$total"}
+        }
+    }])
+
+    res.status(200).json(data)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
 static async getAll(req, res) {
+  
   console.log('MASUK SINIIIII?????????');
 
   try {

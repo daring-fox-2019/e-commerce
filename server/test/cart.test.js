@@ -14,7 +14,6 @@ let productId = null;
 let cartId = null;
 let userId = null;
 let categoryId = null;
-let cartIdOrang = null
 
 
 describe('Cart END POINT test', function () {
@@ -127,7 +126,7 @@ describe('Cart END POINT test', function () {
                 let newProduct = {
                     price: 20000,
                     name: 'Cacing',
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 10,
                     description: 'Cacing kremi',
                     category: categoryId
@@ -150,13 +149,13 @@ describe('Cart END POINT test', function () {
                         expect(res.body).to.have.property('stock')
                         expect(res.body.name).to.equal('Cacing');
                         expect(res.body.price).to.equal(20000)
-                        expect(res.body.image).to.eql(['http://imageurl.cacing.com'])
-                        expect(res.body.description).to.eql('Cacing kremi')
+                        expect(res.body.image).to.equal('http://imageurl.cacing.com')
+                        expect(res.body.description).to.equal('Cacing kremi')
                         productId = res.body._id
                         done()
                     })
                     .catch(err => {
-                        console.log(err)
+                        done()
                     })
             })
         })
@@ -187,7 +186,6 @@ describe('Cart END POINT test', function () {
                         done()
                     })
                     .catch(err => {
-                        console.log(err);
                         
                         done()
                     })

@@ -95,6 +95,7 @@ export default {
           localStorage.setItem("token", data.token);
           localStorage.setItem("userId", data._id);
           localStorage.setItem("name", data.name);
+          localStorage.setItem("role", data.role)
 
           this.swal.fire("Logged in", "Have a nice day", "success");
           this.$emit("loginsuccess", data.role);

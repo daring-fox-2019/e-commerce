@@ -17,7 +17,7 @@
               <tr v-for="(cart, index) in cartItems" :key="index">
                 <th scope="row">{{index + 1}}</th>
                 <td>
-                  <img style="max-width:10vh;" :src="cart.productId.image[0]">
+                  <img style="max-width:10vh;" :src="cart.productId.image">
                 </td>
                 <td>{{cart.productId.name}}</td>
                 <td>
@@ -70,7 +70,6 @@
         </div>-->
       </div>
     </div>
-
 
     <div class="container">
       <div class="row">
@@ -141,7 +140,7 @@
               <div class="col-md-4 mb-3">
                 <label for="country">City (Kota)</label>
                 <select
-                v-on:change="pushDeliveryState('city')"
+                  v-on:change="pushDeliveryState('city')"
                   v-model="chosenCity"
                   v-bind:cities="cities"
                   class="custom-select d-block w-100"
@@ -186,7 +185,11 @@
                   required
                 >
                   <option value>Choose...</option>
-                  <option v-for="(kur, index) in kurir" :value="kur" :key="index">{{kur.toUpperCase()}}</option>
+                  <option
+                    v-for="(kur, index) in kurir"
+                    :value="kur"
+                    :key="index"
+                  >{{kur.toUpperCase()}}</option>
                 </select>
                 <div class="invalid-feedback">Please provide a valid state.</div>
               </div>
@@ -270,7 +273,10 @@
               </div>
             </div>
             <hr class="mb-4">
-            <button class="btn btncard btn-secondary btn-lg btn-block" type="submit">Continue to checkout</button>
+            <button
+              class="btn btncard btn-secondary btn-lg btn-block"
+              type="submit"
+            >Continue to checkout</button>
           </form>
         </div>
       </div>
@@ -283,29 +289,29 @@ export default {
   props: ["isLogin"],
   name: "Carts",
   mounted() {
-      window.addEventListener(
-        "load",
-        function() {
-          // Fetch all the forms we want to apply custom Bootstrap validation styles to
-          var forms = document.getElementsByClassName("needs-validation");
+    window.addEventListener(
+      "load",
+      function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName("needs-validation");
 
-          // Loop over them and prevent submission
-          var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener(
-              "submit",
-              function(event) {
-                if (form.checkValidity() === false) {
-                  event.preventDefault();
-                  event.stopPropagation();
-                }
-                form.classList.add("was-validated");
-              },
-              false
-            );
-          });
-        },
-        false
-      );
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener(
+            "submit",
+            function(event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      },
+      false
+    );
   },
   data() {
     return {
@@ -313,19 +319,18 @@ export default {
       totalProductsInCart: 0,
       sumPrice: 0, //ini itu totalnya!!
       random: 0,
-      cities : [],
-      provinces : [],
-      kurir : ['pos', 'tiki', 'jne'],
-      chosenCity : '',
-      chosenProvince : '',
-      chosenKurir : "",
-      cartItems : [],
-      totalProductsInCart : "",
-      deliverPrice : 0,
-      recipientName : "",
-      address : "",
-      deliveryState : []
-
+      cities: [],
+      provinces: [],
+      kurir: ["pos", "tiki", "jne"],
+      chosenCity: "",
+      chosenProvince: "",
+      chosenKurir: "",
+      cartItems: [],
+      totalProductsInCart: "",
+      deliverPrice: 0,
+      recipientName: "",
+      address: "",
+      deliveryState: []
     };
   },
   computed: {
@@ -341,21 +346,21 @@ export default {
   watch: {
     deliveryState(ov) {
       if (this.deliveryState.length >= 3) {
-        this.calculatePrice()
+        this.calculatePrice();
       }
     }
   },
   methods: {
-    calcTotal(a,b) {
-      return (+a + +b).toLocaleString()
+    calcTotal(a, b) {
+      return (+a + +b).toLocaleString();
     },
     pushDeliveryState(val) {
       if (this.deliverPrice.length >= 3) {
-          this.deliveryState.pop()
-          this.deliveryState.push(val)
-        } else {
-          this.deliveryState.push(val)
-        }
+        this.deliveryState.pop();
+        this.deliveryState.push(val);
+      } else {
+        this.deliveryState.push(val);
+      }
     },
     randomhehe() {
       return Math.floor(Math.random() * 4);
@@ -437,68 +442,85 @@ export default {
         });
     },
     getSelectedDeliveryDetails() {
-        this.axios.get(`/transactions/shipping`, 
-        {headers : {'token' : localStorage.getItem('token')}})
-          .then(({data}) => {
-             this.category = event.target.value;
-            this.cities = data.dataOngkir.city
-            this.provinces = data.dataOngkir.province
-            console.log(data.dataOngkir)
-          })
-          .catch(err => console.log(err))
-      },
-      async calculatePrice() {
-        try {
-          let {data} = await this.axios.post(`/transactions/shipping`, {
-              origin : 153,
-              destination : this.chosenCity,
-              courier : this.chosenKurir,
-              weight : this.totalProductsInCart
-            }, {
-              headers : {'token' : localStorage.getItem('token')}
-            })
-          
-          this.deliverPrice = data.info[0].costs[0].cost[0].value
-          
-        } catch (error) {
-          console.log(error);
-            
-        }   
-      },
-      proceedToCheckout() {
-        this.axios.post(`/carts/checkout`, {
-          recipientName : this.recipientName,
-          address : this.address,
-          total : this.getTotalCart + +this.deliverPrice,
-          deliverPrice : this.deliverPrice
-        },
-        {headers : {'token' : localStorage.getItem('token')}}
+      this.axios
+        .get(`/transactions/shipping`, {
+          headers: { token: localStorage.getItem("token") }
+        })
+        .then(({ data }) => {
+          this.category = event.target.value;
+          this.cities = data.dataOngkir.city;
+          this.provinces = data.dataOngkir.province;
+          console.log(data.dataOngkir);
+        })
+        .catch(err => console.log(err));
+    },
+    async calculatePrice() {
+      try {
+        let { data } = await this.axios.post(
+          `/transactions/shipping`,
+          {
+            origin: 153,
+            destination: this.chosenCity,
+            courier: this.chosenKurir,
+            weight: this.totalProductsInCart
+          },
+          {
+            headers: { token: localStorage.getItem("token") }
+          }
+        );
+
+        this.deliverPrice = data.info[0].costs[0].cost[0].value;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    proceedToCheckout() {
+      this.axios
+        .post(
+          `/carts/checkout`,
+          {
+            recipientName: this.recipientName,
+            address: this.address,
+            total: this.getTotalCart + +this.deliverPrice,
+            deliverPrice: this.deliverPrice
+          },
+          { headers: { token: localStorage.getItem("token") } }
         )
-        .then(({data}) => {
-          console.log(data, 'GIMANA ATUH');
-          
+        .then(({ data }) => {
+          this.swal.fire(
+            "Thank you for shopping",
+            "Items will be dispatched as stated. Please confirm upon arrival",
+            "success"
+          );
+          this.$router.push("/user")
+
+          this.chosenCity = ""
+          this.chosenProvince = ""
+          this.chosenKurir = ""
+          this.deliverPrice = 0
+          this.recipientName = ""
+          this. address = ""
         })
         .catch(error => {
           console.log(error);
-          
+
           this.swal.fire(
             "Something is wrong",
             "Please reload the page",
             "warning"
           );
-        })
-      }
+        });
+    }
   },
   created() {
-    this.chosenCity = ''
-    this.chosenProvince = ''
-    this.chosenKurir = ""
-    this.deliveryState = []
+    this.chosenCity = "";
+    this.chosenProvince = "";
+    this.chosenKurir = "";
+    this.deliveryState = [];
     this.fetchCartData();
-    this.getSelectedDeliveryDetails()
+    this.getSelectedDeliveryDetails();
     this.random = this.randomhehe();
-  },
-
+  }
 };
 </script>
 
@@ -519,9 +541,6 @@ export default {
   text-transform: uppercase;
 }
 
-.updown {
-}
-
 .summ {
   font-family: "Lato", serif;
   font-size: 15px;
@@ -537,6 +556,9 @@ export default {
 }
 
 .btncard:hover {
+  border-style: none !important;
+  color: black;
+
   background-color: rgb(230, 230, 230);
 }
 </style>

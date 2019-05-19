@@ -11,10 +11,9 @@ const productSchema = new Schema({
         required : [true, 'Stock must be filled'],
         min : [0, 'Minimum stock is 0']
     },
-    image : [{
+    image : {
         type : String,
-        required : [true, 'Image cannot be empty']
-    }],
+    },
     description : {
         type : String,
         required : [true, 'Description cannot be empty']

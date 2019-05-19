@@ -6,7 +6,7 @@ import {
 export default {
   extends: Line,
   mixins: [mixins.reactiveProp],
-  props: ['chartData'],
+  props: ['chartData', 'options'],
   data() {
       return {
           options: {

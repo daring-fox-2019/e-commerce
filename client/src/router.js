@@ -13,11 +13,6 @@ export default new Router({
       component: () => import(/* webpackChunkName: "landing" */ './views/Landing.vue')
     },
     {
-      path: '/login',
-      name: 'login',
-      component: () => import(/* webpackChunkName: "login" */ './views/Login.vue')
-    },
-    {
       path: '/register',
       name: 'register',
       component: () => import(/* webpackChunkName: "Register" */ './views/Register.vue')
@@ -25,22 +20,18 @@ export default new Router({
     {
       path: '/user',
       name: 'user',
-      component: () => import(/* webpackChunkName: "User" */ './views/User.vue')
+      component: () => import(/* webpackChunkName: "User" */ './views/User.vue'),
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: '/carts',
       name: 'carts',
-      component: () => import(/* webpackChunkName: "Cart" */ './views/Carts.vue')
-    },
-    {
-      path: '/checkout',
-      name: 'checkout',
-      component: () => import(/* webpackChunkName: "Checkout" */ './views/Checkout.vue')
-    },
-    {
-      path: '/chart',
-      name: 'chart',
-      component: () => import(/* webpackChunkName: "Checkout" */ './components/Chart.vue')
+      component: () => import(/* webpackChunkName: "Cart" */ './views/Carts.vue'),
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: '/products',
@@ -74,6 +65,11 @@ export default new Router({
           path: 'overview',
           name: 'overview',
           component: () => import(/* webpackChunkName: "overview" */ './components/ProductOverviewTable.vue'),
+        },
+        {
+          path: "statistics",
+          name : "statistics",
+          component: () => import(/* webpackChunkName: "Stats" */ './views/Stats.vue'),
         }
       ]
     }

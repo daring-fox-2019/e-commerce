@@ -19,7 +19,7 @@
       <th scope="row">{{index + 1}}</th>
       <td>{{item.name}}</td>
       <td>{{truncate(item.description)}}</td>
-      <td><img class="py-1 px-1" v-for="(img, index) in item.image" :key="index" style="max-width:9vh" :src="img"></td>
+      <td><img style="max-width:8vh;" :src="item.image"></td>
       <td>{{item.stock}}</td>
       <td>{{item.category.name}}</td>
       <td>{{item.price}}</td>

@@ -35,7 +35,7 @@ describe ('Product END POINT test AS ADMIN', function() {
         .then(cat => {
             let { _id } = cat
             categoryId = _id
-            
+     
             done()
         })
         .catch(err => {
@@ -89,11 +89,10 @@ describe ('Product END POINT test AS ADMIN', function() {
     describe('POST /products', function() {
         describe('success create product', function() {
             it('app should return status 201 as an object of new product', function (done) {
-
                 let newProduct = {
                     price: 20000,
                     name: 'Cacing',
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 10,
                     description : 'Cacing kremi',
                     category : categoryId
@@ -116,13 +115,13 @@ describe ('Product END POINT test AS ADMIN', function() {
                     expect(res.body).to.have.property('stock')
                     expect(res.body.name).to.equal('Cacing');
                     expect(res.body.price).to.equal(20000)
-                    expect(res.body.image).to.eql( ['http://imageurl.cacing.com'])
-                    expect(res.body.description).to.eql('Cacing kremi')
+                    expect(res.body.image).to.equal( 'http://imageurl.cacing.com')
+                    expect(res.body.description).to.equal('Cacing kremi')
                     productId = res.body._id
                     done()
                 })
                 .catch(err => {
-                    console.log(err)
+                    done()
                 })
             })
         })
@@ -132,7 +131,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: '',
                     price: 20000,
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 10,
                     description : 'Cacing kremi',
                     category : categoryId
@@ -150,7 +149,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                     done()
                 })
                 .catch(err => {
-                    console.log(err)
+                    done()
                 })
             })
 
@@ -158,7 +157,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: '',
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 10,
                     description : 'Cacing kremi',
                     category : categoryId
@@ -176,7 +175,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                     done()
                 })
                 .catch(err => {
-                    console.log(err)
+                    done()
                 })
             })
         
@@ -184,7 +183,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: 20202,
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: '',
                     description : 'Cacing kremi',
                     category : categoryId
@@ -202,7 +201,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                     done()
                 })
                 .catch(err => {
-                    console.log(err)
+                    done()
                 })
             })
         
@@ -211,7 +210,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: 20202,
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 2,
                     description : 'Cacing kremi',
                 }
@@ -238,7 +237,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: 20202,
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 2,
                     description : '',
                     category : categoryId
@@ -256,7 +255,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                     done()
                 })
                 .catch(err => {
-                    console.log(err)
+                    done()
                 })
             })
         
@@ -265,7 +264,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: -1000,
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 2,
                     description : 'Cacing kremi',
                     category : categoryId
@@ -283,7 +282,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                     done()
                 })
                 .catch(err => {
-                    console.log(err)
+                    done()
                 })
             })
 
@@ -291,7 +290,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: 21000,
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: -1000,
                     description : 'Cacing kremi',
                     category : categoryId
@@ -309,7 +308,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                     done()
                 })
                 .catch(err => {
-                    console.log(err)
+                    done()
                 })
             })
 
@@ -317,7 +316,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: 'sdfghjk',
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 2,
                     description : 'Cacing kremi',
                     category : categoryId
@@ -336,7 +335,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                     done()
                 })
                 .catch(err => {
-                    console.log(err)
+                    done()
                 })
             })
 
@@ -345,7 +344,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Cuacing',
                     price: 1200,
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 'asdakdad',
                     description : 'Cacing kremi',
                     category : categoryId
@@ -362,7 +361,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                     done()
                 })
                 .catch(err => {
-                    console.log(err)
+                    done()
                 })
             })
         
@@ -407,7 +406,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                     expect(res.body).to.have.property('stock')
                     expect(res.body.name).to.equal('Cacing');
                     expect(res.body.price).to.equal(20000)
-                    expect(res.body.image).to.eql(['http://imageurl.cacing.com'])
+                    expect(res.body.image).to.equal(['http://imageurl.cacing.com'])
                     expect(res.body.description).to.equal('Cacing kremi')
                     done()
                 })
@@ -447,7 +446,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Ancylostoma duodenale',
                     price: 1000,
-                    image : ['http://imageurl.cacing.com']
+                    image : 'http://imageurl.cacing.com'
                 }
 
                 chai
@@ -466,7 +465,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                     expect(res.body).to.have.property('stock')
                     expect(res.body.name).to.equal('Ancylostoma duodenale');
                     expect(res.body.price).to.equal(1000)
-                    expect(res.body.image).to.eql(['http://imageurl.cacing.com'])
+                    expect(res.body.image).to.equal(['http://imageurl.cacing.com'])
                     done()
                 })
                 .catch(err => {
@@ -548,7 +547,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 20202,
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: '',
                     description : 'Cacing kremi',
                     category : categoryId
@@ -572,7 +571,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 20202,
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 12,
                     description : '',
                     category : categoryId
@@ -596,7 +595,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 20202,
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 12,
                     description : 'Hehe cacing....',
                     category : ''
@@ -644,7 +643,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: -101010,
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 12,
                     description : 'Hehe cacing....',
                     category : categoryId
@@ -668,7 +667,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 1000,
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: -12,
                     description : 'Hehe cacing....',
                     category : categoryId
@@ -692,7 +691,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 1000,
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 'xxxxxxxx',
                     description : 'Hehe cacing....',
                     category : categoryId
@@ -716,7 +715,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 'asasdasdsad',
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 15,
                     description : 'Hehe cacing....',
                     category : categoryId
@@ -740,7 +739,7 @@ describe ('Product END POINT test AS ADMIN', function() {
                 let newProduct = {
                     name: 'Wuchereria bancroftii',
                     price: 122,
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 15,
                     description : 'Hehe cacing....',
                     category : categoryId
@@ -891,7 +890,7 @@ describe('Product END POINT test AS CUSTOMER', function() {
                     done()
                 })
                 .catch(err => {
-                    console.log(err);
+                    done()
                 })
             })
         })
@@ -903,7 +902,7 @@ describe('Product END POINT test AS CUSTOMER', function() {
                 let newProduct = {
                     price: 20000,
                     name: 'Cacing',
-                    image: ['http://imageurl.cacing.com'],
+                    image: 'http://imageurl.cacing.com',
                     stock: 10,
                     description : 'Cacing kremi',
                     category : categoryId

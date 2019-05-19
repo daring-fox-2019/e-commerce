@@ -1,11 +1,10 @@
 <template>
   <div style="border-radius:0px !important;" class="addproduct productpic producttext border-0 card bg-dark text-white">
-    <img src="../assets/dummy2.jpg" class="card-img " alt="...">
-    <div class=" px-3 py-3 card-img-overlay">
+    <img :src="pic" class="card-img " alt="...">
+    <div class="card-img-overlay">
       <div class="row no-gutters">
-        <div class="col-7">
-        </div>
-        <div class="col-3" style="display:flex; flex-direction: column; align-content: flex-end">
+        <div  style="margin-top:22vh; height:15vh;" class="py-3 text-center container">
+          <p class="categorynametxt">{{text}}</P>
         </div>
       </div>
     </div>
@@ -14,7 +13,8 @@
 
 <script>
 export default {
-  name: "ProductBlock"
+  name: "ProductBlock",
+  props : ["pic","text"]
 };
 </script>
 
@@ -63,5 +63,12 @@ export default {
 
 .producttext:hover:before {
     right: 0;
+}
+
+.categorynametxt {
+  font-family: "Vollkorn", serif;
+  font-weight: 600;
+  font-size: 4.3rem;
+  font-style: italic;
 }
 </style>

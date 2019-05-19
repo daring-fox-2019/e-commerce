@@ -2,7 +2,7 @@
   <div>
     <div class="container">
         <div class="row">
-      <div class="col-sm-12 col-md-4">
+      <div class="ovl px-3 py-2 col-sm-12 col-md-4">
         <DescBlock v-bind:category="category" id="hehe">
         </DescBlock>
     </div>

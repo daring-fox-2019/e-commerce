@@ -13,6 +13,36 @@ Vue.prototype.axios = axios.create({
 
 Vue.prototype.swal = Swal
 
+
+router.beforeEach((to, from, next) => {
+  // console.log(to, '=====to=======from', from);
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // console.log('masuk if atass');
+    if (!localStorage.getItem('token')) {
+      next({
+        path: '/',
+        params: {
+          name : "landing"
+        }
+      })
+    } else {
+      if (to.matched.some(record => record.meta.is_admin)) {
+        if (localStorage.getItem('role') == 'admin') {
+          next()
+        } else {
+          next({path: '/'})
+        }
+      } else {
+        next()
+      }
+    }
+  } else {
+    next()
+  }
+})
+
+
+
 new Vue({
   router,
   render: h => h(App)
