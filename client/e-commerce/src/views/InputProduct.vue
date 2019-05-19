@@ -1,7 +1,12 @@
 <template>
-  <div class="container p-5">
+  <div class="container p-5" style="margin-top:100px">
+    <div class="pb-4">
+      <h1>Add <b> Product </b> Here ... </h1>
+    </div>
+
     <div class="row">
-      <div class="col border p-5">
+
+      <div class="col-lg-6 col-sm-12 border p-5">
         <div class="row">
           <div style="background-color:#f1f1f1;width:100%;height:400px; overflow:hidden">
             <img :src="product.image" width="100%" height="auto">
@@ -34,7 +39,7 @@
           </b-form>
         </div>
       </div>
-      <div class="col px-5">
+      <div class="col-lg-6 col-sm-12 px-5">
         <b-form @submit.prevent="submitProduct">
           <div class="p-2">
             <label for="name-product">Product Name :</label>
@@ -52,6 +57,11 @@
           </div>
 
           <div class="p-2">
+            <label for="price-product">Weight : <span style="color:grey"> <i>input on gram </i></span></label>
+            <b-input v-model="product.weight" id="weight-product" class="p-2"></b-input>
+          </div>
+
+          <div class="p-2">
             <label for="price-product">Price</label>
             <b-input v-model="product.price" id="price-product" class="p-2"></b-input>
           </div>
@@ -60,9 +70,10 @@
               <label for="price-product">Tags</label>
             <vue-tags-input v-model="tag" :tags="product.tags" @tags-changed="newTags => product.tags = newTags"/>
           </div>
-        
+
         <div class="p-2 mt-1">
-          <b-button variant="success" block type="submit"> submit product</b-button>
+          <b-button variant="success" block type="submit" v-if="!editFlag"> submit product</b-button>
+          <b-button variant="success" block type="button" v-if="editFlag" @click.prevent="editProduct"> edit product</b-button>
         </div>
         </b-form>
       </div>
@@ -71,16 +82,16 @@
 </template>
 
 <script>
-import VueTagsInput from "@johmun/vue-tags-input";
-import axios from '@/database/axios'
+import VueTagsInput from '@johmun/vue-tags-input';
+import axios from '@/database/axios';
 
 export default {
   components: {
-    VueTagsInput
+    VueTagsInput,
   },
   data() {
     return {
-      userId: "",
+      userId: '',
       file: null,
       product: {
         name: null,
@@ -89,63 +100,87 @@ export default {
         stock: 0,
         image: null,
         tags: [],
+        weight: null,
       },
       tag: '',
-      
+      editFlag: false,
+
     };
+  },
+  mounted() {
+    if (this.$route.params.id) {
+      this.getProductData();
+      this.editFlag = true;
+    }
   },
   methods: {
     reset() {
       this.file = null;
     },
-    clearProduct(){
-       this.product = {
+    clearProduct() {
+      this.product = {
         name: null,
         description: null,
         price: 0,
         stock: 0,
         image: null,
         tags: [],
-      }
+      };
     },
-    submitProduct(){
-      axios.post('/products',
-          { name : this.product.name,
-            description : this.product.description,
-            price : this.product.price,
-            stock : this.product.stock,
-            image : this.product.image,
-            tags : this.product.tags
-          },
-          { headers : { token: localStorage.getItem('token')}
+    getProductData() {
+      const { id } = this.$route.params;
+
+      axios.get(`/products/${id}`, { headers: { token: localStorage.getItem('token') } })
+        .then(({ data }) => {
+          this.product = data;
         })
-      .then( ({ data }) => {
-        this.$swal('Success', 'Add Product Success', 'success')
-        this.clearProduct()
-      })
-      .catch( err => {
-        this.$swal('Oopps...', `${err.response.data.message}`, 'error')
-      })
+        .catch((err) => {
+          this.$swal(':(', `${err.response.data.message}`, 'error');
+        });
     },
-    uploadPhoto(){
-      if(this.file){
-        let formData = new FormData()
+    editProduct() {
+      const { id } = this.$route.params;
+      axios.patch(`/products/${id}`,
+        this.product,
+        { headers: { token: localStorage.getItem('token') } })
+        .then(({ data }) => {
+          this.$store.commit('updateProduct', data);
+          this.$swal('Success', 'Edit Product Success', 'success');
+        })
+        .catch((err) => {
+          this.$swal('Oopps...', `${err.response.data.message}`, 'error');
+        });
+    },
+    submitProduct() {
+      axios.post('/products',
+        this.product,
+        { headers: { token: localStorage.getItem('token') } })
+        .then(({ data }) => {
+          this.$swal('Success', 'Add Product Success', 'success');
+          this.clearProduct();
+        })
+        .catch((err) => {
+          this.$swal('Oopps...', `${err.response.data.message}`, 'error');
+        });
+    },
+    uploadPhoto() {
+      if (this.file) {
+        const formData = new FormData();
         formData.append('file', this.file);
 
-        axios.post(`/upload`,
-          formData, { headers :{token : localStorage.getItem('token')}}
-        ).then(({data}) =>  {
-          this.reset()
-          this.product.image = data
+        axios.post('/upload',
+          formData, { headers: { token: localStorage.getItem('token') } }).then(({ data }) => {
+          this.reset();
+          this.product.image = data.url;
+          this.product.tags = data.labels;
         })
-        .catch( err =>  {
-          this.$swal('Oopps...', `${err.response.data.message}`, 'error')
-        });
-
+          .catch((err) => {
+            this.$swal('Oopps...', `${err.response.data.message}`, 'error');
+          });
       } else {
-        this.$swal('Oopps...', 'input photo first', 'error')
+        this.$swal('Oopps...', 'select photo first', 'error');
       }
-    }
-  }
+    },
+  },
 };
 </script>

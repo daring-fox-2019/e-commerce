@@ -1,39 +1,26 @@
 <template>
   <div class="home">
-    
-    <InputProduct />
-    <Card></Card>
-    <ProductDetail></ProductDetail>
-    <Login />
-    <Register/>
-    <Transaction />
-    <!-- <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+    <router-view></router-view>
+    <CardDeck />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
 import Header from '@/components/Header.vue';
-import Card from '@/components/CardDeck.vue';
-import ProductDetail from '@/components/ProductDetail.vue';
-import Login from '@/components/Login.vue';
-import Register from '@/components/Register.vue';
-import Transaction from '@/components/Transaction.vue';
-import InputProduct from '@/components/InputProduct.vue';
+import CardDeck from '@/views/CardDeck.vue';
+import axios from '@/database/axios';
 
 export default {
   name: 'home',
   components: {
-    InputProduct,
-    Transaction,
-    Register,
-    Login,
-    ProductDetail,
-    Card,
     Header,
-    HelloWorld,
+    CardDeck,
+  },
+  mounted() {
+    if (localStorage.getItem('token')) {
+      this.$store.dispatch('getCartData');
+    }
   },
 };
 </script>

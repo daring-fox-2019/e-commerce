@@ -7,6 +7,7 @@ class Cart {
 
         cartModel.create( { product_id, user_id, qty } )
         .then( data => {
+            
             res.status(201).json(data)
         }) 
         .catch( err => {
@@ -43,6 +44,14 @@ class Cart {
         const _id = req.params.id
 
         cartModel.findById(_id)
+        .populate({ 
+            path:'product_id',
+            model : 'Product',
+            populate : {
+                path : 'seller_id',
+                select: ['name', 'email', 'address']
+            }
+        })
         .then( data => {
             res.status(200).json(data)
         })
@@ -59,6 +68,17 @@ class Cart {
         }
 
         cartModel.find( obj )
+        .populate({ 
+            path: 'product_id',
+            populate : 
+                { path: 'seller_id',
+                  select: ['email', 'name', '_id', 'address']
+                }
+        })
+        .populate({ 
+            path : 'user_id',
+            select: ['email', 'name', '_id', 'address']
+         })
         .then( data => {
             res.status(200).json(data)
         })

@@ -3,11 +3,18 @@ const Schema = mongoose.Schema
 
 TransactionSchema = new Schema({
     buyer_id: {
-        type : Schema.Types.ObjectId, ref: 'User',
+        type : Schema.Types.ObjectId, 
+        ref: 'User',
+        required : true
+    },
+    seller_id : {
+        type : Schema.Types.ObjectId, 
+        ref: 'User',
         required : true
     },
     product_id: {
-        type : Schema.Types.ObjectId, ref: 'Item',
+        type : Schema.Types.ObjectId, 
+        ref: 'Product',
         required : true
     },
     status: {
@@ -18,8 +25,11 @@ TransactionSchema = new Schema({
         type: Number,
         required: true
     },
-    shipping_cost : {
-        type : String
+    total: {
+        type: Number,
+    },
+    shipping : {
+        type : Object
     },
     resi : {
         type: String

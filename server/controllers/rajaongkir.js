@@ -44,17 +44,26 @@ class Ongkir{
     }
 
     static cost(req, res, next){
-        const { origin, destination, weight, courier } = req.body
-
+        const { origin, destination, weight, courier } = req.query
+        console.log( origin, destination, weight, courier, '=========================')
         axios.post('https://api.rajaongkir.com/starter/cost',
         { origin, destination, weight, courier },
         {headers : { 
             key : process.env.RAJAONGKIR_KEY}
         })
         .then( ({data}) => {
+            let service = data.rajaongkir.results[0].costs
+            if( service.length != 0){
+                let newArr = []
+                service.map( el =>{
+                    newArr.push({text: `${el.service} | ${el.cost[0].etd} days`, value: el.cost[0].value})
+                })
+                data.service = newArr
+            }
             res.status(200).json(data)
         })
         .catch( err => {
+            //console.log( err )
             next(err)
         })
     }

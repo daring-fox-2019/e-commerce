@@ -14,7 +14,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
 
-mongoose.connect(process.env.DB_TEST, { useNewUrlParser: true })
+mongoose.connect(process.env.DB_ATLAS, { useNewUrlParser: true })
 mongoose.connection.on('connected', function (err) {
    if( err ) {
       console.log( err )
@@ -25,11 +25,11 @@ app.use('/', routes)
 app.use(errorHandling)
 
 
-// app.listen(process.env.PORT, ( err )=> {
-//    if( err ) {
-//       console.log( err )
-//    } else 
-//    console.log(`listen on port ${process.env.PORT}`)
-// })
+app.listen(process.env.PORT, ( err )=> {
+   if( err ) {
+      console.log( err )
+   } else 
+   console.log(`listen on port ${process.env.PORT}`)
+})
 
 module.exports = app

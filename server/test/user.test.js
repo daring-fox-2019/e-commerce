@@ -42,6 +42,7 @@ describe('user_test', function(){
                     expect(res.body).to.have.property('_id')
                     expect(res.body).to.have.property('password')
                     expect(res.body).to.have.property('email')
+                    expect(res.body).to.have.property('role')
                     done()
                 })
         })

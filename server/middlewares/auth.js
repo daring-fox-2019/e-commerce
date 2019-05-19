@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const productModel = require('../models/product')
 const cartModel = require('../models/cart')
+const transactionModel = require('../models/transaction')
 
 module.exports = {
     authenticate(req, res, next){
@@ -21,7 +22,7 @@ module.exports = {
 
         productModel.findById({ _id })
         .then( data => {
-            if( data.userId == req.decoded.id ){
+            if( data.seller_id == req.decoded.id || req.decoded.role == 'admin' ){
                 next()
             } else {
                 next({ message: 'Unauthorize'})
@@ -37,6 +38,18 @@ module.exports = {
         cartModel.findById({ _id })
         .then( data => {
             if( data.user_id == req.decoded.id ){
+                next()
+            } else {
+                next({ message: 'Unauthorize'})
+            }
+        })
+    },
+    authorizationTransaction(req, res, next){
+        const _id = req.params.id
+
+        transactionModel.findById( _id )
+        .then( data => {
+            if( data.buyer_id == req.decoded.id || req.decoded.role == 'admin'){
                 next()
             } else {
                 next({ message: 'Unauthorize'})

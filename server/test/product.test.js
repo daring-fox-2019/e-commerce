@@ -65,6 +65,7 @@ describe('product_test', function(){
                 .set('token', token )
                 .end( function(err, res){
                     id = res.body._id
+                    
                     expect(err).to.be.null;
                     expect(res).to.have.status(201);
                     expect(res.body).to.be.an('object');
@@ -212,11 +213,11 @@ describe('product_test', function(){
                 })
         })
 
-        it(' error update stock less than 1 400', function( done ){
+        it(' error update stock less than 0 400', function( done ){
             chai
                 .request(app)
                 .patch(`/products/${id}`)
-                .send({ stock: 0 , description: 'enak sekali', price: 1000, name:'beras' })
+                .send({ stock: -1 , description: 'enak sekali', price: 1000, name:'beras' })
                 .set('token', token )
                 .end( function(err, res){
                     expect(res).to.have.status(400);

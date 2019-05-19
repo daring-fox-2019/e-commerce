@@ -3,6 +3,6 @@ const Ongkir = require('../../controllers/rajaongkir')
 
 router.get('/province', Ongkir.getAllProvince)
 router.get('/city', Ongkir.getAllCity)
-router.post('/cost', Ongkir.cost)
+router.get('/cost', Ongkir.cost)
 
 module.exports = router

@@ -52,21 +52,21 @@ before( function( done ) {
     })
 })
 
-after(function (done) {
-    productModel.deleteMany({})
-        .then(_ => {
-            return userModel.deleteMany({})
-        })
-        .then(() => {
-            return cartModel.deleteMany({})
-        })
-        .then( _ => {
-            done()
-        })
-        .catch( err => {
-            console.log(err)
-        })
-});
+// after(function (done) {
+//     productModel.deleteMany({})
+//         .then(_ => {
+//             return userModel.deleteMany({})
+//         })
+//         .then(() => {
+//             return cartModel.deleteMany({})
+//         })
+//         .then( _ => {
+//             done()
+//         })
+//         .catch( err => {
+//             console.log(err)
+//         })
+// });
 
 
 describe('cart test', function(){
