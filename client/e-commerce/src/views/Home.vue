@@ -12,7 +12,7 @@
 <script>
 export default {
   name: 'home',
-  props: [ 'isLogin', 'userId'],
+  props: ['isLogin', 'userId'],
   data: function () {
     return {
 

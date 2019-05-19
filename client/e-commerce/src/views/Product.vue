@@ -1,7 +1,9 @@
 <template>
   <div>
-    Product<br>
-    Login Status : {{isLogin}}<br>
+    Product
+    <br>
+    Login Status : {{isLogin}}
+    <br>
     User Login : {{userId}}
   </div>
 </template>
@@ -9,11 +11,9 @@
 <script>
 export default {
   name: 'Product',
-  props: [ 'isLogin', 'userId'],
+  props: ['isLogin', 'userId'],
   data: function () {
-    return {
-
-    }
+    return {}
   }
 }
 </script>

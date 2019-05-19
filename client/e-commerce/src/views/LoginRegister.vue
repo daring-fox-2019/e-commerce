@@ -90,12 +90,17 @@
 
 <script>
 export default {
-  name: "LoginRegister",
-  props: ["isLogin", "userId"],
-  data: function() {
-    return {};
+  name: 'LoginRegister',
+  props: ['isLogin', 'userId'],
+  data: function () {
+    return {
+      emaillogin: '',
+      passwordlogin: '',
+      emailregister: '',
+      passwordregister: ''
+    }
   },
-  mounted() {},
+  mounted () {},
   watch: {}
-};
+}
 </script>

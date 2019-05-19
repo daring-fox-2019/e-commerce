@@ -4,12 +4,13 @@
       <div class="d-block text-center">
         <ul class="list-group">
           <li
-            v-for="(item, i) in items"
+            v-for="item in items"
             :key="item.id"
             class="list-group-item d-flex justify-content-between align-items-center"
           >
             <img v-bind:src="item.image" style="width:50px; height:50px">
-            {{item.name}}<br>
+            {{item.name}}
+            <br>
             $ {{item.price}}
             <b-button @click="removeItem(item.id)">remove</b-button>
           </li>
@@ -56,58 +57,58 @@
 
 <script>
 let dummy = [
-        {
-          id: 1,
-          name: "ring 1",
-          image:
-            "https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fclimg8.bluestone.com%2Ff_jpg%2Cc_scale%2Cw_1024%2Cb_rgb%3Af0f0f0%2Fgiproduct%2FBD-R10_YAA18DIG6XXXXXXXX_ABCD00-PICS-00001-1024-1929.jpg&f=1",
-          price: 1200000
-        },
-        {
-          id: 2,
-          name: "ring 2",
-          image:
-            "https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fclimg8.bluestone.com%2Ff_jpg%2Cc_scale%2Cw_1024%2Cb_rgb%3Af0f0f0%2Fgiproduct%2FBD-R10_YAA18DIG6XXXXXXXX_ABCD00-PICS-00001-1024-1929.jpg&f=1",
-          price: 2000000
-        }
-      ]
+  {
+    id: 1,
+    name: 'ring 1',
+    image:
+      'https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fclimg8.bluestone.com%2Ff_jpg%2Cc_scale%2Cw_1024%2Cb_rgb%3Af0f0f0%2Fgiproduct%2FBD-R10_YAA18DIG6XXXXXXXX_ABCD00-PICS-00001-1024-1929.jpg&f=1',
+    price: 1200000
+  },
+  {
+    id: 2,
+    name: 'ring 2',
+    image:
+      'https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fclimg8.bluestone.com%2Ff_jpg%2Cc_scale%2Cw_1024%2Cb_rgb%3Af0f0f0%2Fgiproduct%2FBD-R10_YAA18DIG6XXXXXXXX_ABCD00-PICS-00001-1024-1929.jpg&f=1',
+    price: 2000000
+  }
+]
 export default {
-  name: "app",
-  data() {
+  name: 'app',
+  data () {
     return {
       isLogin: false,
-      userId: "no user",
-      cartId: "1",
+      userId: 'no user',
+      cartId: '1',
       items: dummy
-    };
+    }
   },
-  mounted() {
-    this.checkLogin();
+  mounted () {
+    this.checkLogin()
   },
   methods: {
-    showModalCart() {
-      this.$refs["my-modal"].show();
+    showModalCart () {
+      this.$refs['my-modal'].show()
     },
-    hideModalCart() {
-      this.$refs["my-modal"].hide();
+    hideModalCart () {
+      this.$refs['my-modal'].hide()
     },
-    checkLogin() {
-      if (localStorage.getItem("token")) {
-        this.isLogin = true;
-        this.userId = localStorage.getItem("_id");
+    checkLogin () {
+      if (localStorage.getItem('token')) {
+        this.isLogin = true
+        this.userId = localStorage.getItem('_id')
       } else {
-        this.isLogin = false;
-        this.userId = "no user";
+        this.isLogin = false
+        this.userId = 'no user'
       }
     },
-    removeItem(id){
+    removeItem (id) {
       let items = this.items
       items.forEach((element, i) => {
-        if(element.id == id){
-          items.splice(i,1)
+        if (element.id === id) {
+          items.splice(i, 1)
         }
-      });
+      })
     }
   }
-};
+}
 </script>

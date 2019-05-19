@@ -9,7 +9,7 @@
 <script>
 export default {
   name: 'History',
-  props: [ 'isLogin', 'userId'],
+  props: ['isLogin', 'userId'],
   data: function () {
     return {
 
