@@ -24,7 +24,7 @@ module.exports = function(req, res, next) {
         }
         catch(error) {
             console.log(error);
-            res.status(500).json(`Error checking token. Please try again`)
+            res.status(500).json(`Please try again or LOGIN first!`)
         }
     }
     else {

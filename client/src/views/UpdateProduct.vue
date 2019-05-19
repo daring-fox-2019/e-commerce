@@ -21,8 +21,8 @@ export default {
         fetchData() {
             api.get('/products/' + this.$route.params.id, { headers: {'Authorization': localStorage.ecomm_token}})
             .then(({data}) => {
-                console.log(this.internalProduct);
                 this.formData = data
+                console.log('updateproduct: fetch done..', this.formData);
             })
             .catch(err => {
                 swal.fire('Error', err.response.data,'error')
@@ -40,24 +40,40 @@ export default {
             return formData;
         },
         updateProduct(data) {
-            console.log(data, ' <---- update fired');
-            this.formData = data
-            const formData = this.getFormData(this.formData)
+            this.formData = data;
+            let formData = this.getFormData(this.formData)
 
             const config = {
                 headers: {
                     'Authorization': localStorage.ecomm_token
                 }
             };
+            
+            if(typeof(this.formData.image) === 'string') {
+                console.log('normal upload...');
+                formData = this.formData;
+                
+                api.put('/products/' + this.formData._id, formData, config)
+                    .then(({data}) => {
+                        swal.fire('Success', "Product updated successfully!", 'success')
+                        this.$router.push('/products/' + this.formData._id)
+                    })
+                    .catch(err => {
+                        swal.fire('Error', err.response.data, 'error')
+                    })
+            }
+            else {
+                console.log('upload with pic change...');
+                api.put('/products/' + this.formData._id + '/pic', formData, config)
+                    .then(({data}) => {
+                        swal.fire('Success', "Product updated successfully!", 'success')
+                        this.$router.push('/products/' + this.formData._id)
+                    })
+                    .catch(err => {
+                        swal.fire('Error', err.response.data, 'error')
+                    })
+            }
 
-            api.put('/products', formData, config)
-                .then(({data}) => {
-                    swal.fire('Success', "Product updated successfully!", 'success')
-                    this.$router.push('/products/' + this.$props.product._id)
-                })
-                .catch(err => {
-                    swal.fire('Error', err.response.data, 'error')
-                })
         }
     },
 }

@@ -15,7 +15,10 @@ export default {
   },
   watch: {
       quantity: function(oldval, newval){
-        //   this.internalquantity = this.$props.quantity;
+          this.internalquantity = this.$props.quantity;
+          if(!this.internalquantity) {
+            this.internalquantity = 0;
+          }
       }
   },
   computed: {

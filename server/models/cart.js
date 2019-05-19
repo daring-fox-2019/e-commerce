@@ -4,6 +4,7 @@ const Schema = mongoose.Schema
 const cartSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
+        ref: 'User',
         required: [true, 'Cart must have related user']
     },
     totalAmount: {

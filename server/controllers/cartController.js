@@ -1,7 +1,6 @@
 const Cart = require('../models/cart')
 const CartItem = require('../models/cartItem')
 const Product = require('../models/product')
-const User = require('../models/user')
 
 class CartController {
     static currentCart(req, res) {
@@ -50,7 +49,6 @@ class CartController {
 
         let item = req.body;
 
-        console.log(cartId, item);
         //dummy cart for first time cart by client
         if (cartId === '0') {
             Cart.create({
@@ -224,15 +222,35 @@ class CartController {
     }
 
     static purchase(req, res) {
-        Cart.findOneAndUpdate({
-            _id: req.params.id
-        }, {
-            status: 'paid'
-        }, {
-            new: true
-        })
-        .then(cart => {
-                res.status(200).json(cart)
+        let promises = [];
+
+        Cart.findOne({_id: req.params.id})
+            .populate('items')
+            .then(cart => {
+                cart.items.forEach(x => {
+                    promises.push(Product.findOneAndUpdate({_id: x.product}, {$inc: {stock: x.quantity * -1}}, {new: true}));
+                })
+
+                Promise.all(promises)
+                    .then(results => {
+                        Cart.findOneAndUpdate({
+                            _id: req.params.id
+                        }, {
+                            status: 'paid'
+                        }, {
+                            new: true
+                        })
+                        .then(cart => {
+                            res.status(200).json(cart)
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            res.status(500).json(err.message)
+                        })
+                    })
+                    .catch(err => {
+                        res.status(500).json(err.message);
+                    })
             })
             .catch(err => {
                 console.log(err);

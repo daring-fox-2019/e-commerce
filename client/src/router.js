@@ -14,6 +14,11 @@ export default new Router({
       component: Home,
     },
     {
+      path: '/search/:query',
+      name: 'search',
+      component: () => import(/* webpackChunkName: "search" */ './components/SearchResult.vue'),
+    },
+    {
       path: '/products/:id',
       component: () => import(/* webpackChunkName: "product-detail" */ './views/ProductHome.vue'),
       children: [
@@ -28,6 +33,11 @@ export default new Router({
           component: () => import(/* webpackChunkName: "product-update" */ './views/UpdateProduct.vue'),
         },
       ],
+    },
+    {
+      path: '/transactions',
+      name: 'transactions-admin',
+      component: () => import(/* webpackChunkName: "transactions-admin" */ './views/TransactionsAdmin.vue'),
     },
     {
       path: '/products',

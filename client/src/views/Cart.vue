@@ -95,7 +95,8 @@ export default {
                 .then(({ data }) => {
                     swal.close();
                     swal.fire('Success', `We've received your payment succesfully.
-                    Please go to your User page to confirm the delivery receipt.`, 'success')
+                    Please go to your User page to confirm the delivery receipt.`, 'success');
+                    this.$router.push('/user/transactions')
                 })
                 .catch(err => {
                     swal.close();

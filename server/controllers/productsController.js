@@ -55,11 +55,29 @@ class ProductController {
             })
     }
     static update(req, res) {
+        if(req.file) {
+            req.body.image = req.file.cloudStoragePublicUrl
+        }
         Product.update({_id: req.params.id}, req.body, {new: true})
             .then(product => {
                 res.status(200).json(product)
             })
             .catch(err => {
+                console.log(err);
+                res.status(500).json(err.message)
+            })
+    }
+    static search(req, res) {
+
+        let findRegex = new RegExp(req.params.key, "i");
+        console.log(findRegex);
+
+        Product.find({ $or:[ {name: findRegex}, {description : findRegex} ]})
+            .then(results => {
+                res.status(200).json(results)
+            })
+            .catch(err => {
+                console.log(err);
                 res.status(500).json(err.message)
             })
     }

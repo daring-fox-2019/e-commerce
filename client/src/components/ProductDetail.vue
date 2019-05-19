@@ -6,10 +6,7 @@
       </div>
       <v-flex>
         <v-layout column>
-          <v-layout
-            wrap
-            class="headline product-title font-weight-bold"
-          >{{ shopProduct.name }}</v-layout>
+          <v-layout wrap class="headline product-title font-weight-bold">{{ shopProduct.name }}</v-layout>
           <h1 class="headline yellow--text font-weight-bold py-3">Rp. {{formatPrice}}</h1>
           <v-layout row align-center>
             <span class="title mr-3">Quantity:</span>
@@ -27,9 +24,7 @@
         <v-tab class="font-weight-bold" ripple>Description</v-tab>
         <v-tab-item>
           <v-card flat>
-            <v-card-text>
-                {{ productDesc }}
-            </v-card-text>
+            <v-card-text>{{ productDesc }}</v-card-text>
           </v-card>
         </v-tab-item>
       </v-tabs>
@@ -54,12 +49,14 @@ export default {
   },
   computed: {
     productDesc() {
-        if(this.shopProduct.description && this.shopProduct.description.length > 0) {
-            return this.shopProduct.description;
-        }
-        else {
-            return 'There is no product information yet';
-        }
+      if (
+        this.shopProduct.description &&
+        this.shopProduct.description.length > 0
+      ) {
+        return this.shopProduct.description;
+      } else {
+        return "There is no product information yet";
+      }
     },
     formatPrice() {
       return commaFormat(this.internalProduct.price);
@@ -73,24 +70,29 @@ export default {
   },
   methods: {
     addToCart() {
+      if(this.internalProduct.quantity > this.internalProduct.stock) {
+        swal.fire('AddCartItem Error', `Quantity requested more than current stock!` , 'error');
+      }
+      else {
         let item = {
-          _id: this.internalProduct._id, 
-          quantity: this.internalProduct.quantity, 
-          price: (this.internalProduct.quantity * this.internalProduct.price)
-        }
+          _id: this.internalProduct._id,
+          quantity: this.internalProduct.quantity,
+          price: this.internalProduct.quantity * this.internalProduct.price
+        };
         this.$store
-            .dispatch('addCartItem', item)
-            .then(({ data }) => {
-                console.log(data);
-                this.$store.dispatch('getCurrentCart');
-            })
-            .catch((err) => {
-              let msg  = err.response.data
-              if(msg.includes('dup')) {
-                msg = 'Product existing in the cart!'
-              }
-              swal.fire('AddItem Error', msg , 'error');
-            });
+          .dispatch("addCartItem", item)
+          .then(({ data }) => {
+            console.log(data);
+            this.$store.dispatch("getCurrentCart");
+          })
+          .catch(err => {
+            let msg = err.response.data;
+            if (msg.includes("dup")) {
+              msg = "Product existing in the cart!";
+            }
+            swal.fire("AddItem Error", msg, "error");
+          });
+      }
     },
     fetchData() {
       api
@@ -100,7 +102,7 @@ export default {
         .then(({ data }) => {
           this.internalProduct = data;
           this.shopProduct = data;
-          this.shopProduct.stock = 1;
+          // this.shopProduct.stock = 1;
         })
         .catch(err => {
           swal.fire("Error", err.response.data, "error");
@@ -126,9 +128,9 @@ export default {
   min-height: 80px;
 }
 .description-tabs {
-    width: 100%;
-    min-height: 200px;
-    margin-bottom: 50px;
+  width: 100%;
+  min-height: 200px;
+  margin-bottom: 50px;
 }
 
 * {
@@ -137,6 +139,6 @@ export default {
 </style>
 <style scoped>
 .btn {
-    margin: 0;
+  margin: 0;
 }
 </style>

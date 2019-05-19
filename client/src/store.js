@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import api from '@/api/backend';
+import router from '@/router';
 
 Vue.use(Vuex);
 const store = new Vuex.Store({
@@ -10,6 +11,7 @@ const store = new Vuex.Store({
     isLogin: false,
     user: null,
     cart: null,
+    searchList: null,
   },
   mutations: {
     setUser(s, p) {
@@ -30,6 +32,9 @@ const store = new Vuex.Store({
     updateUserImage(s, p) {
       s.user.image = p;
     },
+    setSearchList(s, p) {
+      s.searchList = p;
+    }
   },
   actions: {
     getCurrentCart(context) {
@@ -55,6 +60,16 @@ const store = new Vuex.Store({
     },
     confirmReceipt(context, id) {
       return api.patch(`/cart/${id}/confirm-receipt`, {}, { headers: { Authorization: localStorage.ecomm_token } });
+    },
+    searchProducts(context, query) {
+      api.get(`/products/search/${query}`)
+        .then(({ data }) => {
+          context.commit('setSearchList', data);
+          router.push(`/search/${query}`);
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+        });
     },
   },
 });

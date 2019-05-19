@@ -25,7 +25,7 @@
           </v-list-tile-content>
         </v-list-tile>
         <!-- Public Products Page -->
-        <v-list-tile v-if="!isLogin" to="/shop">
+        <v-list-tile v-if="!isLogin" to="/products">
           <v-list-tile-action>
             <v-icon>assignment</v-icon>
           </v-list-tile-action>
@@ -34,10 +34,7 @@
           </v-list-tile-content>
         </v-list-tile>
         <!-- Products -->
-        <v-list-group
-          prepend-icon="assignment"
-          v-if="isLogin"
-          value="true">
+        <v-list-group prepend-icon="assignment" v-if="isLogin" value="true">
           <template v-slot:activator>
             <v-list-tile>
               <v-list-tile-content>
@@ -53,7 +50,11 @@
               <v-list-tile-title>Products List</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-list-tile v-if="$store.state.user && $store.state.user.role ==='admin'" class="ml-4" to="/addproduct">
+          <v-list-tile
+            v-if="$store.state.user && $store.state.user.role ==='admin'"
+            class="ml-4"
+            to="/addproduct"
+          >
             <v-list-tile-action>
               <v-icon>add</v-icon>
             </v-list-tile-action>
@@ -62,6 +63,17 @@
             </v-list-tile-content>
           </v-list-tile>
         </v-list-group>
+        <v-list-tile
+          v-if="$store.state.user && $store.state.user.role ==='admin'"
+          to="/transactions"
+        >
+          <v-list-tile-action>
+            <v-icon>list</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>All Transactions</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
         <!-- Products -->
         <v-list-tile to="/cart" v-if="isLogin">
           <v-list-tile-action>
@@ -72,7 +84,6 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
-
     </v-navigation-drawer>
     <v-toolbar fixed app dense class="topNav">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
@@ -81,10 +92,13 @@
       </v-toolbar-title>
       <span class="text-truncate">Pusat Buku Islam</span>
       <v-spacer/>
-      <v-text-field class="mr-2"
+      <v-text-field
+        class="mr-2"
         clearable
         placeholder="Cari Buku"
         solo
+        v-model="searchKey"
+        @change="search"
         prepend-inner-icon="search"
       ></v-text-field>
       <v-toolbar-items v-if="!isLogin">
@@ -100,20 +114,31 @@
         </v-btn>
         <v-btn to="/cart" v-if="itemsInCart > 0">
           <v-badge right overlap class="black--text" color="red">
-          <template v-slot:badge>
-            <span>{{ itemsInCart }}</span>
-          </template>
-          <v-icon color="grey lighten-1">shopping_cart</v-icon>
-        </v-badge>
+            <template v-slot:badge>
+              <span>{{ itemsInCart }}</span>
+            </template>
+            <v-icon color="grey lighten-1">shopping_cart</v-icon>
+          </v-badge>
         </v-btn>
         <v-btn color="yellow" light @click="signOut">Logout</v-btn>
       </v-toolbar-items>
     </v-toolbar>
-    <v-content>
+    <v-content class="viewport">
       <router-view :user="user"/>
     </v-content>
-    <v-footer app inset>
-      <span class="white--text">&copy; 2019 - Andre Suchitra</span>
+    <v-footer height="auto">
+      <v-card flat class="text-xs-center screenwidth">
+        <v-card-text
+          class="white--text pt-3"
+        >
+          BukuBerkah adalah situs e-commerce yang menyajikan buku-buku Islam Pilihan. Beragam topik tersedia di website ini, mulai dari Aqidah, Tafsir, hingga berbagai macam pilihan mushaf Al-Quran <br/>
+          Mari meningkatkan ilmu keislaman Anda dengan membaca buku-buku Islam
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-text class="white--text">
+          <strong>&copy;2019 — Andre Suchitra</strong>
+        </v-card-text>
+      </v-card>
     </v-footer>
   </v-app>
 </template>
@@ -126,21 +151,20 @@ export default {
   name: "App",
   data() {
     return {
-      drawer: false
+      drawer: false,
+      searchKey: ""
     };
   },
   computed: {
     itemsInCart() {
-      if(this.isLogin) {
-        if(this.cart && this.cart.items.length > 0) {
-          return this.cart.items.length
+      if (this.isLogin) {
+        if (this.cart && this.cart.items.length > 0) {
+          return this.cart.items.length;
+        } else {
+          return 0;
         }
-        else {
-          return 0
-        }
-      }
-      else {
-        return 0
+      } else {
+        return 0;
       }
     },
     userPic() {
@@ -163,20 +187,23 @@ export default {
   },
   mounted() {
     const token = localStorage.getItem("ecomm_token");
-    if(token) {
+    if (token) {
       this.getUserData();
-      this.$store.dispatch('getCurrentCart');
+      this.$store.dispatch("getCurrentCart");
     }
-    
+
     //load Google Logout client
-    if (typeof(gapi) !== undefined) {
+    if (typeof gapi !== undefined) {
       gapi.load("auth2", () => {
-        console.log('gapi load...');
+        console.log("gapi load...");
         gapi.auth2.init();
       });
     }
   },
   methods: {
+    search(evt) {
+      this.$store.dispatch("searchProducts", evt);
+    },
     getUserData() {
       api
         .get("/auth/user/", {
@@ -185,7 +212,7 @@ export default {
         .then(({ data }) => {
           this.$store.commit("setIsLogin", true);
           this.$store.commit("setUser", data);
-          this.$store.dispatch('getCurrentCart');
+          this.$store.dispatch("getCurrentCart");
         })
         .catch(({ response }) => {
           swal.fire("Error", response.data, "error");
@@ -202,8 +229,8 @@ export default {
       var auth2;
       const self = this;
       self.processSignOut();
-      
-      if(gapi) {
+
+      if (gapi) {
         auth2 = gapi.auth2.getAuthInstance();
         auth2.signOut().then(function() {
           //
@@ -238,4 +265,13 @@ export default {
 .navDrawer {
   z-index: 10;
 }
+
+.viewport {
+  min-height: 100vh;
+}
+.screenwidth {
+  width: 100%;
+  min-width: 100%;
+}
+
 </style>

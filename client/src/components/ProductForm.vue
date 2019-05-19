@@ -51,7 +51,7 @@
 import Quantity from '@/components/Quantity.vue'
 
 export default {
-  props: ["type"],
+  props: ["type", 'data'],
   components: {
       Quantity,
   },
@@ -71,6 +71,17 @@ export default {
     },
     nameRules: [v => !!v || "Name is required"],
   }),
+  mounted() {
+    this.product = { ...this.$props.data };
+    this.imageData.imageurl = this.product.image;
+    this.$refs.form.resetValidation();
+  },
+  watch: {
+    'data': function() {
+      this.product = { ...this.$props.data };
+      this.imageData.imageurl = this.product.image;
+    },
+  },
   methods: {
     updateProductStock(qty) {
         this.product.stock = qty
