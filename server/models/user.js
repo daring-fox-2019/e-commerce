@@ -39,7 +39,8 @@ const UserSchema = new Schema( {
     type: String,
     minlength: [ 8, 'password must be 8 character' ],
     required: true
-  }
+  },
+  cart: Array
 } )
 
 UserSchema.pre( 'save', function ( next ) {

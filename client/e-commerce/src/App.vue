@@ -33,7 +33,7 @@
         <li class="nav-item" v-if="isLogin === true && userId !== 'no user'">
           <router-link class="nav-link" to="/transactions">Transactions</router-link>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="userId !== '5ce158d52edb972b1e4dc5c4'">
           <a class="nav-link" @click="showModalCart">
             Cart
             <span class="badge badge badge-light">{{items.length}}</span>
@@ -56,7 +56,7 @@
       </ul>
     </nav>
     <div>
-      <router-view v-on:login="login" :isLogin="isLogin" :userId="userId" :page="''"/>
+      <router-view v-on:login="login" :isLogin="isLogin" :userId="userId" ::isAdmin="isAdmin"/>
     </div>
     <footer></footer>
   </div>
@@ -86,8 +86,12 @@ export default {
       isLogin: false,
       userId: 'no user',
       cartId: '1',
-      items: dummy
+      items: [],
+      isAdmin : false,
     }
+  },
+  created() {
+    this.checkLogin()
   },
   mounted () {
     this.checkLogin()
@@ -96,12 +100,13 @@ export default {
     login (data) {
       this.isLogin = data.isLogin
       this.userId = data.userId
+      this.cart = data.cart
     },
     logout () {
       this.items = []
       this.isLogin = false
       this.userId = 'no user'
-      localStorage.removeItem('tokern')
+      localStorage.removeItem('token')
       localStorage.removeItem('email')
       localStorage.removeItem('_id')
       this.$router.push('/')
@@ -115,7 +120,10 @@ export default {
     checkLogin () {
       if (localStorage.getItem('token')) {
         this.isLogin = true
-        this.userId = localStorage.getItem('_id')
+        this.userId = localStorage.getItem('user')
+        if(id === '5ce158d52edb972b1e4dc5c4'){
+        this.isAdmin = true
+        }
       } else {
         this.isLogin = false
         this.userId = 'no user'

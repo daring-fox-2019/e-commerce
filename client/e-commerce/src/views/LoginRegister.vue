@@ -103,21 +103,77 @@ export default {
       passwordlogin: '',
       emailregister: '',
       passwordregister: '',
-      showregister : true
+      showregister: true
     }
   },
   mounted () {},
   methods: {
     login () {
-      this.$emit('login', { isLogin: true, userId: 'aloha' })
-      this.$router.push('/')
+      this.$axios({
+        method: 'post',
+        url: 'http://localhost:3000/login',
+        data: {
+          email: this.emaillogin,
+          password: this.passwordlogin
+        }
+      })
+        .then(({ data }) => {
+          this.emaillogin = ''
+          this.passwordlogin = ''
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('user', data._id)
+          localStorage.setItem('email', data.email)
+          this.$emit('login', { isLogin: true, userId: data._id, cart: data.cart })
+          this.$router.push('/')
+        })
+        .catch(err => {
+          this.$swal('Error', err.response.data.message, 'error')
+          console.log(err.response)
+        })
     },
     register () {
-      this.$swal('Account Created', `Successfully created account ${this.emailregister}`, 'success')
-      this.emaillogin = this.emailregister
-      this.emailregister = ''
-      this.passwordregister = ''
-      this.showregister = false;
+      console.log('register')
+      let re = /^(([^<>()\[\]\.,;:\s@"]+(\.[^<>()\[\]\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      if (this.emailregister.length >= 8 &&
+      re.test(this.emailregister.toLowerCase()) === true &&
+      this.emailregister !== '') {
+        this.$axios({
+          method: 'post',
+          url: 'http://localhost:3000/register',
+          data: {
+            email: this.emailregister,
+            password: this.passwordregister,
+            cart: []
+          }
+        })
+          .then(({ data }) => {
+            this.$swal('Account Created', `Successfully created account ${this.emailregister}`, 'success')
+            this.emaillogin = this.emailregister
+            this.emailregister = ''
+            this.passwordregister = ''
+            this.showregister = false
+          })
+          .catch(err => {
+            this.$swal('Error', err.response.data.message, 'error')
+          })
+      } else {
+        let evalid = true
+        let pvalid = true
+        if (this.passwordregister.length < 8) {
+          pvalid = false
+        }
+        if (re.test(this.emailregister.toLowerCase()) === false) {
+          evalid = false
+        }
+        let message = 'Error : '
+        if (pvalid === false) {
+          message += '\n\n   **password must be 8 character or more** '
+        }
+        if (evalid === false) {
+          message += '\n\n   **please input a valid email address** '
+        }
+        this.$swal('Error', message, 'error')
+      }
     }
   }
 }

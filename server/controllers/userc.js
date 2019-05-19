@@ -10,7 +10,7 @@ class cUser {
         res.status(201).json(created);
       })
       .catch(err => {
-        res.status(400).json({ message: `bad request \n ${err}` });
+        res.status(400).json({ message: `${err}` });
       });
   }
   static login(req, res) {
