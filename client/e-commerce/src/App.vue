@@ -1,31 +1,113 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <b-modal hide-footer title="Your Cart" ref="my-modal">
+      <div class="d-block text-center">
+        <ul class="list-group">
+          <li
+            v-for="(item, i) in items"
+            :key="item.id"
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <img v-bind:src="item.image" style="width:50px; height:50px">
+            {{item.name}}<br>
+            $ {{item.price}}
+            <b-button @click="removeItem(item.id)">remove</b-button>
+          </li>
+        </ul>
+      </div>
+      <b-button class="mt-2" variant="outline-success" block @click="hideModalCart">Checkout</b-button>
+    </b-modal>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+      <ul class="navbar-nav mr-auto">
+        <li class="navbar-brand">
+          Jewelries
+          <i class="far fa-gem"></i>
+        </li>
+        <li class="nav-item">
+          <router-link class="nav-link" to="/">Home</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link class="nav-link" to="/products">Products</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link class="nav-link" to="/transactions">Transactions</router-link>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" @click="showModalCart">
+            Cart
+            <span class="badge badge badge-light">{{items.length}}</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <router-link
+            class="nav-link"
+            v-if="isLogin === false && userId === 'no user'"
+            to="/join"
+          >join us to start shopping</router-link>
+        </li>
+      </ul>
+    </nav>
+    <div>
+      <router-view :isLogin="isLogin" :userId="userId" :page="''"/>
     </div>
-    <router-view/>
+    <footer></footer>
   </div>
 </template>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+<script>
+let dummy = [
+        {
+          id: 1,
+          name: "ring 1",
+          image:
+            "https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fclimg8.bluestone.com%2Ff_jpg%2Cc_scale%2Cw_1024%2Cb_rgb%3Af0f0f0%2Fgiproduct%2FBD-R10_YAA18DIG6XXXXXXXX_ABCD00-PICS-00001-1024-1929.jpg&f=1",
+          price: 1200000
+        },
+        {
+          id: 2,
+          name: "ring 2",
+          image:
+            "https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fclimg8.bluestone.com%2Ff_jpg%2Cc_scale%2Cw_1024%2Cb_rgb%3Af0f0f0%2Fgiproduct%2FBD-R10_YAA18DIG6XXXXXXXX_ABCD00-PICS-00001-1024-1929.jpg&f=1",
+          price: 2000000
+        }
+      ]
+export default {
+  name: "app",
+  data() {
+    return {
+      isLogin: false,
+      userId: "no user",
+      cartId: "1",
+      items: dummy
+    };
+  },
+  mounted() {
+    this.checkLogin();
+  },
+  methods: {
+    showModalCart() {
+      this.$refs["my-modal"].show();
+    },
+    hideModalCart() {
+      this.$refs["my-modal"].hide();
+    },
+    checkLogin() {
+      if (localStorage.getItem("token")) {
+        this.isLogin = true;
+        this.userId = localStorage.getItem("_id");
+      } else {
+        this.isLogin = false;
+        this.userId = "no user";
+      }
+    },
+    removeItem(id){
+      let items = this.items
+      items.forEach((element, i) => {
+        if(element.id == id){
+          items.splice(i,1)
+        }
+      });
+    }
+  }
+};
+</script>
