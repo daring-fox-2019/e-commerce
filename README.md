@@ -46,4 +46,4 @@ $ npm run dev
 
 Access the API via http://localhost:3000/ 
 
-Visit deployed link in http://jualeun.qfs-hacktiv8.com/login
+Visit deployed link in http://jualeun.qfs-hacktiv8.com
