@@ -1,5 +1,5 @@
 <template>
-  <div class="container p-5" style="margin-top:100px">
+  <div class="container p-5 animated fadeIn" style="margin-top:100px">
     <div class="pb-4">
       <h1>Add <b> Product </b> Here ... </h1>
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="animated fadeIn">
     <div>
       <b-modal ref="my-modal" hide-footer title="Payment">
         <div class="d-block text-center">
@@ -73,9 +73,9 @@
           <tr v-for="(item, i) in cartList" :key="i">
             <th scope="row">{{ i+1 }}</th>
             <td>{{ item.product_id.name }}</td>
-            <td>{{ item.product_id.price }}</td>
+            <td> Rp. {{ new Intl.NumberFormat({ style: "currency" }).format(item.product_id.price)}}</td>
             <td>{{ item.qty }}</td>
-            <td>{{ item.qty * item.product_id.price }}</td>
+            <td>Rp. {{ new Intl.NumberFormat({ style: "currency" }).format(item.product_id.price * item.qty)}}</td>
             <td>{{ item.product_id.seller_id.name }}</td>
             <td>
               <b-button

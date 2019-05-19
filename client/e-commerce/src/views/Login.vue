@@ -1,5 +1,5 @@
 <template>
-  <div class="container border p-5" style="margin-top:100px;width:34%;padding-bottom:100px">
+  <div class="container border p-5 animated fadeIn" style="margin-top:100px;width:34%;padding-bottom:100px">
     <meta
       name="google-signin-client_id"
       content="1047288130299-qnimdphrt0ksuu1km60qfn8sdu7daq6v.apps.googleusercontent.com"

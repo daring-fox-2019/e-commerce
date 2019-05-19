@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const axiosInstance = Axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://server-ecommerce.komangmahendra.me',
 });
 
 export default axiosInstance;

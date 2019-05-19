@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-3 p-3 col-sm-6 col-xs-12" >
+  <div class="col-lg-3 p-3 col-sm-6 col-xs-12 animated fadeIn" >
     <div class="card">
       <div style="overflow:hidden; height:220px;background-color:#f1f1f1">
         <img class="card-img-top" :src="item.image" width="100%" >

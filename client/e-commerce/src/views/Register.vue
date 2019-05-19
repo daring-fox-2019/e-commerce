@@ -1,5 +1,5 @@
 <template>
-  <div class="container border p-5" style="margin-top:100px;max-width:40%;padding-bottom:100px">
+  <div class="container border p-5 animated fadeIn" style="margin-top:100px;max-width:40%;padding-bottom:100px">
     <b-form @submit.prevent="register" >
       <div class="row" v-if="!cekAddress">
         <div class="col">

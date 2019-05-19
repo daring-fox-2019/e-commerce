@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container" style="margin-top:120px">
+    <div class="container animated fadeIn" style="margin-top:120px">
       <b-nav>
         <b-nav-item
           v-if="role != 'admin'"
