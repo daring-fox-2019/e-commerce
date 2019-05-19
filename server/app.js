@@ -4,10 +4,10 @@ const app         = express()
 const mongoose    = require('mongoose')
 const errorHandler = require('./middlewares/errorHandler')
 const router = require('./routes/index')
-const PORT = 3000
+const PORT = process.env.PORT
 const cors = require('cors')
 
-mongoose.connect('mongodb://localhost/e-commerce-db'+process.env.NODE_ENV, {useNewUrlParser:true},function(){
+mongoose.connect(process.env.MONGO_DB+process.env.NODE_ENV, {useNewUrlParser:true},function(){
     console.log('connected')
 })
 
@@ -20,7 +20,7 @@ app.use('/', router)
 app.use(errorHandler)
 
 app.listen(PORT, () => {
-    console.log('listening on port 3000')
+    console.log('listening on port '+PORT)
 })
 
 module.exports = app
