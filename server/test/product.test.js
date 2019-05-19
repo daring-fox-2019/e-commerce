@@ -5,6 +5,7 @@ const chai      = require('chai'),
       clearProduct = require('../helpers/clearProduct');
 
 let productId = ''
+let category = 'aqiqah'
 
 chai.use(chaiHttp);
 
@@ -47,11 +48,11 @@ describe('Product tests', function() {
         });
     });
 
-    describe('GET /products/category?q= ', function() {
+    describe('GET /products/category?category= ', function() {
         it('should send an array with 200 status code', function(done) {
         chai
             .request(app)
-            .get(`/products/category?q=${category}`)
+            .get(`/products/category?category=${category}`)
             .end(function(err, res) {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
@@ -69,11 +70,12 @@ describe('Product tests', function() {
                 name: 'White Album',
                 price: 1000000000,
                 stock: 2,
-                detail: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit a, impedit recusandae expedita sunt ratione temporibus, repudiandae tempora distinctio possimus est quibusdam, excepturi molestias quos! Sequi quam laborum aliquam ex.'
+                description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit a, impedit recusandae expedita sunt ratione temporibus, repudiandae tempora distinctio possimus est quibusdam, excepturi molestias quos! Sequi quam laborum aliquam ex.',
+                category: 'shirt'
             };
             chai
                 .request(app)
-                .post('/products')
+                .post('/admin/products')
                 .send(newProduct)
                 .end(function(err, res) {
                     expect(err).to.be.null;
@@ -87,7 +89,7 @@ describe('Product tests', function() {
                     expect(res.body.name).to.equal(newProduct.name);
                     expect(res.body.price).to.equal(newProduct.price);
                     expect(res.body.stock).to.equal(newProduct.stock);
-                    expect(res.body.detail).to.equal(newProduct.detail);
+                    expect(res.body.detail).to.equal(newProduct.description);
                     userId=res.body._id
                     done();
             });
@@ -101,7 +103,7 @@ describe('Product tests', function() {
             name: 'One',
             price: 1000000000,
             stock: 3,
-            detail: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit a, impedit recusandae expedita sunt ratione temporibus, repudiandae tempora distinctio possimus est quibusdam, excepturi molestias quos! Sequi quam laborum aliquam ex.'
+            description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit a, impedit recusandae expedita sunt ratione temporibus, repudiandae tempora distinctio possimus est quibusdam, excepturi molestias quos! Sequi quam laborum aliquam ex.'
         };
         chai
             .request(app)
@@ -115,11 +117,11 @@ describe('Product tests', function() {
                 expect(res.body).to.have.property('name');
                 expect(res.body).to.have.property('price');
                 expect(res.body).to.have.property('stock');
-                expect(res.body).to.have.property('detail');
+                expect(res.body).to.have.property('description');
                 expect(res.body.name).to.equal(newProduct.name);
                 expect(res.body.price).to.equal(newProduct.price);
                 expect(res.body.stock).to.equal(newProduct.stock);
-                expect(res.body.detail).to.equal(newProduct.detail);
+                expect(res.body.description).to.equal(newProduct.description);
                 done();
             });
         });
