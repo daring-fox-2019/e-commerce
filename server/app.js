@@ -7,8 +7,11 @@ const mongoose = require('mongoose')
 const jwt = require ('jsonwebtoken')
 const cors = require('cors')
 const routes= require('./routes')
-const url = `mongodb://localhost/ECOMMERCEKEDUA`
-const uri = `mongodb://localhost/ECOMMERCEKEDUARUN`
+process.env.MONGO_TEST
+process.env.MONGO_RUN
+const url = process.env.MONGO_TEST
+const uri = process.env.MONGO_RUN
+
 
 
 // ON TESTING. PLEASE RUN THIS DATABASE
@@ -17,9 +20,9 @@ const uri = `mongodb://localhost/ECOMMERCEKEDUARUN`
 // .catch((err) => console.log(err))
 
 // UPON USING THE APPLICATION RUN THIS DATABASE INSTEAD
-mongoose.connect(uri, {useNewUrlParser : true, useCreateIndex : true})
-.then(() => {console.log('===> MONGO DB LOCAL CONNECTED <===')})
-.catch((err) => console.log(err))
+// mongoose.connect(uri, {useNewUrlParser : true, useCreateIndex : true})
+// .then(() => {console.log('===> MONGO DB LOCAL CONNECTED <===')})
+// .catch((err) => console.log(err))
 
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
