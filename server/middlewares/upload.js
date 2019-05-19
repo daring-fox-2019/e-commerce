@@ -1,7 +1,5 @@
 // "@google-cloud/storage": "^1.2.0",
 // "multer": "^1.3.0"
-require('dotenv').config()
-
 const Storage = require('@google-cloud/storage')
 
 const CLOUD_BUCKET = process.env.CLOUD_BUCKET
