@@ -7,6 +7,7 @@
         v-for="data in transactions" :key="data._id"
       >
         <div class="col-4">
+        id Order -> {{data._id}} <br>
         total  ->  {{data.total}} item <br>
         amount -> $ {{data.amount}}<br>
         sent to -> {{data.userDetail.address}} <br>
