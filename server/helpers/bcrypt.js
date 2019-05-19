@@ -1,10 +1,10 @@
 const bcrypt = require('bcryptjs')
 
 module.exports = {
-    generateHash : function(pass){
-        return bcrypt.hashSync(pass,8)
-    },
-    verifyPass : function(pass,hash){
-        return bcrypt.compareSync(pass,hash)
-    }
+  hashSync: function (password) {
+    return bcrypt.hashSync (password, 8)
+  },
+  compareSync: function(password, hash) {
+    return bcrypt.compareSync(password, hash)
+  }
 }

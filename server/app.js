@@ -1,26 +1,28 @@
-require('dotenv').config({path:'/home/qoyyima/Documents/Hacktiv8/phase2ke2/week3/day1/e-commerce/server/.env'})
-const express     = require('express')
-const app         = express()
-const mongoose    = require('mongoose')
-const errorHandler = require('./middlewares/errorHandler')
-const router = require('./routes/index')
-const PORT = 3000
+require('dotenv').config()
+const express = require('express')
+const app = express()
+const port = process.env.PORT || 3000
+const NODE_ENV = process.env.NODE_ENV || 'development'
 const cors = require('cors')
 
-mongoose.connect('mongodb://localhost/e-commerce-db'+process.env.NODE_ENV, {useNewUrlParser:true},function(){
-    console.log('connected')
-})
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost/e-commerce' + NODE_ENV, { useNewUrlParser: true })
+mongoose.set('useFindAndModify', false);
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 
 app.use(cors())
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
-app.use('/', router)
 
+const route = require('./routes/routes')
 
-app.use(errorHandler)
+app.use('/', route)
 
-app.listen(PORT, () => {
-    console.log('listening on port 3000')
+app.listen(port, () => {
+    console.log(`You are listening to ${port} FM`);
+    console.log(`~~~Suara musik terkini~~~`);
+
 })
 
 module.exports = app
