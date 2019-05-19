@@ -43,7 +43,7 @@
                 <h1 class="headline orange--text font-weight-bold py-3">Rp. {{ totalPrice }}</h1>
               </v-card-title>
               <v-card-actions>
-                <v-btn color="blue" dark>Pay</v-btn>
+                <v-btn color="blue" dark @click="checkout">Pay</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -80,6 +80,28 @@ export default {
                         err = err.response.data
                     }
 
+                    swal.fire('Error', err, 'error')
+                })
+        },
+        checkout() {
+            this.cart.status = 'paid';
+            swal.fire({
+                title: 'Processing payment...'
+            });
+            
+            swal.showLoading();
+
+            this.$store.dispatch('processPayment')
+                .then(({ data }) => {
+                    swal.close();
+                    swal.fire('Success', `We've received your payment succesfully.
+                    Please go to your User page to confirm the delivery receipt.`, 'success')
+                })
+                .catch(err => {
+                    swal.close();
+                    if(err.response) {
+                        err = err.response.data
+                    }
                     swal.fire('Error', err, 'error')
                 })
         }

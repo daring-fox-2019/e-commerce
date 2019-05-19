@@ -231,7 +231,7 @@ class CartController {
         }, {
             new: true
         })
-        then(cart => {
+        .then(cart => {
                 res.status(200).json(cart)
             })
             .catch(err => {
@@ -244,12 +244,26 @@ class CartController {
         Cart.findOneAndUpdate({
             _id: req.params.id
         }, {
-            status: 'arrived'
+            status: 'received'
         }, {
             new: true
         })
-        then(cart => {
+        .then(cart => {
                 res.status(200).json(cart)
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json(err.message)
+            })
+    }
+
+    static userTransactions(req, res) {
+        Cart.find({user: req.user._id, })
+            .then(list => {
+                if(!list) {
+                    list = [];
+                }
+                res.status(200).json(list)
             })
             .catch(err => {
                 console.log(err);

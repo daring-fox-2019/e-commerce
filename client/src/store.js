@@ -2,7 +2,7 @@
 /* eslint-disable no-param-reassign */
 import Vue from 'vue';
 import Vuex from 'vuex';
-import api from '@/api/backend.js';
+import api from '@/api/backend';
 
 Vue.use(Vuex);
 const store = new Vuex.Store({
@@ -45,6 +45,13 @@ const store = new Vuex.Store({
     removeCartItem(context, newdata) {
       const item = newdata;
       return api.delete(`/cart/${context.state.cart._id}/delete/${item}`, { headers: { Authorization: localStorage.ecomm_token } });
+    },
+    processPayment(context) {
+      context.state.cart.status = 'paid';
+      return api.post(`/cart/${context.state.cart._id}`, {}, { headers: { Authorization: localStorage.ecomm_token } });
+    },
+    confirmReceipt(context, id) {
+      return api.patch(`/cart/${id}/confirm-receipt`, {}, { headers: { Authorization: localStorage.ecomm_token } });
     },
   },
 });

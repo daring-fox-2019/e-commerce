@@ -1,7 +1,8 @@
 <template>
     <v-container fluid fill-height>
-        <v-layout align-center justify-center>
-            <v-flex><h1>USER PAGE for {{user.firstname}} {{user.lastname}}</h1></v-flex>
+        <v-layout column align-start>
+            <div class="headline mb-3">Homepage for user: <span class="headline font-weight-bold yellow--text">{{user.firstname}} {{user.lastname}}</span></div>
+            <router-view />
         </v-layout>
     </v-container>
 </template>

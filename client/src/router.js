@@ -43,6 +43,13 @@ export default new Router({
       path: '/user',
       name: 'user',
       component: () => import(/* webpackChunkName: "user" */ './views/User.vue'),
+      children: [
+        {
+          path: 'transactions',
+          name: 'user-transactions',
+          component: () => import(/* webpackChunkName: "user-transactions" */ './views/Transactions.vue'),
+        },
+      ],
     },
     {
       path: '/register',
