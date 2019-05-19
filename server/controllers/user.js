@@ -24,7 +24,12 @@ class userController {
         if (userFound) {
           if (compare(req.body.password, userFound.password)) {
             let token = sign({ _id: userFound._id, name: userFound.name, email: userFound.email })
-            res.status(200).json({ token, name: userFound.name})
+            console.log(userFound.role);
+            if (userFound.role === 'admin') {
+              res.status(200).json({ token, name: userFound.name, role: userFound.role })
+            } else {
+              res.status(200).json({ token, name: userFound.name })
+            }
           } else {
             res.status(400).json({ msg: "Bad request1" })
           }

@@ -1,10 +1,11 @@
 const router = require('express').Router()
 const transaction = require('../controllers/transaction')
-const { authentication, authorization } = require('../middleware/auth')
+const { authentication } = require('../middleware/auth')
 
 
 router.use(authentication)
 router.get('/', transaction.findAll)
+router.get('/user', transaction.findAllUser)
 router.get('/:id', transaction.findOne)
 router.post('/', transaction.create)
 

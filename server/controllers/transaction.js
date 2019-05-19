@@ -1,10 +1,32 @@
 const Model = require('../models/transaction')
 const modelCart = require('../models/cart')
+const modelProduct = require("../models/product")
 
 class Product {
   static findAll(req, res) {
     Model.find()
+      .populate('cart')
+      .populate('userId')
       .then(data => {
+        res.status(200).json(data)
+      })
+      .catch(err => {
+        res.status(500).json(err)
+      })
+  }
+
+  static findAllUser(req, res) {
+    Model.find({ userId: req.userId })
+      .populate('cart')
+      .populate('userId')
+      .then(data => {
+        modelProduct.populate(data,{
+          path: 'cart.productId',
+          select: 'name'
+        })
+        .then(dat=>{
+          console.log(data);
+        })
         res.status(200).json(data)
       })
       .catch(err => {
@@ -26,7 +48,7 @@ class Product {
 
         return modelCart.updateMany({ userId: req.userId }, { $set: { status: true } })
       })
-      .then(data=>{
+      .then(data => {
         res.status(201).json(newData)
       })
       .catch(err => {
@@ -36,6 +58,8 @@ class Product {
 
   static findOne(req, res) {
     Model.findById(req.params.id)
+      .populate('cart')
+      .populate('userId')
       .then(data => {
         res.status(200).json(data)
       })
@@ -55,7 +79,7 @@ class Product {
   }
 
   static update(req, res) {
-    Model.findOneAndUpdate({ _id: req.params.id }, { $set: { status: true } }, { useFindAndModify: false, new: true })
+    Model.findOneAndUpdate({ _id: req.params.id }, { $set: { status: req.body.status } }, { useFindAndModify: false, new: true })
       .then(data => {
         res.status(200).json(data)
       })

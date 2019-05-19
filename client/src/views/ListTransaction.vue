@@ -1,12 +1,29 @@
 <template>
   <div>
-    <v-data-table :headers="headers" :items="desserts" class="elevation-1">
+    <v-data-table :headers="headers" :items="listTransaction" class="elevation-1">
       <template v-slot:items="props">
-        <td class="text-xs-center">{{ props.item.no }}</td>
-        <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.calories }}</td>
+        <td class="text-xs-center">{{ props.item._id }}</td>
+        <td>{{ props.item.cart }}</td>
+        <td class="text-xs-right">{{ props.item.status }}</td>
         <td class="text-xs-center">
-          <v-btn color="red">delete</v-btn>
+          <v-btn
+            color="green"
+            @click="action(props.item._id, props.item.status)"
+            v-if="props.item.status==='not yet paid'  && !statusAdmin"
+          >Pay</v-btn>
+
+          <v-btn
+            color="green"
+            @click="action(props.item._id, props.item.status)"
+            v-else-if="props.item.status==='waiting for delivery confirmation' && statusAdmin"
+          >Deliver</v-btn>
+          <v-btn
+            color="green"
+            @click="action(props.item._id, props.item.status)"
+            v-else-if="props.item.status==='delivery process' && !statusAdmin"
+          >Confrim</v-btn>
+          <span v-else-if="props.item.status==='arrived'">Done</span>
+          <span v-else>Waiting</span>
         </td>
       </template>
     </v-data-table>
@@ -14,118 +31,151 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       headers: [
-        { text: 'No', value: 'no', width: '1%' },
         {
-          text: 'Customer',
-          align: 'center',
+          text: "Id Transaction",
+          align: "center",
+          value: "_id",
+          width: "4%"
+        },
+        {
+          text: "Items",
+          align: "center",
           sortable: false,
-          value: 'name',
+          value: "cart"
         },
-        { text: 'Stock', value: 'calories', width: '1%' },
         {
-          text: 'Action',
-          align: 'center',
-          value: 'carbs',
-          width: '1%',
+          text: "Status",
+          align: "center",
+          value: "status",
+          width: "15%"
         },
+        {
+          text: "Action",
+          align: "center",
+          sortable: false,
+          width: "1%"
+        }
       ],
-      desserts: [
-        {
-          no: '1',
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: '',
-          protein: 24,
-          iron: '1%',
-        },
-        {
-          no: '2',
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: '1%',
-        },
-        {
-          no: '3',
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: '7%',
-        },
-        {
-          no: '4',
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: '8%',
-        },
-        {
-          no: '5',
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: '16%',
-        },
-        {
-          no: '6',
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: '0%',
-        },
-        {
-          no: '7',
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: '2%',
-        },
-        {
-          no: '8',
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: '45%',
-        },
-        {
-          no: '9',
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: '22%',
-        },
-        {
-          no: '10',
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: '6%',
-        },
-      ],
+      listTransaction: [],
+      statusAdmin: this.$store.state.isAdmin
     };
   },
+  created() {
+    this.loadData();
+    console.log(this.$store.state.isAdmin);
+  },
+  methods: {
+    loadData() {
+      if (this.$store.state.isAdmin) {
+        axios
+          .get("http://localhost:3000/transaction", {
+            headers: {
+              token: localStorage.token
+            }
+          })
+          .then(({ data }) => {
+            data.forEach(element => {
+              if (element.status === "0") {
+                element.status = "not yet paid";
+              } else if (element.status === "1") {
+                element.status = "waiting for delivery confirmation";
+              } else if (element.status === "2") {
+                element.status = "delivery process";
+              } else if (element.status === "3") {
+                element.status = "arrived";
+              }
+
+              let listItem = "";
+              element.cart.forEach(el => {
+                this.$store.state.listProduct.forEach(dat => {
+                  if (dat._id == el.productId) {
+                    listItem += `${dat.name} (${el.quantity}), `;
+                  }
+                });
+              });
+              if (
+                listItem.slice(listItem.length - 2, listItem.length) === ", "
+              ) {
+                listItem = listItem.slice(0, listItem.length - 2);
+              }
+              element.cart = listItem;
+            });
+            this.listTransaction = data;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        axios
+          .get("http://localhost:3000/transaction/user", {
+            headers: {
+              token: localStorage.token
+            }
+          })
+          .then(({ data }) => {
+            data.forEach(element => {
+              if (element.status === "0") {
+                element.status = "not yet paid";
+              } else if (element.status === "1") {
+                element.status = "waiting for delivery confirmation";
+              } else if (element.status === "2") {
+                element.status = "delivery process";
+              } else if (element.status === "3") {
+                element.status = "arrived";
+              }
+
+              let listItem = "";
+              element.cart.forEach(el => {
+                this.$store.state.listProduct.forEach(dat => {
+                  if (dat._id == el.productId) {
+                    listItem += `${dat.name} (${el.quantity}), `;
+                  }
+                });
+              });
+              element.cart = listItem;
+            });
+            this.listTransaction = data;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    },
+    action(id, status) {
+      if (status === "not yet paid") {
+        status = "1";
+      } else if (status === "waiting for delivery confirmation") {
+        status = "2";
+      } else if (status === "delivery process") {
+        status = "3";
+      }
+      console.log(status);
+
+      axios
+        .patch(
+          `http://localhost:3000/transaction/${id}`,
+          {
+            status
+          },
+          {
+            headers: {
+              token: localStorage.token
+            }
+          }
+        )
+        .then(() => {
+          this.loadData();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }
 };
 </script>

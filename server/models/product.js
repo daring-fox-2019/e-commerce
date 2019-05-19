@@ -9,6 +9,6 @@ let productSchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: 'User' }
 })
 
-let Product = mongoose.model('Products',productSchema)
+let Product = mongoose.model('Product',productSchema)
 
 module.exports = Product

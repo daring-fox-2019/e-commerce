@@ -39,44 +39,43 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
   data() {
     return {
-      totalPrice: null
+      totalPrice: null,
     };
   },
   created() {
-    this.$store.dispatch("loadCartCustomer");
-    
+    this.$store.dispatch('loadCartCustomer');
   },
   methods: {
     remove(id) {
       swal({
-        title: "Are you sure to delete this item?",
-        icon: "warning",
+        title: 'Are you sure to delete this item?',
+        icon: 'warning',
         buttons: true,
-        dangerMode: true
-      }).then(willDelete => {
+        dangerMode: true,
+      }).then((willDelete) => {
         if (willDelete) {
           axios
             .delete(`http://localhost:3000/cart/${id}`, {
               headers: {
-                token: localStorage.token
-              }
+                token: localStorage.token,
+              },
             })
             .then(({ data }) => {
               this.loadData();
-              swal("Delete Cart Success", "success");
+              swal('Delete Cart Success', 'success');
             })
-            .catch(err => {
+            .catch((err) => {
               console.log(err);
             });
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

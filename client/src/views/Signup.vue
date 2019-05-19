@@ -46,42 +46,42 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
     return {
       signup: {
-        name: '',
-        email: '',
-        password: '',
+        name: "",
+        email: "",
+        password: ""
       },
 
       emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid',
-      ],
+        v => !!v || "E-mail is required",
+        v => /.+@.+/.test(v) || "E-mail must be valid"
+      ]
     };
   },
   methods: {
     reset() {
-      (this.signup.name = '')((this.signup.email = ''))(
-        (this.signup.password = ''),
-      );
+      this.signup.name = "",
+      this.signup.email = "",
+      this.signup.password = "";
     },
     signUp() {
-      console.log('MASUK');
-
       axios
-        .post('http://localhost:3000/user/signup', this.signup)
+        .post("http://localhost:3000/user/signup", this.signup)
         .then(() => {
           this.reset();
-          console.log('REGISTER SUKSES');
+          swal("Signup Success!", "success");
+          this.$router.push("/signin");
         })
-        .catch((err) => {
+        .catch(err => {
+          swal("Signup Failed!", "warning");
           console.log(err);
         });
-    },
-  },
+    }
+  }
 };
 </script>

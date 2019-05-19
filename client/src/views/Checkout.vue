@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
   data() {
@@ -90,52 +90,52 @@ export default {
       city: [],
       selectedCity: null,
       cost: 0,
-      estimasi: "",
-      grandTotal: this.$store.state.totalPrice
+      estimasi: '',
+      grandTotal: this.$store.state.totalPrice,
     };
   },
   created() {
     axios
-      .get("http://localhost:3000/rajaongkir/province")
+      .get('http://localhost:3000/rajaongkir/province')
       .then(({ data }) => {
         this.province = data;
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   },
   watch: {
     selectedProvince(val) {
       axios
-        .post("http://localhost:3000/rajaongkir/city", {
-          idProvince: val.province_id
+        .post('http://localhost:3000/rajaongkir/city', {
+          idProvince: val.province_id,
         })
         .then(({ data }) => {
           this.city = data;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
     selectedCity(val) {
       axios
-        .post("http://localhost:3000/rajaongkir/cost", {
-          idCity: val.city_id
+        .post('http://localhost:3000/rajaongkir/cost', {
+          idCity: val.city_id,
         })
         .then(({ data }) => {
           this.cost = data.value * 100;
           console.log(this.cost);
           let ket;
           if (data.etd[2] > 1) {
-            ket = " days";
+            ket = ' days';
           } else {
-            ket = " day";
+            ket = ' day';
           }
           this.estimasi = data.etd + ket;
           this.grandTotal += this.cost;
           console.log(this.estimasi);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -144,25 +144,25 @@ export default {
     buyin() {
       axios
         .post(
-          "http://localhost:3000/transaction",
-          { 
+          'http://localhost:3000/transaction',
+          {
             cart: this.products,
-            totalPrice: this.grandTotal
-           },
+            totalPrice: this.grandTotal,
+          },
           {
             headers: {
-              token: localStorage.token
-            }
-          }
+              token: localStorage.token,
+            },
+          },
         )
         .then(({ data }) => {
-          this.$router.push('/transaction')
+          this.$router.push('/transaction');
           console.log(data);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
-    }
-  }
+    },
+  },
 };
 </script>

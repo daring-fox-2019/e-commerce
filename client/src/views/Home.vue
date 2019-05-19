@@ -9,7 +9,7 @@
         <h1>Product</h1>
       </v-layout>
       <v-layout row wrap>
-        <v-flex v-for="product in listProduct" :key="product._id" md4>
+        <v-flex v-for="product in this.$store.state.listProduct" :key="product._id" md4>
           <v-card :to="'product/'+product._id">
             <v-img :src="product.image">
               <span class="my-span">{{ product.name }}</span>
@@ -83,18 +83,10 @@ export default {
           text: 'Radiant Power.',
         },
       ],
-      listProduct: [],
     };
   },
   created() {
-    axios
-      .get('http://localhost:3000/products')
-      .then(({ data }) => {
-        this.listProduct = data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.$store.dispatch('loadProduct')
   },
 };
 </script>
