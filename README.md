@@ -1,4 +1,4 @@
-# Ra-commerce
+# +plusOne
 
 built with `Express` and `Mongoose`
 
@@ -20,7 +20,7 @@ $ npm run test
 Make sure you have set all required your .env parameters
 <br>(key reference: .env.example)
 
-Access the REST API via SERVER_URL = `http://localhost:3000/`
+Access the REST API via SERVER_URL = `http://api.plusone.ramdhon.net`
 
 ## REST API Routes:
 

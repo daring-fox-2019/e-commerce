@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <v-progress-linear v-show="loading" color="teal" :indeterminate="true"></v-progress-linear>
     <v-btn
       color="teal"
       dark
@@ -29,6 +30,7 @@ export default {
     ...mapState([
       'isLogin',
       'role',
+      'loading',
     ]),
   },
   watch: {

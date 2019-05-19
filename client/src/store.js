@@ -10,8 +10,13 @@ export default new Vuex.Store({
     search: '',
     isLogin: false,
     role: '',
+    loading: false,
   },
   mutations: {
+    setLoading(state, payload) {
+      // eslint-disable-next-line
+      state.loading = payload;
+    },
     setRole(state, payload) {
       // eslint-disable-next-line
       state.role = payload;
@@ -92,7 +97,34 @@ export default new Vuex.Store({
             timer: 1500,
           });
         });
-      console.log(payload);
+    },
+    upload(context, payload) {
+      const { token } = localStorage;
+      context.commit('setLoading', true);
+      axios
+        .post('/products', payload, { headers: { token } })
+        .then(({ data }) => {
+          context.commit('setLoading', false);
+          const { message } = data;
+          Swal.fire({
+            position: 'top',
+            type: 'success',
+            title: message,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        })
+        .catch((err) => {
+          context.commit('setLoading', false);
+          const { message } = err.response.data;
+          Swal.fire({
+            position: 'top',
+            type: 'error',
+            title: message,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        });
     },
   },
 });
