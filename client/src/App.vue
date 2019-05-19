@@ -77,7 +77,7 @@
     <v-toolbar fixed app dense class="topNav">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>
-        <router-link to="/" class="navtitle">BUKUBERKAH | &nbsp;</router-link>
+        <a href="/" class="navtitle">BUKUBERKAH | &nbsp;</a>
       </v-toolbar-title>
       <span class="text-truncate">Pusat Buku Islam</span>
       <v-spacer/>
@@ -163,7 +163,10 @@ export default {
   },
   mounted() {
     const token = localStorage.getItem("ecomm_token");
-    this.getUserData();
+    if(token) {
+      this.getUserData();
+    }
+    
     //load Google Logout client
     if (typeof(gapi) !== undefined) {
       gapi.load("auth2", () => {
