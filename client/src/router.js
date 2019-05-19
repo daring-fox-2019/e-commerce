@@ -14,10 +14,7 @@ export default new Router({
     },
     {
       path: '/products',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
+      name: 'products',
       component: () => import(/* webpackChunkName: "products" */ './views/Products.vue'),
       children: [
         {
@@ -26,6 +23,19 @@ export default new Router({
           component: () => import(/* webpackChunkName: "detailProduct" */ './views/Product.vue'),
         },
       ],
+    },
+    {
+      path: '/carts',
+      name: 'carts',
+      component: () => import(/* webpackChunkName: "carts" */ './views/Carts.vue'),
+      // children: [
+      //   {
+      //     path: ':id',
+      //     name: 'productCart',
+      // eslint-disable-next-line
+      //     component: () => import(/* webpackChunkName: "productCart" */ './views/ProductCart.vue'),
+      //   },
+      // ],
     },
   ],
 });

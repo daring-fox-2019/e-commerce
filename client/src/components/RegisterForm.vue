@@ -7,6 +7,7 @@
       <v-card-text>
         <v-form @submit.prevent="register" v-model="registerForm.valid">
           <v-text-field
+            color="teal"
             v-model="registerForm.name"
             :rules="registerForm.nameRules"
             :counter="30"
@@ -14,12 +15,14 @@
             required
           ></v-text-field>
           <v-text-field
+            color="teal"
             v-model="registerForm.email"
             :rules="registerForm.emailRules"
             label="E-mail"
             required
           ></v-text-field>
           <v-text-field
+            color="teal"
             v-model="registerForm.password"
             :rules="registerForm.passwordRules"
             :counter="6"
@@ -28,7 +31,7 @@
             required
           ></v-text-field>
           <v-layout justify-end row>
-            <v-btn type="submit" flat color="green">Login</v-btn>
+            <v-btn type="submit" flat color="green">Register</v-btn>
           </v-layout>
         </v-form>
       </v-card-text>
@@ -51,6 +54,7 @@ export default {
         email: '',
         emailRules: [
           v => !!v || 'E-mail is required',
+          // eslint-disable-next-line
           v => /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
         ],
         password: '',
@@ -68,7 +72,9 @@ export default {
       this.registerForm.password = '';
     },
     register() {
-
+      this.$store.dispatch('register', this.registerForm);
+      this.$emit('close');
+      this.resetForm();
     },
   },
 };

@@ -30,7 +30,7 @@ class Controller {
               email: foundUser.email,
               role: foundUser.role
             })
-            res.status(200).json({ message: 'login success', token, user: foundUser.name });
+            res.status(200).json({ message: 'login success', token, user: foundUser.name, role: foundUser.role });
           }
         }
       })
@@ -52,36 +52,36 @@ class Controller {
       })
   }
 
-  static glogin(req, res, next) {
-    const { getPayload } = req;
-    User.findOne({
-      email: getPayload.email
-    })
-      .then(user => {
-        if(!user) {
-          const register_token = jwt.sign({
-            name: getPayload.name,
-            email: getPayload.email
-          })
-          const err = {
-            status: 404,
-            message: 'new account, then set password',
-            register_token
-          }
-          next(err);
-        } else {
-          let token = jwt.sign({
-            id: user._id,
-            name: user.name,
-            email: user.email
-          })
-          res.status(200).json({ message: 'login success', token, user: user.name });
-        }
-      })
-      .catch(err => {
-        next(err);
-      })
-  }
+  // static glogin(req, res, next) {
+  //   const { getPayload } = req;
+  //   User.findOne({
+  //     email: getPayload.email
+  //   })
+  //     .then(user => {
+  //       if(!user) {
+  //         const register_token = jwt.sign({
+  //           name: getPayload.name,
+  //           email: getPayload.email
+  //         })
+  //         const err = {
+  //           status: 404,
+  //           message: 'new account, then set password',
+  //           register_token
+  //         }
+  //         next(err);
+  //       } else {
+  //         let token = jwt.sign({
+  //           id: user._id,
+  //           name: user.name,
+  //           email: user.email
+  //         })
+  //         res.status(200).json({ message: 'login success', token, user: user.name });
+  //       }
+  //     })
+  //     .catch(err => {
+  //       next(err);
+  //     })
+  // }
 
   // static gregister(req, res, next) {
   //   if (req.headers.hasOwnProperty('register_token')) {

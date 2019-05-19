@@ -149,6 +149,7 @@ describe('AUTHENTICATION', function() {
             expect(res.body).to.have.property('message');
             expect(res.body).to.have.property('token');
             expect(res.body).to.have.property('user');
+            expect(res.body).to.have.property('role');
             done();
           })
           .catch(err => {

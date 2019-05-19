@@ -20,5 +20,16 @@ export default {
     HeadBar,
     FootBar,
   },
+  created() {
+    this.checkLog();
+  },
+  methods: {
+    checkLog() {
+      if (localStorage.token) {
+        this.$store.commit('login');
+        this.$store.commit('setRole', localStorage.role);
+      }
+    },
+  },
 };
 </script>

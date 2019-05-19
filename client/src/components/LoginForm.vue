@@ -7,12 +7,14 @@
       <v-card-text>
         <v-form @submit.prevent="login" v-model="loginForm.valid">
           <v-text-field
+            color="teal"
             v-model="loginForm.email"
             :rules="loginForm.emailRules"
             label="E-mail"
             required
           ></v-text-field>
           <v-text-field
+            color="teal"
             v-model="loginForm.password"
             :rules="loginForm.passwordRules"
             label="Password"
@@ -34,10 +36,11 @@ export default {
   data() {
     return {
       loginForm: {
-        valid: false,
+        valid: true,
         email: '',
         emailRules: [
           v => !!v || 'E-mail is required',
+          // eslint-disable-next-line
           v => /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
         ],
         password: '',
@@ -53,8 +56,11 @@ export default {
       this.loginForm.password = '';
     },
     login() {
-
+      const { email, password } = this.loginForm;
+      this.$store.dispatch('login', { email, password });
+      this.$emit('close');
+      this.resetForm();
     },
-  }
+  },
 };
 </script>
