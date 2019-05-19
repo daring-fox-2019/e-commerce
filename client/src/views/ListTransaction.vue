@@ -11,7 +11,6 @@
             @click="action(props.item._id, props.item.status)"
             v-if="props.item.status==='not yet paid'  && !statusAdmin"
           >Pay</v-btn>
-
           <v-btn
             color="green"
             @click="action(props.item._id, props.item.status)"
@@ -68,7 +67,6 @@ export default {
   },
   created() {
     this.loadData();
-    console.log(this.$store.state.isAdmin);
   },
   methods: {
     loadData() {
@@ -138,6 +136,11 @@ export default {
                   }
                 });
               });
+              if (
+                listItem.slice(listItem.length - 2, listItem.length) === ", "
+              ) {
+                listItem = listItem.slice(0, listItem.length - 2);
+              }
               element.cart = listItem;
             });
             this.listTransaction = data;
@@ -155,8 +158,6 @@ export default {
       } else if (status === "delivery process") {
         status = "3";
       }
-      console.log(status);
-
       axios
         .patch(
           `http://localhost:3000/transaction/${id}`,

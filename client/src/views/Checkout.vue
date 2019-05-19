@@ -124,7 +124,6 @@ export default {
         })
         .then(({ data }) => {
           this.cost = data.value * 100;
-          console.log(this.cost);
           let ket;
           if (data.etd[2] > 1) {
             ket = ' days';
@@ -133,7 +132,6 @@ export default {
           }
           this.estimasi = data.etd + ket;
           this.grandTotal += this.cost;
-          console.log(this.estimasi);
         })
         .catch((err) => {
           console.log(err);
@@ -157,7 +155,7 @@ export default {
         )
         .then(({ data }) => {
           this.$router.push('/transaction');
-          console.log(data);
+          swal("Checkout Success!", "success");
         })
         .catch((err) => {
           console.log(err);

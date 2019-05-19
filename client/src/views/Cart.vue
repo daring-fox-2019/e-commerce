@@ -66,7 +66,7 @@ export default {
               },
             })
             .then(({ data }) => {
-              this.loadData();
+              this.$store.dispatch('loadCartCustomer');
               swal('Delete Cart Success', 'success');
             })
             .catch((err) => {

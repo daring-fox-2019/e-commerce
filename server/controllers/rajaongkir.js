@@ -12,7 +12,7 @@ class rajaongkir {
         res.status(200).json(data.rajaongkir.results)
       })
       .catch(err => {
-        console.log(err);
+        res.status(500).json(err)
       });
   }
 
@@ -27,7 +27,7 @@ class rajaongkir {
         res.status(200).json(data.rajaongkir.results)
       })
       .catch(err => {
-        console.log(err);
+        res.status(500).json(err)
       });
   }
 
@@ -49,8 +49,8 @@ class rajaongkir {
 
         res.status(200).json(newData[0])
       })
-      .catch(err => {
-        console.log(err);
+      .catch(err => {        
+        res.status(500).json(err)
       });
   }
 }

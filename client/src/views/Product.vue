@@ -44,7 +44,6 @@ export default {
       .get('http://localhost:3000/products')
       .then(({ data }) => {
         this.listProduct = data;
-        console.log(data);
       })
       .catch((err) => {
         console.log(err);

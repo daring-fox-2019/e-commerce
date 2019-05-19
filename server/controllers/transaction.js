@@ -20,13 +20,6 @@ class Product {
       .populate('cart')
       .populate('userId')
       .then(data => {
-        modelProduct.populate(data,{
-          path: 'cart.productId',
-          select: 'name'
-        })
-        .then(dat=>{
-          console.log(data);
-        })
         res.status(200).json(data)
       })
       .catch(err => {
@@ -48,7 +41,16 @@ class Product {
 
         return modelCart.updateMany({ userId: req.userId }, { $set: { status: true } })
       })
-      .then(data => {
+      .then(() => {
+        req.body.cart.forEach(element => {
+          return modelProduct.findById(element.productId._id)
+            .then((data) => {
+              let stock = data.stock - element.quantity
+              return modelProduct.findOneAndUpdate({ _id: element.productId._id }, { $set: { stock: stock } }, { useFindAndModify: false, new: true })
+            })
+            .then(() => {
+            })
+        });
         res.status(201).json(newData)
       })
       .catch(err => {

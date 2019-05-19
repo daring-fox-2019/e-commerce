@@ -8,7 +8,7 @@
         </v-flex>
       </v-layout>
       <div class="middle">
-        <v-btn>Detail</v-btn>
+        <v-btn :to="'/product/'+product._id">Detail</v-btn>
       </div>
     </v-img>
   </v-card>

@@ -98,11 +98,9 @@ export default {
 .car {
   margin-bottom: 15px;
 }
-
 #list {
   margin-right: 5px;
 }
-
 #carousel {
   height: 100vh;
   width: 100%;
@@ -113,7 +111,6 @@ export default {
 #detail {
   display: fixed;
 }
-
 .my-span {
   color: black;
   font-size: 2rem;
@@ -121,10 +118,7 @@ export default {
   margin-left: 20px;
   float: left;
 }
-
 .my-btn {
-  /* top: 50px;
-  margin-left: 20px; */
   float: left;
 }
 </style>
