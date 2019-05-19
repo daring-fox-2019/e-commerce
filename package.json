@@ -1,0 +1,36 @@
+{
+  "name": "e-commerce",
+  "version": "1.0.0",
+  "description": "e-commerce API!",
+  "main": "index.js",
+  "directories": {},
+  "scripts": {
+    "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha --exit",
+    "dev": "NODE_ENV=dev nodemon server/app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qoyyima22/e-commerce.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qoyyima22/e-commerce/issues"
+  },
+  "homepage": "https://github.com/qoyyima22/e-commerce#readme",
+  "dependencies": {
+    "@google-cloud/storage": "^2.5.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.1",
+    "standard": "^12.0.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "dotenv": "^7.0.0",
+    "mocha": "^6.1.3"
+  }
+}
