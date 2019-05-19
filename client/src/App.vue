@@ -7,15 +7,17 @@
       <router-view
         @signup-admin="signupAdmin"
         @sign-in="signIn"
+        @sign-up="signUp"
         @submit-product="submitProduct"
       />
     </div>
-    
+    <Footer />
   </div>
 </template>
 
 <script>
   import Navbar from '@/components/Navbar.vue'
+  import Footer from '@/components/Footer.vue'
   import api from '@/api/localapi'
   import {convertToRupiah } from '@/helpers/convertToRupiah.js'
 
@@ -23,6 +25,7 @@
     name: 'app',
     components: {
       Navbar,
+      Footer
     },
     methods: {
       convertToRupiah
@@ -76,6 +79,28 @@
           })
         })
       },
+      signUp(payload) {
+        const {name, email, password} = payload;
+
+        api
+        .post('/users/signup', {
+          name,
+          email,
+          password
+        })
+        .then(user => {
+          Swal.fire(
+            'Success!',
+            `You successfully register ${user.data.name}!`,
+            'success'
+          )
+          this.$router.push('/')
+          payload = {}
+        })
+        .catch(err => {
+          console.log(err);
+        })
+      },
       signIn(payload) {
         const { email, password } = payload;
 
@@ -103,11 +128,10 @@
       logout() {
         localStorage.clear()
         this.$store.state.isLoggedIn=false
+        this.$router.push('/')
       },
       signupAdmin(payload) {
         const {name, email, password} = payload
-
-        console.log('admin payload: ', payload);
 
         api
         .post('/admin/signup', {

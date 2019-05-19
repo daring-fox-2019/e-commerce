@@ -9,6 +9,7 @@
             <div 
                 class="col-md-3"
                 v-for="(category, index) in categories"
+                :key="index"
             >
                 <div 
                     class="card" 

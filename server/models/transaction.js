@@ -1,19 +1,25 @@
+const mongoose = require('mongoose');
+mongoose.set('useCreateIndex', true)
 const {Schema } = mongoose;
 
 const transactionSchema = new Schema({
-    name: { type: Schema.Types.ObjectId, ref: 'Product' },
-    buyer : { type: Schema.Types.ObjectId, ref: 'User' },
-    quantity: {
-        type: Number,
-        required: [true, 'Quantity is required']
+    userId: {
+        type: String,
+        required: true
     },
-    status: {
-        type: String
-    }
+    carts:[{
+        type: Schema.Types.ObjectId, 
+        ref: 'Cart'
+    }],
+    totalPayment: { 
+        type: Number,
+        required: [true, 'Total amount is required']
+    },
+    status: { type: String }
 });
 
 transactionSchema.pre('save', function(next, done) {
-    this.status = 'Waiting for Payment'
+    this.status = 'waiting'
     next()
 })
 

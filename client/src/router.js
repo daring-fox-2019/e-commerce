@@ -5,6 +5,7 @@ import SignUpForm from '@/components/SignUpForm.vue'
 
 import Cart from '@/views/Cart.vue'
 import Shipment from '@/views/Shipment.vue'
+import Checkout from '@/views/Checkout.vue'
 
 import HomePage from '@/views/HomePage.vue'
 
@@ -79,7 +80,9 @@ const router = new Router({
         component: Shipment
     },
     {
-        path: '/checkout'
+        path: '/checkout',
+        name: 'checkout',
+        component: Checkout
     },
     {
         path: '/404',

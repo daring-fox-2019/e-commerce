@@ -40,9 +40,9 @@
   export default {
       name: 'signup',
       methods: {
-          onSubmitRegister() {
-            this.$store.dispatch('signUp', this.signUpForm)
-          }
+        onSubmitRegister() {
+          this.$emit('sign-up', this.signUpForm)
+        }
       },
       data() {
         return {

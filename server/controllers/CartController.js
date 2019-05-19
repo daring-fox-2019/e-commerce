@@ -31,16 +31,11 @@ class CartController {
         .populate('buyer', 'name')
         .populate('product')
         .then(cart=> {
-            console.log(cart);
             res.status(200).json(cart)
         })
         .catch(err=> {
             res.status(400).json({msg: err})
         })
-    }
-
-    static update(req, res) {
-
     }
 
     static delete(req, res) {

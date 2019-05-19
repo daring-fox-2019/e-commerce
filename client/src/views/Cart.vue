@@ -4,6 +4,7 @@
             <div 
                 class="card mb-3" 
                 v-for="(cart, index) in carts"
+                :key="index"
             >
                 <div class="row no-gutters">
                     <div class="col-md-3">
@@ -35,7 +36,7 @@
                 <div>
                     <h5>Total: {{convertToRupiah(totalPayment)}}</h5>
                 </div>
-                <router-link class="btn btn-danger" to="/checkout">Checkout Order</router-link>
+                <button class="btn btn-danger" @click="createCheckout">Checkout Order</button>
             </div>
         </div>
 
@@ -92,6 +93,36 @@ export default {
                         return el
                     }
                 })
+            })
+            .catch(err=> {
+                console.log(err);
+            })
+        },
+        createCheckout() {
+            api.defaults.headers.common['token'] = localStorage.token
+
+            api
+            .get('/carts')
+            .then(({data}) => {
+                this.carts = data
+                let cartToAdd = []
+                data.forEach(e => {
+                    cartToAdd.push(e._id)
+                })
+                
+                console.log(cartToAdd);
+                return api
+                .post(`/transactions`, {
+                    userId: data[0].buyer._id,
+                    carts: cartToAdd,
+                    totalPayment: this.totalPayment
+                })
+            })
+            .then(({data}) => {
+                this.$router.push('/checkout')
+            })
+            .catch(err=> {
+                console.log(err);
             })
             .catch(err=> {
                 console.log(err);
