@@ -45,9 +45,16 @@ export default {
     },
     methods: {
       addToCart() {
+        let item = {
+          _id: this.$props.product._id, 
+          quantity: 1, 
+          price:  this.$props.product.price,
+        }
+
         this.$store
-            .dispatch('addCartItem', this.product)
+            .dispatch('addCartItem', item)
             .then(({ data }) => {
+                console.log(data);
                 this.$store.dispatch('getCurrentCart');
             })
             .catch((err) => {
@@ -57,7 +64,7 @@ export default {
               }
               swal.fire('AddItem Error', msg , 'error');
             });
-      },
+    },
       deleteProduct() {
         this.$emit('deleteproduct', this.$props.product._id);
       } 

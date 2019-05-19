@@ -165,6 +165,7 @@ export default {
     const token = localStorage.getItem("ecomm_token");
     if(token) {
       this.getUserData();
+      this.$store.dispatch('getCurrentCart');
     }
     
     //load Google Logout client
@@ -198,12 +199,16 @@ export default {
       swal.fire("Success", "Bye!", "success");
     },
     signOut() {
-      var auth2 = gapi.auth2.getAuthInstance();
+      var auth2;
       const self = this;
-
-      auth2.signOut().then(function() {
-        self.processSignOut();
-      });
+      self.processSignOut();
+      
+      if(gapi) {
+        auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function() {
+          //
+        });
+      }
     }
   }
 };

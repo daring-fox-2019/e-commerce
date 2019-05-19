@@ -13,7 +13,7 @@
           <h1 class="headline yellow--text font-weight-bold py-3">Rp. {{formatPrice}}</h1>
           <v-layout row align-center>
             <span class="title mr-3">Quantity:</span>
-            <Quantity class="py-2" :quantity="shopProduct.stock" @updatequantity="onChangQuantity"></Quantity>
+            <Quantity class="py-2" :quantity="shopProduct.stock" @updatequantity="onChangeQuantity"></Quantity>
           </v-layout>
           <v-flex>
             <v-btn class="btn mt-4" color="yellow black--text" @click="addToCart">Add to Cart</v-btn>
@@ -73,8 +73,13 @@ export default {
   },
   methods: {
     addToCart() {
+        let item = {
+          _id: this.internalProduct._id, 
+          quantity: this.internalProduct.quantity, 
+          price: (this.internalProduct.quantity * this.internalProduct.price)
+        }
         this.$store
-            .dispatch('addCartItem', this.shopProduct)
+            .dispatch('addCartItem', item)
             .then(({ data }) => {
                 console.log(data);
                 this.$store.dispatch('getCurrentCart');
@@ -101,7 +106,7 @@ export default {
           swal.fire("Error", err.response.data, "error");
         });
     },
-    onChangQuantity(value) {
+    onChangeQuantity(value) {
       this.internalProduct.quantity = value;
     }
   }

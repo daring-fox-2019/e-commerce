@@ -162,7 +162,7 @@ class AuthController {
             })
         })
         .catch(err => {
-            console.log('linkedin error ----', err.response.data);
+            res.status(500).json(err.response.data.error_description)
         })
     }
 

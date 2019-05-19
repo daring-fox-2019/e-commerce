@@ -23,10 +23,6 @@ const cartSchema = new Schema({
     payment_date: {
         type: Date,
     },
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    }
 })
 
 /* cartSchema.pre('save', function(next) {

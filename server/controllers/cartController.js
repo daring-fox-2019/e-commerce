@@ -10,13 +10,7 @@ class CartController {
                 status: 'open'
             })
             .populate('user')
-            .populate({
-                path: 'items',
-                populate: {
-                    path: 'product',
-                    model: 'Product'
-                }
-            })
+            .populate({path: 'items', populate: {path: 'product', model: 'Product'}})
             .then(cart => {
                 res.status(200).json(cart)
             })
@@ -27,13 +21,7 @@ class CartController {
     static findAll(req, res) {
         Cart.find()
             .populate('user')
-            .populate({
-                path: 'items',
-                populate: {
-                    path: 'product',
-                    model: 'Product'
-                }
-            })
+            .populate({path: 'items', populate: {path: 'product', model: 'Product'}})
             .then(carts => {
                 res.status(200).json(carts)
             })
@@ -47,13 +35,7 @@ class CartController {
                 _id: req.params.id
             })
             .populate('user')
-            .populate({
-                path: 'items',
-                populate: {
-                    path: 'product',
-                    model: 'Product'
-                }
-            })
+            .populate({path: 'items', populate: {path: 'product', model: 'Product'}})
             .then(cart => {
                 res.status(200).json(cart)
             })
@@ -66,41 +48,50 @@ class CartController {
         let cartItem, newCart, cartId
         cartId = req.params.id
 
+        let item = req.body;
+
+        console.log(cartId, item);
         //dummy cart for first time cart by client
         if (cartId === '0') {
             Cart.create({
-                user: req.user._id
+                user: req.user._id,
+                totalAmount: item.price
             })
-            .then(function (cart) {
+            .then( (cart) => {
                 newCart = cart
+                cartId = cart._id
 
-                CartItem.create(req.body)
-                    .then(function (item) {
-                        cartItem = item
-                        newCart.totalAmount = item.price;
-
-                        Cart.findOneAndUpdate({
-                                _id: newCart._id
-                            }, {
-                                totalAmount: item.price,
-                                $push: {
-                                    items: cartItem
-                                }
-                            }, {
-                                new: true
-                            })
-                            .then(function (result) {
-                                res.status(201).json(cartItem)
-                            })
-                            .catch(err => {
-                                console.log(err);
-                                res.status(500).json(err.message)
-                            })
+                CartItem.create({
+                    product: item._id,
+                    quantity: item.quantity,
+                    price: item.price
+                })
+                .then(cartItem => {
+                    Cart.findOneAndUpdate(
+                        {
+                            _id: newCart._id
+                        },
+                        {
+                            $push: {items: cartItem._id},
+                            $inc: {totalAmount: cartItem.price}
+                        },
+                        {
+                            new: true,
+                        }
+                    )
+                    .populate({path: 'items', populate: {path: 'product', model: 'Product'}})
+                    .then(updated => {
+                        res.status(201).json(updated);
                     })
                     .catch(err => {
                         console.log(err);
                         res.status(500).json(err.message)
                     })
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(500).json(err.message)
+                })
             })
             .catch(err => {
                 console.log(err);
@@ -112,81 +103,84 @@ class CartController {
                     status: 'open'
                 })
                 .populate('user')
-                .populate({
-                    path: 'items',
-                    populate: {
-                        path: 'product',
-                        model: 'Product'
-                    }
-                })
                 .then(cart => {
-                    if (!cart) { //if current user does not have open cart, create new one first
-                        Cart.create({
-                                user: req.user._id
-                            })
-                            .then(function (cart) {
-                                newCart = cart
-                                CartItem.create(req.body)
-                                    .then(function (item) {
-                                        cartItem = item
-                                        Cart.findOneAndUpdate({
-                                                _id: newCart._id
-                                            }, {
-                                                $inc: {totalAmount: item.price},
-                                                $push: {
-                                                    items: cartItem
-                                                }
-                                            }, {
-                                                new: true
-                                            })
-                                            .then(function (result) {
-                                                res.status(201).json(cartItem)
-                                            })
-                                            .catch(err => {
-                                                console.log(err);
-                                                res.status(500).json(err.message)
-                                            })
-                                    })
-                                    .catch(err => {
-                                        console.log(err);
-                                        res.status(500).json(err.message)
-                                    })
+                    if(cart) { //if there is open cart, add item to it
+                        CartItem.create({
+                            product: item._id,
+                            quantity: item.quantity,
+                            price: item.price
+                        })
+                        .then(cartItem => {
+                            Cart.findOneAndUpdate(
+                                {
+                                    _id: cartId
+                                },
+                                {
+                                    $push: {items: cartItem._id},
+                                    $inc: {totalAmount: cartItem.price}
+                                },
+                                {
+                                    new: true,
+                                }
+                            )
+                            .populate({path: 'items', populate: {path: 'product', model: 'Product'}})
+                            .then(updated => {
+                                res.status(201).json(updated);
                             })
                             .catch(err => {
                                 console.log(err);
                                 res.status(500).json(err.message)
                             })
-                    } else { //if current use has existing cart
-                        let found = cart.items.find(x => x.product == req.body._id)
-                        if (found) {
-                            res.status(400).json('Product existed in cart!')
-                        } else {
-                            CartItem.create(req.body)
-                                .then(item => {
-                                    cartItem = item
-
-                                    //if current user has cart, add the item to it
-                                    Cart.findOneAndUpdate({
-                                            _id: cartId
-                                        }, {
-                                            $inc: {totalAmount: item.price},
-                                            $push: {
-                                                items: cartItem
-                                            }
-                                        })
-                                        .then(function (result) {
-                                            res.status(201).json(cartItem)
-                                        })
-                                        .catch(err => {
-                                            console.log(err);
-                                            res.status(500).json(err.message)
-                                        })
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            res.status(500).json(err.message)
+                        })
+                    }
+                    else { //if no open cart existed, create new one
+                        Cart.create({
+                            user: req.user._id,
+                            items: [item._id],
+                            totalAmount: item.price
+                        })
+                        .then(function (cart) {
+                            newCart = cart
+                            CartItem.create({
+                                product: item._id,
+                                quantity: item.quantity,
+                                price: item.price
+                            })
+                            .then(cartItem => {
+                                Cart.findOneAndUpdate(
+                                    {
+                                        _id: newCart._id
+                                    },
+                                    {
+                                        $push: {items: cartItem._id},
+                                        $inc: {totalAmount: cartItem.price}
+                                    },
+                                    {
+                                        new: true,
+                                    }
+                                )
+                                .populate({path: 'items', populate: {path: 'product', model: 'Product'}})
+                                .then(updated => {
+                                    res.status(201).json(updated);
                                 })
                                 .catch(err => {
                                     console.log(err);
                                     res.status(500).json(err.message)
                                 })
-                        }
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                res.status(500).json(err.message)
+                            })
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            res.status(500).json(err.message)
+                        })
                     }
                 })
                 .catch(err => {
@@ -198,31 +192,30 @@ class CartController {
         let cartId = req.params.id
         let itemId = req.params.itemId
 
-        Cart.findOneAndUpdate({
-                _id: cartId,
-                status: 'open'
-            }, {
-                $pull: {
-                    items: itemId
-                }
-            }, {
-                new: true
-            })
-            .then(cart => {
-                if (cart) {
-                    CartItem.findOneAndDelete({
-                            _id: req.params.id
-                        })
-                        .then((deleted) => {
-                            res.status(200).json(deleted)
-                        })
-                        .catch(err => {
-                            console.log(err);
-                            res.status(500).json(err.message)
-                        })
-                } else {
-                    res.status(400).json('Invalid Cart')
-                }
+        CartItem.findOne({_id: itemId})
+            .then(cartItem => {
+                Cart.findOneAndUpdate({
+                    _id: cartId,
+                    status: 'open'
+                }, {
+                    $pull: {
+                        items: itemId
+                    },
+                    $inc: {totalAmount: Number(cartItem.price)* -1}
+                }, {
+                    new: true
+                })
+                .then(cart => {
+                    if (cart) {
+                        res.status(200).json(cart)
+                    } else {
+                        res.status(400).json('Invalid Cart')
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(500).json(err.message)
+                })
             })
             .catch(err => {
                 console.log(err);

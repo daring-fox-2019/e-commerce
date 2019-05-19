@@ -24,8 +24,8 @@ const store = new Vuex.Store({
     addItem(s, p) {
       s.cart.items.push(p);
     },
-    removetItem(s, p) {
-      s.cart.items = s.cart.items.filter(x => x._id !== p._id);
+    removeItem(s, p) {
+      s.cart.items = s.cart.items.filter(x => x._id.toString() !== p);
     },
   },
   actions: {
@@ -40,14 +40,10 @@ const store = new Vuex.Store({
     },
     addCartItem(context, newdata) {
       const cartId = context.state.cart ? context.state.cart._id : '0';
-      const item = newdata;
-
-
-      return api.patch(`/cart/${cartId}`, item, { headers: { Authorization: localStorage.ecomm_token } });
+      return api.patch(`/cart/${cartId}`, newdata, { headers: { Authorization: localStorage.ecomm_token } });
     },
     removeCartItem(context, newdata) {
       const item = newdata;
-
       return api.delete(`/cart/${context.state.cart._id}/delete/${item}`, { headers: { Authorization: localStorage.ecomm_token } });
     },
   },

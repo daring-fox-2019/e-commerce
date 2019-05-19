@@ -57,7 +57,12 @@ export default new Router({
     {
       path: '/addproduct',
       name: 'addproduct',
-      component: () => import(/* webpackChunkName: "login" */ './views/AddProduct.vue'),
+      component: () => import(/* webpackChunkName: "addproduct" */ './views/AddProduct.vue'),
+    },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: () => import(/* webpackChunkName: "cart" */ './views/Cart.vue'),
     },
   ],
 });

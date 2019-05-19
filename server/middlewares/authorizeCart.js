@@ -1,17 +1,17 @@
 const Cart = require('../models/cart')
 
 module.exports = function(req, res, next) {
-    let id
+    let id = req.params.id
 
-    if(req.user.role === 'admin') {
+    if(req.user.role === 'admin' || id === '0') {
         next()
     }
     else {
-        id = req.params.id
         Cart.findOne({_id: id})
             .then(cart => {
                 if(cart) {
-                    if(cart.user === req.user._id) {
+                    console.log(cart.user, req.user.id);
+                    if(cart.user.toString() === req.user._id.toString()) {
                         next()
                     }
                     else {
