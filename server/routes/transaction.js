@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const transaction = require('../controllers/transaction')
-const { authentication } = require('../middleware/auth')
+const { authentication, authorizationTransaction } = require('../middleware/auth')
 
 
 router.use(authentication)
@@ -9,7 +9,7 @@ router.get('/user', transaction.findAllUser)
 router.get('/:id', transaction.findOne)
 router.post('/', transaction.create)
 
-// router.use('/:id', authorization)
+router.use('/:id', authorizationTransaction)
 router.delete('/:id', transaction.delete)
 router.patch('/:id', transaction.update)
 

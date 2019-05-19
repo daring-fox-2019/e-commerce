@@ -23,7 +23,7 @@ export default {
     addCart() {
       axios
         .post(
-          'http://localhost:3000/cart',
+          'http://35.198.240.251/cart',
           { productId: this.product._id },
           { headers: { token: localStorage.token } },
         )

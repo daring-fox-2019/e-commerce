@@ -30,39 +30,39 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
   data() {
     return {
       headers: [
         {
-          text: "Id Transaction",
-          align: "center",
-          value: "_id",
-          width: "4%"
+          text: 'Id Transaction',
+          align: 'center',
+          value: '_id',
+          width: '4%',
         },
         {
-          text: "Items",
-          align: "center",
+          text: 'Items',
+          align: 'center',
           sortable: false,
-          value: "cart"
+          value: 'cart',
         },
         {
-          text: "Status",
-          align: "center",
-          value: "status",
-          width: "15%"
+          text: 'Status',
+          align: 'center',
+          value: 'status',
+          width: '15%',
         },
         {
-          text: "Action",
-          align: "center",
+          text: 'Action',
+          align: 'center',
           sortable: false,
-          width: "1%"
-        }
+          width: '1%',
+        },
       ],
       listTransaction: [],
-      statusAdmin: this.$store.state.isAdmin
+      statusAdmin: this.$store.state.isAdmin,
     };
   },
   created() {
@@ -72,33 +72,33 @@ export default {
     loadData() {
       if (this.$store.state.isAdmin) {
         axios
-          .get("http://localhost:3000/transaction", {
+          .get('http://35.198.240.251/transaction', {
             headers: {
-              token: localStorage.token
-            }
+              token: localStorage.token,
+            },
           })
           .then(({ data }) => {
-            data.forEach(element => {
-              if (element.status === "0") {
-                element.status = "not yet paid";
-              } else if (element.status === "1") {
-                element.status = "waiting for delivery confirmation";
-              } else if (element.status === "2") {
-                element.status = "delivery process";
-              } else if (element.status === "3") {
-                element.status = "arrived";
+            data.forEach((element) => {
+              if (element.status === '0') {
+                element.status = 'not yet paid';
+              } else if (element.status === '1') {
+                element.status = 'waiting for delivery confirmation';
+              } else if (element.status === '2') {
+                element.status = 'delivery process';
+              } else if (element.status === '3') {
+                element.status = 'arrived';
               }
 
-              let listItem = "";
-              element.cart.forEach(el => {
-                this.$store.state.listProduct.forEach(dat => {
+              let listItem = '';
+              element.cart.forEach((el) => {
+                this.$store.state.listProduct.forEach((dat) => {
                   if (dat._id == el.productId) {
                     listItem += `${dat.name} (${el.quantity}), `;
                   }
                 });
               });
               if (
-                listItem.slice(listItem.length - 2, listItem.length) === ", "
+                listItem.slice(listItem.length - 2, listItem.length) === ', '
               ) {
                 listItem = listItem.slice(0, listItem.length - 2);
               }
@@ -106,38 +106,38 @@ export default {
             });
             this.listTransaction = data;
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
           });
       } else {
         axios
-          .get("http://localhost:3000/transaction/user", {
+          .get('http://35.198.240.251/transaction/user', {
             headers: {
-              token: localStorage.token
-            }
+              token: localStorage.token,
+            },
           })
           .then(({ data }) => {
-            data.forEach(element => {
-              if (element.status === "0") {
-                element.status = "not yet paid";
-              } else if (element.status === "1") {
-                element.status = "waiting for delivery confirmation";
-              } else if (element.status === "2") {
-                element.status = "delivery process";
-              } else if (element.status === "3") {
-                element.status = "arrived";
+            data.forEach((element) => {
+              if (element.status === '0') {
+                element.status = 'not yet paid';
+              } else if (element.status === '1') {
+                element.status = 'waiting for delivery confirmation';
+              } else if (element.status === '2') {
+                element.status = 'delivery process';
+              } else if (element.status === '3') {
+                element.status = 'arrived';
               }
 
-              let listItem = "";
-              element.cart.forEach(el => {
-                this.$store.state.listProduct.forEach(dat => {
+              let listItem = '';
+              element.cart.forEach((el) => {
+                this.$store.state.listProduct.forEach((dat) => {
                   if (dat._id == el.productId) {
                     listItem += `${dat.name} (${el.quantity}), `;
                   }
                 });
               });
               if (
-                listItem.slice(listItem.length - 2, listItem.length) === ", "
+                listItem.slice(listItem.length - 2, listItem.length) === ', '
               ) {
                 listItem = listItem.slice(0, listItem.length - 2);
               }
@@ -145,38 +145,38 @@ export default {
             });
             this.listTransaction = data;
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
           });
       }
     },
     action(id, status) {
-      if (status === "not yet paid") {
-        status = "1";
-      } else if (status === "waiting for delivery confirmation") {
-        status = "2";
-      } else if (status === "delivery process") {
-        status = "3";
+      if (status === 'not yet paid') {
+        status = '1';
+      } else if (status === 'waiting for delivery confirmation') {
+        status = '2';
+      } else if (status === 'delivery process') {
+        status = '3';
       }
       axios
         .patch(
-          `http://localhost:3000/transaction/${id}`,
+          `http://35.198.240.251/transaction/${id}`,
           {
-            status
+            status,
           },
           {
             headers: {
-              token: localStorage.token
-            }
-          }
+              token: localStorage.token,
+            },
+          },
         )
         .then(() => {
           this.loadData();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
-    }
-  }
+    },
+  },
 };
 </script>

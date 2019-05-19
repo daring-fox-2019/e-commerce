@@ -41,43 +41,43 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
   data() {
     return {
       signin: {
-        email: "",
-        password: ""
+        email: '',
+        password: '',
       },
       emailRules: [
-        v => !!v || "E-mail is required",
-        v => /.+@.+/.test(v) || "E-mail must be valid"
-      ]
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid',
+      ],
     };
   },
   methods: {
     signIn() {
       axios
-        .post("http://localhost:3000/user/signin", this.signin)
+        .post('http://35.198.240.251/user/signin', this.signin)
         .then(({ data }) => {
-          this.signin.email = "";
-          this.signin.password = "";
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("name", data.name);
-          localStorage.setItem("role", data.role);
-          this.$store.commit("setLogin", true);
+          this.signin.email = '';
+          this.signin.password = '';
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('name', data.name);
+          localStorage.setItem('role', data.role);
+          this.$store.commit('setLogin', true);
           if (data.role) {
-            this.$store.commit("setAdmin", true);
+            this.$store.commit('setAdmin', true);
           }
-          swal("Welcome back!", "Login Success", "success");
-          this.$router.push("/");
+          swal('Welcome back!', 'Login Success', 'success');
+          this.$router.push('/');
         })
-        .catch(err => {
-          swal("Signin Failed!", "warning");
+        .catch((err) => {
+          swal('Signin Failed!', 'warning');
           console.log(err);
         });
-    }
-  }
+    },
+  },
 };
 </script>

@@ -60,7 +60,7 @@ export default {
       }).then((willDelete) => {
         if (willDelete) {
           axios
-            .delete(`http://localhost:3000/cart/${id}`, {
+            .delete(`http://35.198.240.251/cart/${id}`, {
               headers: {
                 token: localStorage.token,
               },

@@ -87,29 +87,29 @@
 
 <script>
 // @ is an alias to /src
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  name: "home",
+  name: 'home',
   components: {},
   data() {
     return {
       product: {},
-      priceProduct: "",
+      priceProduct: '',
       isEdit: false,
       product: {
-        name: "",
-        price: "",
-        stock: "",
-        imageName: "",
-        imageUrl: "",
-        imageFile: ""
+        name: '',
+        price: '',
+        stock: '',
+        imageName: '',
+        imageUrl: '',
+        imageFile: '',
       },
 
       emailRules: [
-        v => !!v || "E-mail is required",
-        v => /.+@.+/.test(v) || "E-mail must be valid"
-      ]
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid',
+      ],
     };
   },
   watch: {
@@ -117,19 +117,18 @@ export default {
       this.fetchData();
     },
     product(val) {
-      let rupiah = "";
+      let rupiah = '';
       const angkarev = val.price
         .toString()
-        .split("")
+        .split('')
         .reverse()
-        .join("");
-      for (let i = 0; i < angkarev.length; i++)
-        if (i % 3 === 0) rupiah += `${angkarev.substr(i, 3)}.`;
+        .join('');
+      for (let i = 0; i < angkarev.length; i++) if (i % 3 === 0) rupiah += `${angkarev.substr(i, 3)}.`;
       this.priceProduct = `Rp. ${rupiah
-        .split("", rupiah.length - 1)
+        .split('', rupiah.length - 1)
         .reverse()
-        .join("")}`;
-    }
+        .join('')}`;
+    },
   },
   created() {
     this.fetchData();
@@ -137,11 +136,11 @@ export default {
   methods: {
     fetchData() {
       axios
-        .get(`http://localhost:3000/products/${this.$route.params.id}`)
+        .get(`http://35.198.240.251/products/${this.$route.params.id}`)
         .then(({ data }) => {
           this.product = data;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -149,15 +148,15 @@ export default {
       if (this.product.stock > 0) {
         axios
           .post(
-            "http://localhost:3000/cart",
+            'http://35.198.240.251/cart',
             { productId: this.product._id },
-            { headers: { token: localStorage.token } }
+            { headers: { token: localStorage.token } },
           )
           .then(() => {
-            swal("Add to Cart Success!", "success");
+            swal('Add to Cart Success!', 'success');
           })
-          .catch(err => {
-            swal("Add to Cart Failed!", "warning");
+          .catch((err) => {
+            swal('Add to Cart Failed!', 'warning');
             console.log(err);
           });
       }
@@ -166,12 +165,12 @@ export default {
       this.isEdit = !this.isEdit;
     },
     reset() {
-      (this.product.name = ""),
-        (this.product.price = ""),
-        (this.product.stock = ""),
-        (this.product.imageFile = ""),
-        (this.product.imageName = ""),
-        (this.product.imageUrl = "");
+      (this.product.name = ''),
+      (this.product.price = ''),
+      (this.product.stock = ''),
+      (this.product.imageFile = ''),
+      (this.product.imageName = ''),
+      (this.product.imageUrl = '');
     },
 
     pickFile() {
@@ -182,47 +181,47 @@ export default {
       const { files } = e.target;
       if (files[0] !== undefined) {
         this.product.imageName = files[0].name;
-        if (this.product.imageName.lastIndexOf(".") <= 0) {
+        if (this.product.imageName.lastIndexOf('.') <= 0) {
           return;
         }
         const fr = new FileReader();
         fr.readAsDataURL(files[0]);
-        fr.addEventListener("load", () => {
+        fr.addEventListener('load', () => {
           this.product.imageUrl = fr.result;
           this.product.imageFile = files[0];
         });
       } else {
-        this.product.imageFile = "";
-        this.product.imageUrl = "";
+        this.product.imageFile = '';
+        this.product.imageUrl = '';
       }
     },
 
     editProduct() {
       const data = new FormData();
-      data.append("name", this.product.name);
-      data.append("price", this.product.price);
-      data.append("stock", this.product.stock);
+      data.append('name', this.product.name);
+      data.append('price', this.product.price);
+      data.append('stock', this.product.stock);
       if (this.product.imageFile) {
-        data.append("image", this.product.imageFile, this.product.imageName);
+        data.append('image', this.product.imageFile, this.product.imageName);
       }
 
       axios
-        .put(`http://localhost:3000/products/${this.product._id}`, data, {
-          headers: { token: localStorage.token }
+        .put(`http://35.198.240.251/products/${this.product._id}`, data, {
+          headers: { token: localStorage.token },
         })
         .then(() => {
-          swal("Edit Product Success!", "success");
+          swal('Edit Product Success!', 'success');
           this.reset();
           this.fetchData();
-          this.isEdit = false
-          console.log("Edit SUKSES");
+          this.isEdit = false;
+          console.log('Edit SUKSES');
         })
-        .catch(err => {
-          swal("Edit Product Failed!", "warning");
+        .catch((err) => {
+          swal('Edit Product Failed!', 'warning');
           console.log(err);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

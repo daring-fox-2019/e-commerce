@@ -48,20 +48,20 @@
 
 <script>
 export default {
-  data(){
-    return{
-      name: localStorage.name
-    }
+  data() {
+    return {
+      name: localStorage.name,
+    };
   },
   methods: {
     signout() {
-      this.$store.commit("setLogin", false);
-      this.$store.commit("setAdmin", false);
-      localStorage.removeItem("token");
-      localStorage.removeItem("name");
-      swal("Logout Success!", "", "success");
-      this.$router.push("/");
-    }
-  }
+      this.$store.commit('setLogin', false);
+      this.$store.commit('setAdmin', false);
+      localStorage.removeItem('token');
+      localStorage.removeItem('name');
+      swal('Logout Success!', '', 'success');
+      this.$router.push('/');
+    },
+  },
 };
 </script>

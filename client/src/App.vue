@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import Footer from "@/components/Footer.vue";
-import Header from "@/components/Header.vue";
+import Footer from '@/components/Footer.vue';
+import Header from '@/components/Header.vue';
 
 export default {
   data() {
@@ -26,15 +26,15 @@ export default {
   },
   components: {
     Header,
-    Footer
+    Footer,
   },
   created() {
     if (localStorage.token) {
-      this.$store.commit("setLogin", true);
-      this.$store.commit("setAdmin", true);
+      this.$store.commit('setLogin', true);
+      this.$store.commit('setAdmin', true);
     }
-    this.$store.dispatch("loadProduct");
-  }
+    this.$store.dispatch('loadProduct');
+  },
 };
 </script>
 <style>

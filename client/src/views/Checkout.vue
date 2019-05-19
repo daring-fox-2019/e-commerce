@@ -96,7 +96,7 @@ export default {
   },
   created() {
     axios
-      .get('http://localhost:3000/rajaongkir/province')
+      .get('http://35.198.240.251/rajaongkir/province')
       .then(({ data }) => {
         this.province = data;
       })
@@ -107,7 +107,7 @@ export default {
   watch: {
     selectedProvince(val) {
       axios
-        .post('http://localhost:3000/rajaongkir/city', {
+        .post('http://35.198.240.251/rajaongkir/city', {
           idProvince: val.province_id,
         })
         .then(({ data }) => {
@@ -119,7 +119,7 @@ export default {
     },
     selectedCity(val) {
       axios
-        .post('http://localhost:3000/rajaongkir/cost', {
+        .post('http://35.198.240.251/rajaongkir/cost', {
           idCity: val.city_id,
         })
         .then(({ data }) => {
@@ -142,7 +142,7 @@ export default {
     buyin() {
       axios
         .post(
-          'http://localhost:3000/transaction',
+          'http://35.198.240.251/transaction',
           {
             cart: this.products,
             totalPrice: this.grandTotal,
@@ -155,7 +155,7 @@ export default {
         )
         .then(({ data }) => {
           this.$router.push('/transaction');
-          swal("Checkout Success!", "success");
+          swal('Checkout Success!', 'success');
         })
         .catch((err) => {
           console.log(err);

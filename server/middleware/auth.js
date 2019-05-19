@@ -1,5 +1,6 @@
 const User = require('../models/user')
 const Cart = require('../models/cart')
+const Transaction = require('../models/transaction')
 const { verify } = require('../helpers/jwt')
 
 function authentication(req, res, next){
@@ -19,7 +20,7 @@ function authentication(req, res, next){
     process.env.VUE_APP_asdad
 }
 
-function authorization(req, res, next){
+function authorizationCart(req, res, next){
     Cart.findById(req.params.id)
     .then(data=>{
         if(String(data.userId)===String(req.userId)){
@@ -33,4 +34,18 @@ function authorization(req, res, next){
     })
 }
 
-module.exports={authentication, authorization}
+function authorizationTransaction(req, res, next){
+    Transaction.findById(req.params.id)
+    .then(data=>{
+        if(String(data.userId)===String(req.userId)){
+            next()
+        }else{
+            res.status(401).json({message: 'Unauthorized'})
+        }
+    })
+    .catch(err=>{
+        res.status(500).json({message: 'Unauthorized'})
+    })
+}
+
+module.exports={authentication, authorizationCart, authorizationTransaction}

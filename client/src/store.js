@@ -25,14 +25,14 @@ export default new Vuex.Store({
     setTotalCart(state, payload) {
       state.totalPrice = payload;
     },
-    setProduct(state, payload){
-      state.listProduct = payload
-    }
+    setProduct(state, payload) {
+      state.listProduct = payload;
+    },
   },
   actions: {
     loadCartCustomer(context) {
       axios
-        .get('http://localhost:3000/cart', {
+        .get('http://35.198.240.251/cart', {
           headers: {
             token: localStorage.token,
           },
@@ -52,13 +52,13 @@ export default new Vuex.Store({
     },
     loadProduct(context) {
       axios
-        .get('http://localhost:3000/products')
+        .get('http://35.198.240.251/products')
         .then(({ data }) => {
-          context.commit('setProduct', data)
+          context.commit('setProduct', data);
         })
         .catch((err) => {
           console.log(err);
         });
-    }
+    },
   },
 });

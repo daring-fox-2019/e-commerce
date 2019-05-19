@@ -59,34 +59,34 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
   data() {
     return {
       product: {
-        name: "",
-        price: "",
-        stock: "",
-        imageName: "",
-        imageUrl: "",
-        imageFile: ""
+        name: '',
+        price: '',
+        stock: '',
+        imageName: '',
+        imageUrl: '',
+        imageFile: '',
       },
 
       emailRules: [
-        v => !!v || "E-mail is required",
-        v => /.+@.+/.test(v) || "E-mail must be valid"
-      ]
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid',
+      ],
     };
   },
   methods: {
     reset() {
-      this.product.name = "",
-      this.product.price = "",
-      this.product.stock = "",
-      this.product.imageFile = "",
-      this.product.imageName = "",
-      this.product.imageUrl = ""
+      this.product.name = '',
+      this.product.price = '',
+      this.product.stock = '',
+      this.product.imageFile = '',
+      this.product.imageName = '',
+      this.product.imageUrl = '';
     },
 
     pickFile() {
@@ -97,44 +97,44 @@ export default {
       const { files } = e.target;
       if (files[0] !== undefined) {
         this.product.imageName = files[0].name;
-        if (this.product.imageName.lastIndexOf(".") <= 0) {
+        if (this.product.imageName.lastIndexOf('.') <= 0) {
           return;
         }
         const fr = new FileReader();
         fr.readAsDataURL(files[0]);
-        fr.addEventListener("load", () => {
+        fr.addEventListener('load', () => {
           this.product.imageUrl = fr.result;
           this.product.imageFile = files[0];
         });
       } else {
-        this.product.imageFile = "";
-        this.product.imageUrl = "";
+        this.product.imageFile = '';
+        this.product.imageUrl = '';
       }
     },
 
     addProduct() {
       const data = new FormData();
-      data.append("name", this.product.name);
-      data.append("price", this.product.price);
-      data.append("stock", this.product.stock);
+      data.append('name', this.product.name);
+      data.append('price', this.product.price);
+      data.append('stock', this.product.stock);
       if (this.product.imageFile) {
-        data.append("image", this.product.imageFile, this.product.imageName);
+        data.append('image', this.product.imageFile, this.product.imageName);
       }
 
       axios
-        .post("http://localhost:3000/products", data, {
-          headers: { token: localStorage.token }
+        .post('http://35.198.240.251/products', data, {
+          headers: { token: localStorage.token },
         })
         .then(() => {
-          swal("Add Product Success!", "success");
+          swal('Add Product Success!', 'success');
           this.reset();
-          console.log("ADD SUKSES");
+          console.log('ADD SUKSES');
         })
-        .catch(err => {
-          swal("Add Product Failed!", "warning");
+        .catch((err) => {
+          swal('Add Product Failed!', 'warning');
           console.log(err);
         });
-    }
-  }
+    },
+  },
 };
 </script>

@@ -86,7 +86,7 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch('loadProduct')
+    this.$store.dispatch('loadProduct');
   },
 };
 </script>
