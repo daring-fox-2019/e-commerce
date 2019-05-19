@@ -155,7 +155,7 @@ export default new Vuex.Store({
     changeCount(context,payload) {
       axios({
         method: 'POST',
-        url: `/cart/add/${payload.id}`,
+        url: `/cart/upsert/${payload.id}`,
         data: {
           count: payload.count
         },
@@ -164,6 +164,24 @@ export default new Vuex.Store({
         },
       })
         .then(({ data }) => {
+          context.dispatch('getCart');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    deleteCart(context,payload) {
+      axios({
+        method: 'PUT',
+        url: `/cart/delete/${payload.id}`,
+        data: {
+          count: payload.count
+        },
+        headers: {
+          token: localStorage.getItem('token'),
+        },
+      })
+        .then((result) => {
           context.dispatch('getCart');
         })
         .catch((err) => {

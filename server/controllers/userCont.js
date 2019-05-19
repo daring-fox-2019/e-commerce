@@ -7,10 +7,10 @@ const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 class UserController {
-  static addToCart(req, res) {
-    Promise.all([User.findOne({'cart.product': req.params._id }), Product.findById(req.params._id)])
+  static upsertCart(req, res) {
+    Promise.all([User.findOne({ 'cart.product': req.params._id }), Product.findById(req.params._id)])
       .then(results => {
-        console.log(results)
+        console.log(results, req.body.count)
         if (results[1].stock - req.body.count >= 0) {
           results[1].stock -= req.body.count
           results[1].save()
@@ -38,7 +38,7 @@ class UserController {
           return User.findOneAndUpdate({
             'cart.product': req.params._id
           }, {
-              $inc: { 
+              $inc: {
                 'cart.$.totalCount': req.body.count, 'cart.$.totalPrice': results[1].price * req.body.count,
                 subTotal: results[1].price * req.body.count,
                 totalProduct: req.body.count
@@ -69,17 +69,39 @@ class UserController {
   }
 
   static deleteCart(req, res) {
-    User.update({
-      _id: req.decoded._id,
-    }, { $pull: { cart: { productId: req.params._id } } })
-      .then(row => {
+    Promise.all([User.findOne({ 'cart.product': req.params._id }), Product.findById(req.params._id)])
+      .then(results => {
+        results[1].stock += req.body.count
+        results[1].save()
+        return User.findOneAndUpdate({
+          _id: req.decoded._id
+        }, {
+            $pull: { cart: { product: req.params._id } },
+            $inc: {
+              subTotal: -results[1].price * req.body.count,
+              totalProduct: -req.body.count
+            }
+          })
+      })
+      .then((row) => {
         res.status(200).json(row)
       })
       .catch(err => {
         res.status(500).json({
-          message: 'gak bisa bang'
+          message: err
         })
       })
+    // User.update({
+    //   _id: req.decoded._id,
+    // }, { $pull: { cart: { product: req.params._id } } })
+    //   .then(row => {
+    //     res.status(200).json(row)
+    //   })
+    //   .catch(err => {
+    //     res.status(500).json({
+    //       message: 'gak bisa bang'
+    //     })
+    //   })
   }
 
   static GoogleSignIn(req, res) {

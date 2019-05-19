@@ -9,15 +9,19 @@
           width="60"
         >
         <p class="ml-4 my-auto">{{ keranjang.product.name }}</p>
-        <div class="ml-auto">
+        <div class="row ml-auto">
           <!-- <p>Total barang : {{ keranjang.totalCount }}</p> -->
-          <div class="form-group">
-            <label for="exampleFormControlSelect1">Jumlah :</label>
-            <select class="form-control" @change="onChange($event,keranjang.totalCount,keranjang.product._id)" id="exampleFormControlSelect1">
-              <option v-for="index in keranjang.product.stock" :selected="index===keranjang.totalCount" :key="index">{{ index }}</option>
-            </select>
+          <div class="col">
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Jumlah :</label>
+              <select class="form-control" @change="onChange($event,keranjang.totalCount,keranjang.product._id)" id="exampleFormControlSelect1">
+                <option v-for="index in keranjang.product.stock" :selected="index===keranjang.totalCount" :key="index">{{ index }}</option>
+              </select>
+            </div>
+            <p>Total harga : {{ keranjang.totalPrice }}</p>
           </div>
-          <p>Total harga : {{ keranjang.totalPrice }}</p>
+        <a @click.prevent="deleteCart(keranjang.product._id,keranjang.totalCount)" href="#" class="my-auto"><i class="fas fa-trash-alt fa-2x"></i>
+        </a>
         </div>
       </li>
     </ul>
@@ -28,6 +32,11 @@
 </template>
 <script>
 export default {
+  data(){
+    return {
+      count: 0
+    }
+  },
   created() {
     this.$store.dispatch("getCart");
   },
@@ -37,6 +46,9 @@ export default {
         count: event.target.value - countBefore,
         id
       })
+    },
+    deleteCart(id,count){
+      this.$store.dispatch('deleteCart',{id,count})
     }
   }
 };

@@ -3,9 +3,9 @@ const userCont = require('../controllers/userCont')
 const Authorize = require('../middlewares/authorize')
 const Authenticate = require('../middlewares/authenticate')
 
-router.post('/add/:_id', Authenticate, userCont.addToCart)
-router.get('/', Authenticate, userCont.readCart)
+router.post('/upsert/:_id', Authenticate, Authorize, userCont.upsertCart)
+router.get('/', Authenticate, Authorize, userCont.readCart)
 // router.put('/update/:_id', Authenticate, Authorize, userCont.updateCart)
-router.put('/delete/:_id', Authenticate, /* Authorize, */ userCont.deleteCart)
+router.put('/delete/:_id', Authenticate, Authorize, userCont.deleteCart)
 
 module.exports = router
