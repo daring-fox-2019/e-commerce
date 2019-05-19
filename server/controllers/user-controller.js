@@ -5,6 +5,7 @@ const { sign } = require('../helpers/jwt')
 class UserController {
 
     static async register(req, res) {
+    
         try {
             let newUser = await User.create(req.body)
             res.status(201).json(newUser)
@@ -26,8 +27,8 @@ class UserController {
                 if (!findOneUser) res.status(401).json({ message: 'Email/Password is incorrect!' })
                 else if (!compare(password, findOneUser.password)) res.status(401).json({ message: 'Email/Password is incorrect!' })
                 else {
-                    const { id, firstName, lastName, email } = findOneUser
-                    const payload = { id, firstName, lastName, email }
+                    const { id, firstName, lastName, email, role } = findOneUser
+                    const payload = { id, firstName, lastName, email, role }
                     const token = sign(payload)
                     req.headers.token = token
                     res.status(200).json({
@@ -38,7 +39,8 @@ class UserController {
                 }
             })
             .catch((err) => {
-                res.status(500).json(err)
+                console.log(err);
+                res.status(500).json({msg : 'Internal Server Error!'})
             })
     }
 }

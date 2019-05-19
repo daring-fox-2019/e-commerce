@@ -8,6 +8,7 @@ let unauthorizedToken = ''
 
 const User = require('../models/user-model')
 const Product = require('../models/product-model')
+const Category = require('../models/category-model')
 const { sign } = require('../helpers/jwt')
 
 chai.use(chaiHttp);
@@ -16,17 +17,17 @@ before(function(done) {
     
     User
         .create({
-            firstName : 'Martin',
-            lastName : 'Suhendra',
+            firstName : 'Testing',
+            lastName : 'Testing ',
             gender: 'male',
-            email : 'martin@mail.com',
+            email : 'testing@mail.com',
             password : '12345',
             role : 'admin'
         })
         .then((newUser) => {
             
             let { _id, firstName, lastName,gender, email, role } = newUser
-            let payload = { _id, firstName, lastName, gender, email, role }
+            let payload = { id : _id, firstName, lastName, gender, email, role }
             token = sign(payload)
            
         })
@@ -46,8 +47,8 @@ before(function(done) {
     })
     .then((newUser) => {
         
-        let { _id, firstName, lastName,gender, email, role } = newUser
-        let payload = { _id, firstName, lastName, gender, email, role }
+        let { id, firstName, lastName,gender, email, role } = newUser
+        let payload = { id, firstName, lastName, gender, email, role }
         unauthorizedToken = sign(payload)
         done()
     })
@@ -55,6 +56,7 @@ before(function(done) {
         console.log(err);
         done()
     })
+
 })
 
 after(function(done) {
@@ -78,12 +80,14 @@ describe('Product tests', function() {
 
     describe('POST /products', function() {
         describe('success parameter value', function() {
+
             let newProduct = {
-                productName : 'Guitar',
-                description : 'Fender Mustang',
+                productName : 'Yollo',
+                description : 'dedicated free vector design',
                 price : 2000,
                 stock : 12,
-                image : 'image.jpg'
+                category : 123,
+                image : 'http://hahahaha'
             }
 
             it('should send an object with status code 201', function(done) {
@@ -102,12 +106,13 @@ describe('Product tests', function() {
                         expect(newProduct).to.have.property('price')
                         expect(newProduct).to.have.property('stock')
                         expect(newProduct).to.have.property('image')
+                        expect(newProduct).to.have.property('category')
                         ProductId = res.body._id
                         done()
                     })
             })
 
-            //Input without description
+            // Input without description
             it('should send an object with status code 201', function(done) {
 
                 chai
@@ -117,7 +122,8 @@ describe('Product tests', function() {
                             description : '',
                             price : 2000,
                             stock : 12,
-                            image : 'image.jpg'})
+                            image : 'image.jpg',
+                            category : 'Mirage'})
                     .set('token', token)
                     .end(function(err, res) {
                         expect(err).to.be.null;
@@ -127,6 +133,7 @@ describe('Product tests', function() {
                         expect(newProduct).to.have.property('price')
                         expect(newProduct).to.have.property('stock')
                         expect(newProduct).to.have.property('image')
+                        expect(newProduct).to.have.property('category')
                         ProductId = res.body._id
                         done()
                     })
@@ -343,12 +350,13 @@ describe('Product tests', function() {
                     })
                     .set('token', token)
                     .end(function(err, res) {
+                    //   console.log(res.body, 'DISINININI??');
                       
                         expect(res).to.have.status(200)
                         expect(res).is.an('object')
                         expect(res.body).is.an('object')
-                        expect(res.body.updated._id).equal(ProductId)
-                        expect(res.body.message).equal('Successfully update data')
+                        expect(res.body.updateProduct._id).equal(ProductId)
+                        expect(res.body.message).to.include('successfully updating data')
                         done()
                     })
             })
@@ -362,15 +370,18 @@ describe('Product tests', function() {
                     .send({
                         productName : 'Bass',
                         description : 'Fender Jazz',
-                        image : 'image1.jpg'
+                        image : 'image1.jpg',
+                        price : 10,
+                        stock : 10
                     })
                     .set('token', token)
                     .end(function(err, res) {
+                        
                         expect(res).to.have.status(200)
                         expect(res).is.an('object')
                         expect(res.body).is.an('object')
-                        expect(res.body.updated._id).equal(ProductId)
-                        expect(res.body.message).equal('Successfully update data')
+                        expect(res.body.updateProduct._id).equal(ProductId)
+                        expect(res.body.message).equal('successfully updating data')
                         done()
                     })
             })
@@ -446,6 +457,8 @@ describe('Product tests', function() {
                     stock : -1000
                 })
                 .end(function(err, res) {  
+                    // console.log(res, '//// GAJADI EROR');
+                    
                     expect(res.body.message).to.include('Stock should greater than equal 0')
                     expect(res).to.have.status(400)
                     done()

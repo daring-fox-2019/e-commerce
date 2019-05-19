@@ -8,19 +8,14 @@ cartSchema = new Schema(
       required: [true, "UserId is required"],
       ref: "User"
     },
-    ProductId: [
+    ProductId: 
       {
         type: Schema.Types.ObjectId,
         required: [true, "ProductId is required"],
         ref: "Product"
       }
-    ],
-    amount: Number,
-    total: {
-      type: Number,
-      required: [true, "Stock must be filled"],
-      min: [1, "Stock cannot be zero"]
-    }
+    ,
+    amount: Number
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" }

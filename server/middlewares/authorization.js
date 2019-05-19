@@ -1,9 +1,11 @@
 const User = require('../models/user-model')
 
 module.exports = (req, res, next) => {
+   
     User
-    .findById({_id : req.authenticatedUser._id})
+    .findById({_id : req.authenticatedUser.id})
     .then((user)=> {
+       
         if( user.role == 'admin'){
             next()
         } else {
