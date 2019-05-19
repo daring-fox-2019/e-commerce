@@ -159,8 +159,7 @@ export default {
         status: "wait for payment",
         userId: localStorage.getItem("user"),
         userDetail: this.userDetail,
-        }
-      
+        }   
       this.$axios({
           method: 'post',
           url: 'http://localhost:3000/cart',

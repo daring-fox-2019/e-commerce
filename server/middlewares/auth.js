@@ -43,7 +43,7 @@ function adminAccess(req, res, next) {
     next();
   } else {
     res.status(403).json({
-      message: `Restricted access, you have no rights to access this`
+      message: `Restricted access,you have no rights to access this`
     });
   }
 }

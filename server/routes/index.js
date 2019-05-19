@@ -20,21 +20,20 @@ router.use(authentication);
 router.put(`/user/:id`, authentication, user.update);
 router.get(`/user/:id`, authentication, user.detail);
 router.post(`/cart`, cart.create);
+
 router.get(`/carts`, cart.carts);
+router.get(`/cart/:id`, cart.detail);
+router.put(`/cart/:id`, cart.update);
 
-router.get(`/cart/:id`, authorization, cart.detail);
 router.delete(`/cart/:id`, authorization, cart.delete);
-router.put(`/cart/:id`, authorization, cart.update);
 
-router.post(`/product`, adminAccess, product.create);
 
 router.get(`/product/:id`, product.detail);
-router.delete(`/product/:id`, adminAccess, product.delete);
 router.put(`/product/:id`, product.update);
+
 
 router.post(
   `/uploadimg`,
-  adminAccess,
   multer.single(`image`),
   sendUploadToGCS,
   (req, res) => {
@@ -44,6 +43,9 @@ router.post(
       res.status(500).send(`Unable to upload`);
     }
   }
-);
+  );
 
+router.post(`/product`, adminAccess, product.create);
+router.delete(`/product/:id`, adminAccess, product.delete);
+  
 module.exports = router;

@@ -29,7 +29,7 @@ export default new Router({
       path: '/transactions',
       name: 'transactions',
       component: () =>
-        import(/* webpackChunkName: 'transactions' */ './views/History.vue')
+        import(/* webpackChunkName: 'transactions' */ './views/Transaction.vue')
     }
   ]
 })

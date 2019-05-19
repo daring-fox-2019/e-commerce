@@ -22,7 +22,7 @@ class cCart {
   }
 
   static detail(req, res) {
-    Cart.findById(req.params.id)
+    Cart.find({userId : req.params.id})
       .then(found => {
         if (found) {
           res.status(200).json(found);

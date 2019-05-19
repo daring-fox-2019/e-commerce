@@ -12,6 +12,7 @@
           <br>
           <br>
           <center>
+            <p>New to Us?</p>
             <h3>Register</h3>
           </center>
           <br>
@@ -55,6 +56,7 @@
           <br>
           <br>
           <center>
+            <p>Have an account?</p>
             <h3>Login</h3>
           </center>
           <br>
