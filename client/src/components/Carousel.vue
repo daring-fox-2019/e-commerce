@@ -1,23 +1,24 @@
 <template>
     <div class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">
-            <div class="carousel-item active" data-interval="10000">
-            <img src="https://d2s36jztkuk7aw.cloudfront.net/sites/default/files/tile/image/carousel_01v2.jpg" class="d-block w-100" alt="...">
+            <div class="carousel-item active" data-interval="3000">
+                <img src="https://atriumhealth.org/dailydose/-/media/daily-dose-blog/DD-Social-Images/Sleeping-baby_social.jpg" class="d-block w-100" alt="Bayi Image 1">
             </div>
-            <div class="carousel-item" data-interval="2000">
-            <img src="https://bhlivecouk.s3.amazonaws.com/uploads/Pavilion/Events/Carousel/2019/08%20Aug/TheBobDylanStory-Carouselpx.jpg" class="d-block w-100" alt="...">
+            <div class="carousel-item" data-interval="3000">
+                <img src="https://surrogacybypons.com/wp-content/uploads/elementor/thumbs/delivery-o4fa5n0ijp2kyz4axbaz4zqo0ewkq1xio5vih34u4o.jpg" class="d-block w-100" alt="Bayi Image 2">
             </div>
-            <div class="carousel-item">
-            <img src="http://igloomag.com/wp/wp-content/uploads/2016/10/miles-davis-dreamland.jpg" class="d-block w-100" alt="...">
+            <div class="carousel-item" data-interval="3000">
+                <img src="http://saralossius.no/wp-content/uploads/2015/02/20150222_123059-1140x500.jpg" class="d-block w-100" alt="Bayi Image 2">
             </div>
+            
         </div>
-        <a class="carousel-control-prev" href="#" role="button" data-slide="prev">
+        <span class="carousel-control-prev" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#" role="button" data-slide="next">
+        </span>
+        <span class="carousel-control-next" role="button" data-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
-        </a>
+        </span>
     </div>
 </template>

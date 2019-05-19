@@ -1,24 +1,28 @@
 <template>
-  <b-form @submit.prevent="onSubmitLogin">
-    <b-form-group>
-      <b-form-input 
-        v-model="email" 
-        type="email" 
-        placeholder="Input your email" 
-        aria-autocomplete="off"
-        required
-    />
-    </b-form-group>
+  <div>
+    <h4 class="text-center">Sign In</h4>
 
-    <b-form-group>
-      <b-form-input v-model="password" type="password" placeholder="Password" required/>
-    </b-form-group>
+    <b-form @submit.prevent="onSubmitLogin">
+      <b-form-group>
+        <b-form-input 
+          v-model="loginForm.email" 
+          type="email" 
+          placeholder="Input your email" 
+          aria-autocomplete="off"
+          required
+      />
+      </b-form-group>
 
-    <div class="text-center">
-      <b-button type="submit" variant="success" block>Sign In</b-button>
-      <router-link :to="{ name: 'signup' }">Sign Up</router-link>
-    </div>
-  </b-form>
+      <b-form-group>
+        <b-form-input v-model="loginForm.password" type="password" placeholder="Password" required/>
+      </b-form-group>
+
+      <div class="text-center">
+        <b-button type="submit" variant="success" block>Sign In</b-button>
+        <router-link :to="{ name: 'signup' }">Sign Up</router-link>
+      </div>
+    </b-form>
+  </div>
 </template>
 
 <script>
@@ -26,14 +30,15 @@
         name: 'signin',
         methods: {
             onSubmitLogin() {
-                this.$router.push('/')
+              this.$store.dispatch('signIn', this.loginForm)
             }
         },
         data() {
           return {
-            name:'',
-            password:'',
-            email:''
+            loginForm: {
+              password:'',
+              email:''
+            }
           }
         },  
     }

@@ -2,32 +2,56 @@
   <div>
     <div class="row">
       <Carousel />
-
     </div>
-    <div class="row">
-      <div class="col-md-3" v-for="product in products" :key="product._id">
-        <router-link :to="{'name': 'product-detail', params :{ id: product._id } }">
-          <div class="my-card">
-            {{product.name}}
-          </div>
-        </router-link>
+    <Card
+      :categories="cerealProducts"
+    >
+      <div class="row">
+        <h5>Cereals</h5>
       </div>
-    </div>
+    </Card>
+    <Card
+      :categories="shirtProducts"
+    >
+      <div class="row">
+        <h5>Shirt</h5>
+      </div>
+    </Card>
+    <Card
+    :categories="aqiqahProducts"
+    >
+      <div class="row">
+        <h5>Aqiqah</h5>
+      </div>
+    </Card>
+    <Card
+      :categories="birthdayProducts"
+    >
+      <div class="row">
+        <h5>Birthday</h5>
+      </div>
+    </Card>
   </div>
 </template>
 
 <script>
-  import Carousel from '@/components/Carousel.vue'
   import api from '@/api/localapi'
+  import Carousel from '@/components/Carousel.vue'
+  import Card from '@/components/Card.vue'
 
   export default {
     name: 'Home',
     components: {
-      Carousel
+      Carousel,
+      Card
     },
     data() {
       return {
-        products : []
+        products : [],
+        cerealProducts : [],
+        aqiqahProducts : [],
+        shirtProducts : [],
+        birthdayProducts : []
       }
     },
     methods: {
@@ -40,10 +64,54 @@
         .catch(err => {
           console.log(err);
         })
-      }
+      },
+      fetchProductByCereal() {
+        api
+        .get('/products/category?category=cereal')
+        .then(({data}) => {
+          this.cerealProducts=data
+        })
+        .catch(err => {
+          console.log(err);
+        })
+      },
+      fetchProductByShirt() {
+        api
+        .get('/products/category?category=shirt')
+        .then(({data}) => {
+          this.shirtProducts=data
+        })
+        .catch(err => {
+          console.log(err);
+        })
+      },
+      fetchProductByAqiqah() {
+        api
+        .get('/products/category?category=aqiqah')
+        .then(({data}) => {
+          this.aqiqahProducts=data
+        })
+        .catch(err => {
+          console.log(err);
+        })
+      },
+      fetchProductByBirthday() {
+        api
+        .get('/products/category?category=birthday')
+        .then(({data}) => {
+          this.birthdayProducts=data
+        })
+        .catch(err => {
+          console.log(err);
+        })
+      },
     },
     mounted() {
       this.fetchProducts()
+      this.fetchProductByCereal()
+      this.fetchProductByShirt()
+      this.fetchProductByAqiqah()
+      this.fetchProductByBirthday()
     }
   }
 </script>

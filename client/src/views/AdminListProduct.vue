@@ -1,10 +1,11 @@
 <template>
     <div>
-        <router-link :to="{'name': 'home'}">
-            < back
-        </router-link>
-
-        <h3>Product List</h3>
+        <div class="text-center mb-3 mt-5">
+            <h3>Product List</h3>
+            <router-link :to="{'name': 'admin-create-product'}">
+                Create Product
+            </router-link>
+        </div>
         <table class="table table-striped">
             <thead>
                 <tr>
