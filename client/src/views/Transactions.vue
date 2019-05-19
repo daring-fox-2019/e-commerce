@@ -10,35 +10,9 @@
       <td class="text-xs-center">{{  formattedPrice(props.item.totalAmount) }}</td>
       <td class="text-xs-center">{{ formattedDate(props.item.created_at) }}</td>
       <td class="text-xs-center">{{ props.item.status.toUpperCase() }}</td>
-      <td><v-btn v-if="props.item.status.toLowerCase() !== 'received'" color="red" @click="updateStatus(props.item._id)"><small class="smallText">Confirm Delivery Status</small></v-btn></td>
+      <td><v-btn v-if="props.item.status.toLowerCase() === 'paid'" color="red" @click="updateStatus(props.item._id)"><small class="smallText">Confirm Delivery Status</small></v-btn></td>
     </template>
   </v-data-table>
-  <!-- <v-dialog v-model="statusDialog" persistent max-width="600px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">Update Receipt Status</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-layout wrap>
-              <v-flex xs12 sm6>
-                <v-select
-                  :items="['sent', 'received' ]"
-                  label="Delivery Status"
-                  required
-                ></v-select>
-              </v-flex>
-            </v-layout>
-          </v-container>
-          <small>Thank you for your kind cooperation!</small>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="grey" flat @click="closeStatusDialog">Close</v-btn>
-          <v-btn color="blue darken-1" flat @click="updateStatus">Save</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog> -->
 </v-layout>
 </template>
 <script>
@@ -74,6 +48,7 @@ export default {
                 this.transactions = data;
             })
             .catch(err => {
+                console.log(err);
                 if(err.response) {
                     err = err.response.data
                 }

@@ -195,6 +195,39 @@ class AuthController {
                 res.status(500).json(err.message)
             })
     }
+
+    static update(req, res) {
+        let user = req.body;
+        console.log(user);
+
+        User.findOneAndUpdate({_id: req.user._id}, user, {new: true})
+            .then(found => {
+                res.status(200).json(found);
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json(err.message)
+            })
+    }
+
+    static updatePicture(req, res) {
+        let newImage;
+
+        if(req.file) {
+            newImage = req.file.cloudStoragePublicUrl
+            User.findOneAndUpdate({_id: req.user._id}, {image: newImage}, {new: true})
+                .then(found => {
+                    res.status(200).json(found);
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(500).json(err.message)
+                })
+        }
+        else {
+            res.status(500).json('Error updating image')
+        }
+    }
 }
 
 module.exports = AuthController

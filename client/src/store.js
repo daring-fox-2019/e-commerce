@@ -27,6 +27,9 @@ const store = new Vuex.Store({
     removeItem(s, p) {
       s.cart.items = s.cart.items.filter(x => x._id.toString() !== p);
     },
+    updateUserImage(s, p) {
+      s.user.image = p;
+    },
   },
   actions: {
     getCurrentCart(context) {
