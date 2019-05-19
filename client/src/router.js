@@ -37,5 +37,18 @@ export default new Router({
       //   },
       // ],
     },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import(/* webpackChunkName: "carts" */ './views/Admin.vue'),
+      // children: [
+      //   {
+      //     path: 'product',
+      //     name: 'productForm',
+      // eslint-disable-next-line
+      //     component: () => import(/* webpackChunkName: "productForm" */ './views/ProductForm.vue'),
+      //   },
+      // ],
+    },
   ],
 });

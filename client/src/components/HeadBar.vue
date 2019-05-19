@@ -43,20 +43,25 @@
       prepend-icon="search"
       single-line
     ></v-text-field>
-    <router-link :to="isLogin ? '/carts' : '#'">
-      <v-btn v-if="isLogin" color="teal" icon flat>
-        <v-icon>shopping_basket</v-icon>
-      </v-btn>
-      <v-btn v-else @click.stop="loginWindow = true" color="teal" icon flat>
-        <v-icon>shopping_basket</v-icon>
-      </v-btn>
-    </router-link>
-    <v-toolbar-items v-if="isLogin">
 
+    <div v-if="isLogin">
+      <router-link to="/admin">
+        <v-btn v-if="role === 'admin'" color="teal" icon flat>
+          <v-icon>person</v-icon>
+        </v-btn>
+      </router-link>
+      <router-link :to="isLogin ? '/carts' : '#'">
+        <v-btn v-if="isLogin" color="teal" icon flat>
+          <v-icon>shopping_basket</v-icon>
+        </v-btn>
+        <v-btn v-else @click.stop="loginWindow = true" color="teal" icon flat>
+          <v-icon>shopping_basket</v-icon>
+        </v-btn>
+      </router-link>
       <v-btn @click.prevent="logout" icon flat>
         <v-icon>exit_to_app</v-icon>
       </v-btn>
-    </v-toolbar-items>
+    </div>
   </v-toolbar>
 </template>
 
@@ -67,8 +72,7 @@
 </style>
 
 <script>
-import { mapMutations } from 'vuex';
-import { mapState } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 import LoginForm from '@/components/LoginForm.vue';
 import RegisterForm from '@/components/RegisterForm.vue';
 
@@ -86,6 +90,7 @@ export default {
   computed: {
     ...mapState([
       'isLogin',
+      'role',
     ]),
   },
   data() {
