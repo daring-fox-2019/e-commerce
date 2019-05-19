@@ -53,4 +53,39 @@ describe('User Test', function() {
                 });
         })
     })
+
+    it("should success register user with status 201 with no error", function (done) {
+        let user = {
+            name: "lutfi",
+            email: "lutfi@email.com",
+            password: "12345"
+        };
+
+        chai
+        .request(app)
+        .post("/users/signup")
+        .send(user)
+        .end(function (err, res) {
+            expect(err).to.be.null;
+            expect(res).to.have.status(201);
+            expect(res.body).to.be.an("object")
+            expect(res.body.name).to.equal("lutfi")
+            expect(res.body).to.have.keys(["token","name","picture"]);
+            done()
+        });
+    });
+
+    it("should error with error code 400", function(done){
+        let errorUser ={}
+        chai
+        .request(app)
+        .post("/users/register")
+        .send(errorUser)
+        .end(function(err, res){
+            console.log(JSON.stringify(res.body,null,3))
+            expect(err).to.be.null;
+            expect(res).to.have.status(400)
+            done()
+        })
+    });
 })

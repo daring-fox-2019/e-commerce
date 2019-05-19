@@ -147,5 +147,27 @@ describe('Product tests', function() {
                 done();
             });
         });
+
+        it("should failed delete because id", function(done){
+            chai
+            .request(app)
+            .delete(`/products/5cb4c91945915a175607648f`)
+            .set({authorization:tokenAdmin})
+            .end(function(err,res){
+                testFunction.errorTest(err,res,400,"Item id not found")
+                done()
+            })
+        })
+
+        it("failed delete when token is invalid/user not logged in", function(done){
+            chai
+            .request(app)
+            .delete(`/products/5cb4c91945915a175607648f`)
+            .set({authorization:"alknfalknfalkfnaleknf"})
+            .end(function(err,res){
+                testFunction.errorTest(err,res,403,"Token is Invalid")
+                done()
+            })
+        })
     });
 });
