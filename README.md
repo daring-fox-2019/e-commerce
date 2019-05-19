@@ -352,33 +352,3 @@ Access the REST API via SERVER_URL = `http://localhost:3000/`
           "message": "data not found"
         }
       ```
-
-- **GET LIST OF TAGS**
-  - URL:
-    - **`GET`** *`<SERVER_URL>/tags`*
-  - URL (filtered):
-    - **`GET`** *`<SERVER_URL>/tags?search=<KEYWORD>`*
-  - Expected response (status: `200`):
-    ```json
-      {
-        "message": "data found",
-        "tags": [
-          {
-            "_id": "<id>",
-            "title": "<title>",
-            "created": "<createdAt>"
-          }, 
-          {
-            "..."
-          }, 
-          "..."
-        ]
-      }
-    ```
-  - Error responses:
-    - status: `404`:
-      ```json
-        {
-          "message": "data empty"
-        }
-      ```

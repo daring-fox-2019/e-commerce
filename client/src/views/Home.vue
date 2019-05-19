@@ -1,5 +1,5 @@
 <template>
-  <v-container style="min-height:76vh" fluid>
+  <v-container fluid>
     <v-layout row class="mb-3">
       <v-flex sm6 class="pa-2">
         <Carousel/>
@@ -8,7 +8,7 @@
         <h1 class="display-2 mb-1">New!</h1>
         <v-layout row>
           <v-flex v-for="index in 3" :key="index" sm4 class="px-1">
-            <ProductCard/>
+            <ProductCard :ratio="2"/>
           </v-flex>
         </v-layout>
       </v-flex>
@@ -33,10 +33,10 @@
       </v-flex>
     </v-layout>
 
-    <router-link to="/"><h1 class="display-2">all products</h1></router-link>
+    <router-link to="/products"><h1 class="display-2">all products</h1></router-link>
     <v-layout row wrap class="mb-3">
       <v-flex v-for="index in 6" :key="index" sm2 class="pa-2">
-        <ProductCard/>
+        <ProductCard :ratio="2" />
       </v-flex>
     </v-layout>
   </v-container>

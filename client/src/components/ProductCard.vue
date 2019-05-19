@@ -2,7 +2,7 @@
   <v-card>
     <v-img
       src="http://static1.businessinsider.com/image/596e282cc50c291e008b4fb4-1190-625/the-best-apple-products-to-buy-from-apples-refurbished-mac-store.jpg"
-      aspect-ratio="2"
+      :aspect-ratio="ratio"
     ></v-img>
 
     <v-card-title primary-title>
@@ -35,6 +35,9 @@
 <script>
 export default {
   name: 'productCard',
+  props: {
+    ratio: Number,
+  },
   data() {
     return {
       product: {
