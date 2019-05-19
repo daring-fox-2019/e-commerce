@@ -1,10 +1,12 @@
 <template>
   <div>
-    Home<br>
-    Login Status : {{isLogin}}<br>
-    User Login : {{userId}}
-    <div>
-      <img style="max-width: 100%; height: aut0;" src="http://4.bp.blogspot.com/-fi7yRHc_Dy8/UUnAikYjIMI/AAAAAAAAADY/IcjlPdSMv3U/s1600/Jewelry+Store.jpg.jpg" alt="">
+    <div style="position:relative;width: 100%; height: 100%;">
+      <img style="max-width: 100%; height:auto;" src="https://media.timeout.com/images/101828539/image.jpg" alt="">
+      <div style="position: absolute;top: 30%;left: 50%;transform: translate(-50%, -50%);">
+        <b-jumbotron style="background-color: rgba(255, 255, 255, 0.6)" header="Lux Jewelries">
+        <h1><router-link to="/products">Shop Now</router-link></h1>
+        </b-jumbotron>
+      </div>
     </div>
   </div>
 </template>

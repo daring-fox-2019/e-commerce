@@ -14,9 +14,11 @@ const { sendUploadToGCS, multer } = require(`../middlewares/uploadtogcs`);
 
 router.post("/register", user.register);
 router.post(`/login`, user.login);
-router.put(`/user/:id`, user.update);
+router.get(`/products`, product.products);
 
 router.use(authentication);
+router.put(`/user/:id`, authentication, user.update);
+router.get(`/user/:id`, authentication, user.detail);
 router.post(`/cart`, cart.create);
 router.get(`/carts`, cart.carts);
 
@@ -24,7 +26,6 @@ router.get(`/cart/:id`, authorization, cart.detail);
 router.delete(`/cart/:id`, authorization, cart.delete);
 router.put(`/cart/:id`, authorization, cart.update);
 
-router.get(`/products`, product.products);
 router.post(`/product`, adminAccess, product.create);
 
 router.get(`/product/:id`, product.detail);

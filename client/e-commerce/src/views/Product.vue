@@ -84,6 +84,7 @@
               v-on:updateItem="updateItem"
               :isAdmin="isAdmin"
               :items="items"
+              :isLogin="isLogin"
             />
           </div>
         </b-row>
@@ -93,206 +94,215 @@
 </template>
 
 <script>
-import listitems from "@/components/listitems";
-import swal from "sweetalert";
+import listitems from '@/components/listitems'
+import swal from 'sweetalert'
 
 export default {
-  name: "Product",
-  props: ["isLogin", "userId"],
-  data: function() {
+  name: 'Product',
+  props: ['isLogin', 'userId'],
+  data: function () {
     return {
       isAdmin: false,
       items: [],
       product: {
-        _id: "",
-        name: "",
-        image: "",
+        _id: '',
+        name: '',
+        image: '',
         price: null,
         stock: null,
-        description: ""
+        description: ''
       },
-      mode: "add"
-    };
+      mode: 'add'
+    }
   },
-  mounted() {
-    this.populateItem();
-    let id = localStorage.getItem("user");
-    if (id === "5ce158d52edb972b1e4dc5c4") {
-      this.isAdmin = true;
+  mounted () {
+    this.populateItem()
+    let id = localStorage.getItem('user')
+    if (id === '5ce158d52edb972b1e4dc5c4') {
+      this.isAdmin = true
     }
   },
   components: {
     listitems
   },
   methods: {
-    atc(e){
-      console.log(e, "di product")
+    atc (e) {
+      console.log(e, 'di product')
       this.$emit('atc', e)
     },
-    deleteItem(e) {
-      console.log(e, "delete di parent");
+    deleteItem (e) {
+      console.log(e, 'delete di parent')
       swal({
-        title: "Are you sure?",
+        title: 'Are you sure?',
         text:
-          "Once deleted, you will not be able to recover this product data!",
-        icon: "warning",
+          'Once deleted, you will not be able to recover this product data!',
+        icon: 'warning',
         buttons: true,
         dangerMode: true
       }).then(willDelete => {
         if (willDelete) {
-          console.log("jadi ngehapus")
+          console.log('jadi ngehapus')
           this.$axios({
-            method: "delete",
-            url: "http://localhost:3000/product/"+e,
+            method: 'delete',
+            url: 'http://localhost:3000/product/' + e,
             headers: {
-              token : localStorage.getItem('token'),
-              id : localStorage.getItem('user')
-            },
+              token: localStorage.getItem('token'),
+              id: localStorage.getItem('user')
+            }
           })
-          .then(({data})=>{
-            swal("Successfully delete product", {
-              icon: "success"
-            });
-            this.populateItem();
-          })
-          .catch(({response})=>{
-            console.log(response)
-            this.$swal("Error Status ${response.status}",`${response.data.message}`, "error")
-          })
+            .then(({ data }) => {
+              swal('Successfully delete product', {
+                icon: 'success'
+              })
+              this.populateItem()
+            })
+            .catch(({ response }) => {
+              console.log(response)
+              this.$swal(
+                `Error Status ${response.status}`,
+                `${response.data.message}`,
+                'error'
+              )
+            })
         } else {
-          swal("Cancelling your action...", {buttons: false, timer:2000});
-          this.populateItem();
+          swal('Cancelling your action...', { buttons: false, timer: 2000 })
+          this.populateItem()
         }
-      });
+      })
     },
-    updateItem(e) {
-      console.log(e, "di parent");
-      this.mode = "upd";
-      this.product = e;
-      this.product.image = ""
-      this.populateItem();
+    updateItem (e) {
+      console.log(e, 'di parent')
+      this.mode = 'upd'
+      this.product = e
+      this.product.image = ''
+      this.populateItem()
     },
-    updProduct() {
-      console.log("disini")
-      if (this.product.image === "") {
+    updProduct () {
+      console.log('disini')
+      if (this.product.image === '') {
         this.$axios({
-          method: "put",
-          url: "http://localhost:3000/product/"+this.product._id,
-          headers : {
+          method: 'put',
+          url: 'http://localhost:3000/product/' + this.product._id,
+          headers: {
             token: localStorage.getItem('token'),
             id: localStorage.getItem('user')
           },
-          data : {
+          data: {
             name: this.product.name,
             price: this.product.price,
             stock: this.product.stock,
             description: this.product.description
           }
-          })
-          .then(({response})=>{
-            this.$swal("Product Updated", "produc successfully updated", "success")
+        })
+          .then(({ response }) => {
+            this.$swal(
+              'Product Updated',
+              'produc successfully updated',
+              'success'
+            )
             this.cancelUpd()
             this.populateItem()
           })
-          .catch(err=>{
+          .catch(({ response }) => {
             this.$swal(
-              "Error Status : " + String(response.status),
+              'Error Status : ' + String(response.status),
               response.data.message,
-              "error"
-            );
+              'error'
+            )
             this.cancelUpd()
             this.populateItem()
           })
       } else if (
-        this.product.name === "" ||
-        this.product.image === "" ||
+        this.product.name === '' ||
+        this.product.image === '' ||
         this.product.price === null ||
         this.product.price <= 0 ||
         this.product.stock === null ||
         this.product.stock < 0 ||
-        this.product.description === ""
+        this.product.description === ''
       ) {
-        this.$swal("Please input valid product info");
+        this.$swal('Please input valid product info')
       } else {
-        swal("Upload Your Image...", {
+        swal('Upload Your Image...', {
           buttons: false,
           timer: 3500
-        });
+        })
       }
     },
-    cancelUpd() {
-      this.product.name = ""
-      this.product.image = ""
+    cancelUpd () {
+      this.product.name = ''
+      this.product.image = ''
       this.product.price = null
       this.product.stock = null
-      this.product.description = ""
-      this.mode = "add"
+      this.product.description = ''
+      this.mode = 'add'
     },
-    populateItem() {
+    populateItem () {
       this.$axios({
-        method: "get",
-        url: "http://localhost:3000/products",
+        method: 'get',
+        url: 'http://localhost:3000/products',
         headers: {
-          id: localStorage.getItem("user"),
-          token: localStorage.getItem("token")
+          id: localStorage.getItem('user'),
+          token: localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
-          this.items = data;
+          this.items = data
         })
         .catch(({ response }) => {
-          this.$swal(response.status, response.data.message, "error");
-        });
+          console.log(response)
+          this.$swal(`${response.status}`, response.data.message, 'error')
+        })
     },
-    newProduct() {
-      console.log("input produk");
+    newProduct () {
+      console.log('input produk')
       if (this.product.image === null) {
-        this.$swal("Please add product image");
+        this.$swal('Please add product image')
       } else if (
-        this.product.name === "" ||
-        this.product.image === "" ||
+        this.product.name === '' ||
+        this.product.image === '' ||
         this.product.price === null ||
         this.product.price <= 0 ||
         this.product.stock === null ||
         this.product.stock < 0 ||
-        this.product.description === ""
+        this.product.description === ''
       ) {
-        this.$swal("Please input valid product ino");
+        this.$swal('Please input valid product ino')
       } else {
-        swal("Upload Your Image...", {
+        swal('Upload Your Image...', {
           buttons: false,
           timer: 3500
-        });
+        })
 
         const blob = new Blob([this.product.image], {
           type: this.product.image.type
-        });
+        })
 
-        const formdata = new FormData();
+        const formdata = new FormData()
 
-        formdata.append("image", blob);
+        formdata.append('image', blob)
 
         this.$axios({
-          method: "post",
-          url: "http://localhost:3000/uploadimg",
+          method: 'post',
+          url: 'http://localhost:3000/uploadimg',
           headers: {
-            token: localStorage.getItem("token"),
-            id: localStorage.getItem("user")
+            token: localStorage.getItem('token'),
+            id: localStorage.getItem('user')
           },
           data: formdata
         })
           .then(({ data }) => {
-            this.product.image = data;
-            swal("Adding new Product to database...", {
+            this.product.image = data
+            swal('Adding new Product to database...', {
               buttons: false,
               timer: 3500
-            });
+            })
             this.$axios({
-              method: "post",
-              url: "http://localhost:3000/product",
+              method: 'post',
+              url: 'http://localhost:3000/product',
               headers: {
-                id: localStorage.getItem("user"),
-                token: localStorage.getItem("token")
+                id: localStorage.getItem('user'),
+                token: localStorage.getItem('token')
               },
               data: {
                 name: this.product.name,
@@ -304,30 +314,30 @@ export default {
             })
               .then(({ data }) => {
                 this.cancelUpd()
-                console.log("created => " + JSON.stringify(data));
-                this.$swal("Success", "Product Added", "success");
-                this.populateItem();
+                console.log('created => ' + JSON.stringify(data))
+                this.$swal('Success', 'Product Added', 'success')
+                this.populateItem()
               })
               .catch(err => {
-                console.log("error di db");
-                this.cancelUpd();
-                console.log(err);
-              });
+                console.log('error di db')
+                this.cancelUpd()
+                console.log(err)
+              })
           })
-          .catch(err => {
+          .catch(({ response }) => {
             this.cancelUpd()
             this.$swal(
-              "Error Status : " + String(response.status),
+              'Error Status : ' + String(response.status),
               response.data.message,
-              "error"
-            );
-          });
+              'error'
+            )
+          })
       }
     },
-    previewFile(e) {
-      this.product.image = e.target.files[0];
-      console.log(this.product.image);
+    previewFile (e) {
+      this.product.image = e.target.files[0]
+      console.log(this.product.image)
     }
   }
-};
+}
 </script>

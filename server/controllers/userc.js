@@ -44,6 +44,16 @@ class cUser {
         res.status(500).json({ message: `internal server error ${err}` });
       });
   }
+
+  static detail(req, res) {
+    User.findById(req.params.id)
+      .then(found => {
+        res.status(200).json(found);
+      })
+      .catch(err => {
+        res.status(500).json({ message: `internal server error ${err}` });
+      });
+  }
 }
 
 module.exports = cUser;

@@ -29,7 +29,8 @@
               > Stock Empty </p>
             </div>
             <div class="card-body" v-if="isAdmin === false">
-              <a href="#" @click.prevent="atc(item)" class="card-link">Add to Cart</a>
+              <a href="#" v-if="isLogin" @click.prevent="atc(item)" class="card-link">Add to Cart</a>
+              <router-link v-if="isLogin === false" to="/join" class="card-link">Shop Now</router-link>
             </div>
             <div v-if="isAdmin === true" class="card-footer text-muted">
               <a href="#" class="card-link" @click.prevent="del(item._id)">Delete</a>
@@ -44,22 +45,22 @@
 
 <script>
 export default {
-  name: "listitems",
-  props: ["isAdmin", "items"],
-  data: function() {
-    return {};
+  name: 'listitems',
+  props: ['isLogin','isAdmin', 'items'],
+  data: function () {
+    return {}
   },
-  mounted() {},
-  methods : {
-    atc(item){
+  mounted () {},
+  methods: {
+    atc (item) {
       this.$emit('atc', item)
     },
-    del(id) {
+    del (id) {
       this.$emit('deleteItem', id)
     },
-    upd(item){
+    upd (item) {
       this.$emit('updateItem', item)
     }
   }
-};
+}
 </script>

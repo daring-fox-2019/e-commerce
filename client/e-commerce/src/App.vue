@@ -6,19 +6,61 @@
           <li
             v-for="item in carts"
             :key="item.id"
-            class="list-group-item d-flex justify-content-between align-carts-center"
+            class="list-group-item d-flex justify-content-between align-items-center"
           >
             <img v-bind:src="item.image" style="width:50px; height:50px">
             {{item.name}}
             <br>
-            $ {{item.price}}
+            total $ {{item.amount}} - {{item.total}} item
+            <br>
+            price $ {{item.price}} per ring
             <b-button @click="removeItem(item.id)">remove</b-button>
           </li>
         </ul>
-        <h3 v-if="carts.length < 1"> Your cart is empty</h3>
+        <h3 v-if="carts.length < 1">Your cart is empty</h3>
       </div>
       <b-button class="mt-2" variant="outline-secondary" block @click="hideModalCart">Close</b-button>
-      <b-button v-if="carts.length > 0" class="mt-2" variant="outline-success" block @click="checkout">Checkout</b-button>
+      <b-button
+        v-if="carts.length > 0 && checkoutStat === false"
+        class="mt-2"
+        variant="outline-success"
+        block
+        @click="co"
+      >Checkout</b-button>
+      <div v-if="checkoutStat">
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input
+            v-model="userDetail.email"
+            type="email"
+            class="form-control"
+            id="email"
+            aria-describedby="emailHelp"
+            placeholder="Enter email"
+          >
+        </div>
+        <div class="form-group">
+          <label for="phonenumber">Phone Number</label>
+          <input
+            v-model="userDetail.phonenumber"
+            type="text"
+            class="form-control"
+            id="phonenumber"
+            placeholder="Enter phone number"
+          >
+        </div>
+        <div class="form-group">
+          <label for="address">Addres</label>
+          <input
+            v-model="userDetail.address"
+            type="text"
+            class="form-control"
+            id="address"
+            placeholder="Enter shipping address"
+          >
+        </div>
+        <b-button class="mt-2" variant="outline-success" block @click="checkout">Order</b-button>
+      </div>
     </b-modal>
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
       <ul class="navbar-nav mr-auto">
@@ -38,7 +80,7 @@
         <li class="nav-item" v-if="userId !== '5ce158d52edb972b1e4dc5c4'">
           <a class="nav-link" @click="showModalCart">
             Cart
-            <span class="badge badge badge-light">{{carts.length}}</span>
+            <span class="badge badge badge-light">{{cartItems}}</span>
           </a>
         </li>
         <li class="nav-item">
@@ -49,16 +91,18 @@
           >join us to start shopping</router-link>
         </li>
         <li class="nav-item">
-          <a
-            class="nav-link"
-            v-if="isLogin === true"
-            @click="logout"
-          >Log Out</a>
+          <a class="nav-link" v-if="isLogin === true" @click="logout">Log Out</a>
         </li>
       </ul>
     </nav>
     <div>
-      <router-view v-on:atc="atc" v-on:login="login" :isLogin="isLogin" :userId="userId" :isAdmin="isAdmin"/>
+      <router-view
+        v-on:atc="atc"
+        v-on:login="login"
+        :isLogin="isLogin"
+        :userId="userId"
+        :isAdmin="isAdmin"
+      />
     </div>
     <footer></footer>
   </div>
@@ -66,104 +110,155 @@
 
 <script>
 export default {
-  name: 'app',
-  data () {
+  name: "app",
+  data() {
     return {
       isLogin: false,
-      userId: 'no user',
+      userId: "no user",
+      userDetail: {
+        address: "",
+        phonenumber: "",
+        email : localStorage.getItem('email')
+      },
       carts: [],
-      isAdmin : false,
-    }
+      cartItems: 0,
+      isAdmin: false,
+      checkoutStat: false
+    };
   },
   created() {
-    this.checkLogin()
+    this.checkLogin();
   },
-  mounted () {
-    this.checkLogin()
+  mounted() {
+    this.checkLogin();
   },
   methods: {
-    checkout(){
+    sumCart() {
+      let total = 0;
+      this.carts.forEach(item => {
+        total += item.total;
+      });
+      this.cartItems = total;
+    },
+    co() {
+      this.checkoutStat = true;
+    },
+    checkout() {
       this.hideModalCart()
       let amount = 0;
-      this.carts.forEach(item=>{
-        amount += item.price  
-      })
-      console.log("di check out")
-      // this.$axios({
-      //     method: 'post',
-      //     url: 'http://localhost:3000/cart',
-      //     headers: {
-      //       token: localStorage.getItem('token'),
-      //       id: localStorage.getItem('user')
-      //     },
-      //     data: {
-      //       email: this.emailregister,
-      //       password: this.passwordregister,
-      //       cart: []
-      //     }
-      //   })
-      //     .then(({ data }) => {
-      //       this.$swal('Account Created', `Successfully created account ${this.emailregister}`, 'success')
-      //       this.emaillogin = this.emailregister
-      //       this.emailregister = ''
-      //       this.passwordregister = ''
-      //       this.showregister = false
-      //     })
-      //     .catch(err => {
-      //       this.$swal('Error', err.response.data.message, 'error')
-      //     })
+      let total = 0;
+      this.carts.forEach(item => {
+        amount += item.amount;
+        total += item.total;
+      });
+      let transaction = {
+        products: this.carts,
+        amount: amount,
+        total: total,
+        transfer: "",
+        status: "wait for payment",
+        userId: localStorage.getItem("user"),
+        userDetail: this.userDetail,
+        }
+      
+      this.$axios({
+          method: 'post',
+          url: 'http://localhost:3000/cart',
+          headers: {
+            id: localStorage.getItem('user'),
+            token: localStorage.getItem('token')
+          },
+          data : transaction
+        })
+        .then(({ data }) => {
+          this.carts = []
+          this.updateCart("wkwk")
+          this.userDetail= {
+            address: "",
+            phonenumber: "",
+            email : localStorage.getItem('email')
+          }
+          this.$swal("Order submitted", "Transfer to 123456789 and sent the transfer receipt in the transactions dashboard, click the transaction menu on the navbar and upload your picture", 'success')
+        })
+        .catch(({ response }) => {
+          this.$swal(response.status, response.data.message, 'error')
+        })
     },
     updateCart(i) {
       this.$axios({
-          method: 'put',
-          url: 'http://localhost:3000/user/'+this.userId,
-          headers: {
-            token: localStorage.getItem('token'),
-            id: localStorage.getItem('user')
-          },
-          data: {
-            cart: this.carts
+        method: "put",
+        url: "http://localhost:3000/user/" + this.userId,
+        headers: {
+          token: localStorage.getItem("token"),
+          id: localStorage.getItem("user")
+        },
+        data: {
+          cart: this.carts
+        }
+      })
+        .then(({ data }) => {
+          if (i === "add") {
+            this.$swal("Addedd to cart", `Added item to cart`, "success");
+          } else if(i === "upd"){
+            this.$swal("Item deleted", `Deleted item from cart`, "success");
+          } else {
+
           }
+          this.sumCart();
         })
-          .then(({ data }) => {
-            if(i === 'add'){
-              this.$swal('Addedd to cart', `Added item to cart`, 'success')
-            } else {
-              this.$swal('Item deleted', `Deleted item from cart`, 'success')
-            }
-          })
-          .catch(err => {
-            this.$swal('Error', `${err}`, 'error')
-          })
+        .catch(err => {
+          this.$swal("Error", `${err}`, "error");
+        });
     },
     atc(e) {
-      this.carts.push(e)
-      this.updateCart('add')
+      if (this.carts.length < 1) {
+        this.carts.push(e);
+        this.carts[0].total = 1;
+        this.carts[0].amount = e.price;
+      } else {
+        let exist = false;
+        let yo = this.carts.length;
+        for (let i = 0; i < this.carts.length; i++) {
+          if (this.carts[i]._id === e._id) {
+            this.carts[i].total += 1;
+            this.carts[i].amount += e.price;
+            exist = true;
+          }
+        }
+        if (exist === false) {
+          this.carts.push(e);
+          this.carts[yo].total = 1;
+          this.carts[yo].amount = e.price;
+        }
+      }
+      this.updateCart("add");
+      console.log(this.carts);
     },
-    login (data) {
-      this.isLogin = data.isLogin
-      this.userId = data.userId
-      this.cart = data.cart
+    login(data) {
+      this.isLogin = data.isLogin;
+      this.userId = data.userId;
+      this.cart = data.cart;
     },
-    logout () {
-      this.carts = []
-      this.isLogin = false
-      this.userId = 'no user'
-      localStorage.removeItem('token')
-      localStorage.removeItem('email')
-      localStorage.removeItem('_id')
-      this.$router.push('/')
+    logout() {
+      this.carts = [];
+      this.isLogin = false;
+      this.userId = "no user";
+      localStorage.removeItem("token");
+      localStorage.removeItem("email");
+      localStorage.removeItem("_id");
+      this.$router.push("/");
     },
-    showModalCart () {
-      this.$refs['my-modal'].show()
+    showModalCart() {
+      this.$refs["my-modal"].show();
     },
-    hideModalCart () {
-      this.$refs['my-modal'].hide()
+    hideModalCart() {
+      this.$refs["my-modal"].hide();
+      this.checkoutStat = false;
     },
     getCartItem() {
       this.$axios({
         method: "get",
-        url: "http://localhost:3000/user/"+this.userId,
+        url: "http://localhost:3000/user/" + this.userId,
         headers: {
           id: localStorage.getItem("user"),
           token: localStorage.getItem("token")
@@ -171,36 +266,41 @@ export default {
       })
         .then(({ data }) => {
           this.carts = data.cart;
+          this.sumCart();
         })
-        .catch((err) => {
-          console.log(err)
-          this.$swal(`Error Status : ${response.status}`, `${response.data.message}`, "error");
+        .catch(({ response }) => {
+          console.log(response);
+          this.$swal(
+            `Error Status : ${response.status}`,
+            `${response.data.message}`,
+            "error"
+          );
         });
     },
-    checkLogin () {
-      if (localStorage.getItem('token')) {
-        this.isLogin = true
-        this.userId = localStorage.getItem('user')
-        let id = localStorage.getItem('user')
-        this.getCartItem()
-        if(id === '5ce158d52edb972b1e4dc5c4'){
-        this.isAdmin = true
+    checkLogin() {
+      if (localStorage.getItem("token")) {
+        this.isLogin = true;
+        this.userId = localStorage.getItem("user");
+        let id = localStorage.getItem("user");
+        this.getCartItem();
+        if (id === "5ce158d52edb972b1e4dc5c4") {
+          this.isAdmin = true;
         }
       } else {
-        this.isLogin = false
-        this.userId = 'no user'
+        this.isLogin = false;
+        this.userId = "no user";
       }
     },
-    removeItem (id) {
-      let carts = this.carts
+    removeItem(id) {
+      let carts = this.carts;
       carts.forEach((element, i) => {
         if (element.id === id) {
-          carts.splice(i, 1)
+          carts.splice(i, 1);
         }
-      })
-      this.carts = carts
-      this.updateCart('del')
+      });
+      this.carts = carts;
+      this.updateCart("del");
     }
   }
-}
+};
 </script>
