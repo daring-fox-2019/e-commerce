@@ -1,10 +1,13 @@
-const Product = require('../models/product')
+const User = require('../models/user')
 
 module.exports = (req, res, next) => {
-  // console.log("Authorize",req.decoded._id)
-  Product.findOne({_id: req.params._id})
+  console.log("Authorize",req.decoded._id)
+  User.findOne({
+    _id: req.decoded._id
+  })
   .then(row =>{
-    if(row.user.equals(req.decoded._id)){
+    console.log(row)
+    if(row.cart.filter(produk=>produk.product.equals(req.params._id))){
       next()
     }
     else{

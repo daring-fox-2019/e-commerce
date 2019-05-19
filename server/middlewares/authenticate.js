@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
   if(req.headers.hasOwnProperty('token')){
     req.decoded = jwt.verify(req.headers.token, process.env.KUNCI)
     // cek user ada di database atau tidak
-    // console.log("Authenticate",req.decoded._id)
+    console.log("Authenticate",req.decoded._id)
     User.findOne({_id:req.decoded._id})
     .then(user =>{
       // console.log(user)
