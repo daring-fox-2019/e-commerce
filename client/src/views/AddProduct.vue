@@ -1,16 +1,25 @@
 <template>
     <v-container column>
         <h1>Add Product</h1>
-        <ProductForm type="add" @onadd="createProduct"></ProductForm>
+        <ProductForm v-if="!$store.state.isLoading" type="add" @onadd="createProduct"></ProductForm>
+        <v-container full-height fluid>
+            <v-layout mb-5 align-center justify-center>
+                <v-flex>
+                    <Circle2 v-if="$store.state.isLoading" :size="'120px'"></Circle2>
+                </v-flex>
+            </v-layout>
+        </v-container>
     </v-container>
 </template>
 <script>
 import ProductForm from '@/components/ProductForm.vue'
 import api from'@/api/backend.js'
+import {Circle2} from 'vue-loading-spinner';
 
 export default {
     components: {
         ProductForm,
+        Circle2,
     },
     data() {
         return {
@@ -30,7 +39,6 @@ export default {
             return formData;
         },
         createProduct(data) {
-            console.log(data, ' <---- create fire');
             this.formData = data
             const formData = this.getFormData(this.formData)
 
@@ -40,12 +48,14 @@ export default {
                 }
             };
 
+            this.$store.commit('setIsLoading', true)
             api.post('/products', formData, config)
                 .then(({data}) => {
-                    console.log(`created successfully...${data}`);
+                    this.$store.commit('setIsLoading', false);
                     this.$router.push('/products')
                 })
                 .catch(err => {
+                    this.$store.commit('setIsLoading', false);
                     swal.fire('Error', err.response.data, 'error')
                 })
         }

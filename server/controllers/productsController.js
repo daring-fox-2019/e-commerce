@@ -68,9 +68,7 @@ class ProductController {
             })
     }
     static search(req, res) {
-
         let findRegex = new RegExp(req.params.key, "i");
-        console.log(findRegex);
 
         Product.find({ $or:[ {name: findRegex}, {description : findRegex} ]})
             .then(results => {

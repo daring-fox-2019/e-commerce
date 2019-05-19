@@ -1,6 +1,6 @@
 <template>
   <v-container fluid fill-height>
-    <v-layout column justify-start>
+    <v-layout column justify-start v-if="!$store.state.isLoading">
       <div class="headline">Featured Books</div>
       <v-layout px-2 v-if="$store.state.user && $store.state.user.role ==='admin'">
           <v-spacer></v-spacer>
@@ -12,16 +12,25 @@
         </v-flex>
       </v-layout>
     </v-layout>
+    <v-container v-if="$store.state.isLoading" full-height fluid>
+        <v-layout mb-5 align-center justify-center>
+            <v-flex>
+                <Circle2 :size="'120px'"></Circle2>
+            </v-flex>
+        </v-layout>
+    </v-container>
   </v-container>
 </template>
 <script>
 import ProductCard from "@/components/ProductCard.vue";
 import api from "@/api/backend.js";
+import {Circle2} from 'vue-loading-spinner';
 
 let config = {}
 export default {
     components: {
-        ProductCard
+        ProductCard,
+        Circle2,
     },
     data() {
         return {
@@ -34,11 +43,14 @@ export default {
                 'Authorization': localStorage.ecomm_token
             }
         }
+        this.$store.commit('setIsLoading', true);
         api.get('/products', config)
             .then(({data}) => {
                 this.products = data
+                this.$store.commit('setIsLoading', false);
             })
             .catch(err => {
+                this.$store.commit('setIsLoading', false);
                 swal.fire('Error', err.response.data, 'error')
             })
     },

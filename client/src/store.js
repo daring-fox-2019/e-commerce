@@ -12,8 +12,12 @@ const store = new Vuex.Store({
     user: null,
     cart: null,
     searchList: null,
+    isLoading: false,
   },
   mutations: {
+    setIsLoading(s, p) {
+      s.isLoading = p;
+    },
     setUser(s, p) {
       s.user = p;
     },

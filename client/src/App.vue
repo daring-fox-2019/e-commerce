@@ -125,6 +125,7 @@
     </v-toolbar>
     <v-content class="viewport">
       <router-view :user="user"/>
+      
     </v-content>
     <v-footer height="auto">
       <v-card flat class="text-xs-center screenwidth">
