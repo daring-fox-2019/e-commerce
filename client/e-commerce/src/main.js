@@ -6,6 +6,7 @@ import BootstrapVue from 'bootstrap-vue'
 import VueSweetAlert from 'vue-sweetalert'
 import axios from 'axios'
 
+Vue.prototype.$axios = axios
 Vue.use(BootstrapVue)
 Vue.use(VueSweetAlert)
 
@@ -15,5 +16,3 @@ new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')
-
-Vue.prototype.$axios = axios

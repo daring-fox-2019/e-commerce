@@ -126,8 +126,8 @@ export default {
   },
   methods: {
     atc(e){
-      this.items.push(e)
-      
+      console.log(e, "di product")
+      this.$emit('atc', e)
     },
     deleteItem(e) {
       console.log(e, "delete di parent");
@@ -233,7 +233,7 @@ export default {
         method: "get",
         url: "http://localhost:3000/products",
         headers: {
-          id: localStorage.getItem("_id"),
+          id: localStorage.getItem("user"),
           token: localStorage.getItem("token")
         }
       })
