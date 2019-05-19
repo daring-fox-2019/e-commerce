@@ -78,17 +78,28 @@ class ProductController {
     }
 
     static update(req, res) {
-        const { name, price } = req.body
+        const { name, price, stock, category, description } = req.body
+        let picture=''
+        if(!req.file) {
+            picture = req.body.picture
+        }else {
+            picture = req.file.cloudStoragePublicUrl
+        }
 
         Product
         .findByIdAndUpdate(req.params.id, {
             name,
-            price
+            price,
+            stock,
+            category,
+            description,
+            picture
         }, {new:true})
         .then(function (product) {
             res.status(201).json(product);
         })
         .catch(function (err) {
+            console.log(err);
             res.status(400).json({
                 message: 'Internal server error',
                 err

@@ -9,6 +9,7 @@
         @sign-in="signIn"
         @sign-up="signUp"
         @submit-product="submitProduct"
+        @edit-product="editProduct"
       />
     </div>
     <Footer />
@@ -79,6 +80,23 @@
           })
         })
       },
+      editProduct(payload) {
+        api.defaults.headers.common['token'] = localStorage.token
+
+        api
+        .patch(`/admin/products/${payload._id}`, payload)
+        .then(product => {
+          Swal.fire(
+            'Product edited!',
+            '',
+            'success'
+          )
+          this.$router.push('/admin/list-product')
+        })
+        .catch(err => {
+          console.log(err);
+        })
+      },
       signUp(payload) {
         const {name, email, password} = payload;
 
@@ -116,6 +134,11 @@
           )
           this.$store.dispatch('signIn')
           localStorage.token = data.token
+
+          if(data.role==='Admin') {
+            this.$store.dispatch('isAdminTrue')
+          }
+
           this.$router.push('/')
         })
         .catch(err => {
@@ -128,6 +151,7 @@
       logout() {
         localStorage.clear()
         this.$store.state.isLoggedIn=false
+        this.$store.state.isAdmin=false
         this.$router.push('/')
       },
       signupAdmin(payload) {

@@ -50,6 +50,21 @@ class CartController {
             res.status(400).json({msg: err})
         })
     }
+
+    static deleteByUser(req, res) {
+        const id = req.params.id
+        const user = Helper.verifyJWT(req.headers.token)
+
+        Cart
+        .deleteMany({buyer:user.id})
+        .then(cart=> {
+
+            res.status(202).json(cart)
+        })
+        .catch(err => {
+            res.status(400).json({msg: err})
+        })
+    }
 }
 
 module.exports = CartController

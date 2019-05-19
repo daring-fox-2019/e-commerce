@@ -16,6 +16,8 @@ import ProductCategory from '@/views/ProductCategory.vue'
 import AdminSignup from '@/views/AdminSignup.vue'
 import AdminListProduct from '@/views/AdminListProduct.vue'
 import AdminCreateProduct from '@/views/AdminCreateProduct.vue'
+import AdminEditProduct from '@/views/AdminEditProduct.vue'
+import AdminOrders from '@/views/AdminOrders.vue'
 
 import NotFound from '@/views/NotFound.vue'
 
@@ -38,6 +40,16 @@ const router = new Router({
         path: '/admin/create-product',
         name: 'admin-create-product',
         component: AdminCreateProduct
+    },
+    {
+        path: '/admin/edit-product/:id',
+        name: 'admin-edit-product',
+        component: AdminEditProduct
+    },
+    {
+        path: '/admin/orders',
+        name: 'admin-orders',
+        component: AdminOrders
     },
     {
         path: '/signin',

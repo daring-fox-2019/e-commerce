@@ -8,5 +8,6 @@ routes.post('/:id', Authentication, CartController.create)
 // routes.put('/:id', Authentication, ProductController.update)
 // routes.patch('/:id', Authentication, ProductController.update)
 routes.delete('/:id', Authentication, CartController.delete)
+routes.delete('/user/:id', Authentication, CartController.deleteByUser)
 
 module.exports = routes

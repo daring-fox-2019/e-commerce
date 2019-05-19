@@ -4,8 +4,8 @@ const {Schema } = mongoose;
 
 const transactionSchema = new Schema({
     userId: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     },
     carts:[{
         type: Schema.Types.ObjectId, 

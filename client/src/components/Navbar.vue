@@ -9,16 +9,17 @@
                 </router-link>
             </div>
 
-            <div class="mr-auto">
-                <form class="form-group" style="display: flex;">
+            <div class="mr-auto" style="width: 47em;
+margin-left: -258px;">
+                <form style="display: flex;">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
             </div>
 
-            <div v-if="isLoggedIn" class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
-                <ul class="navbar-nav">
-                <li class="nav-item">
+            <div v-if="isLoggedIn" class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent" style="justify-content: flex-end !important;">
+                <ul class="navbar-nav" >
+                <li v-if="!isAdmin" class="nav-item" style="width: 40px; align-self: center;">
                     <router-link to="/cart">
                         <div class="cart">
                             <i class="fas fa-baby-carriage"></i>
@@ -27,7 +28,7 @@
                     </router-link>
                 </li>
                 
-                <li class="nav-item dropdown">
+                <li v-if="isAdmin" class="nav-item dropdown">
                     <span 
                         class="nav-link dropdown-toggle cursor-pointer"
                         role="button" 
@@ -35,9 +36,10 @@
                         aria-haspopup="true" 
                         aria-expanded="false"
                     >
-                    Dashboard
+                    Dashboard Admin
                     </span>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <router-link class="dropdown-item" :to="{ name : 'admin-orders' }">Order List</router-link>
                         <router-link class="dropdown-item" :to="{ name : 'admin-list-product' }">Product List</router-link>
                         <router-link class="dropdown-item" :to="{ name : 'admin-create-product' }">Create Product</router-link>
                         <div class="dropdown-divider"></div>
@@ -47,7 +49,7 @@
                         >Logout</span>
                     </div>
                 </li>
-                <li class="nav-item dropdown">
+                <li  v-if="!isAdmin" class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     User
                     </a>
@@ -62,7 +64,7 @@
                 </ul>
             </div>
 
-            <div v-else class="d-flex justify-content-end" style="width: 75%;">
+            <div v-else class="d-flex justify-content-end">
                 <div style="margin-right: 15px;">
                     <router-link to="/signin">Sign In</router-link>
                 </div>
@@ -107,6 +109,9 @@ export default {
         },
         countCart() {
             return this.$store.state.cart
+        },
+        isAdmin() {
+            return this.$store.state.isAdmin
         }
     },
     mounted() {

@@ -18,7 +18,9 @@
                 <tr v-for="product in products" :key="product._id">
                     <td>{{product.name}}</td>
                     <td>{{product.price}}</td>
-                    <td> <span @click="editProduct(product._id)">Edit</span> | <span @click="deleteProduct(product._id)" class="color-red cursor-pointer">Delete</span> </td>
+                    <td> 
+                        <router-link :to="`/admin/edit-product/${product._id}`"><span class="btn-edit" @click="editProduct(product._id)">Edit </span> </router-link>| <span @click="deleteProduct(product._id)" class="color-red cursor-pointer">Delete</span> 
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -50,9 +52,6 @@
                 .catch(err => {
                     console.log(err);
                 })
-            },
-            editProduct(id) {
-
             },
             deleteProduct(id) {
                 Swal.fire({
@@ -96,5 +95,11 @@
   color: #e33012;
 }
 .cursor-pointer {cursor: pointer;}
+.btn-edit {
+    color: cornflowerblue;
+}
+.btn-edit:hover {
+    cursor: pointer;
+}
 </style>
 

@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="col-md-2">
                     <div>
-                        <img :src="cart.product.picture ? cart.product.picture : 'https://via.placeholder.com/150x150'" alt="...">
+                        <img :src="cart.product.picture ? cart.product.picture : 'https://via.placeholder.com/150x150'" alt="..." style="width: 100%">
                     </div>
                 </div>
                 <div class="col-md-7">
@@ -45,6 +45,13 @@
 
                 </div>
             </div>
+        </div>
+
+        <div class="mt-2">
+            <button 
+                class="btn btn-success"
+                @click="payNow"
+            >Pay</button>
         </div>
     </div>
 </template>
@@ -72,7 +79,6 @@ export default {
             api
             .get('/transactions')
             .then(({data}) => {
-                console.log(data[0]);
                 this.transactions = data[0]
             })
             .catch(err => {
@@ -86,8 +92,27 @@ export default {
             api
             .get('https://api.rajaongkir.com/starter/city')
             .then(cities => {
-                console.log(cities);
                 this.cities = cities.rajaongkir.results
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        },
+        payNow() {
+            api.defaults.headers.common['token'] = localStorage.token
+
+            api
+            .delete(`/carts/user/:id`)
+            .then(cities => {
+                Swal.fire(
+                    'Transaction Success!',
+                    'Thank you and wait for your goods to come~',
+                    'success'
+                )
+
+                api
+                .patch('/transactions/paid')
+                this.$router.push('/')
             })
             .catch(err => {
                 console.log(err);

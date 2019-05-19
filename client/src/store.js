@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     token: '',
     isLoggedIn:false,
+    isAdmin:false,
     cart: 0
   },
   mutations: {
@@ -16,7 +17,9 @@ export default new Vuex.Store({
     signIn(state) {
       state.isLoggedIn = true
     },
-
+    isAdminTrue(state) {
+      state.isAdmin = true
+    }
   },
   actions: {
     setCart(context, payload) {
@@ -27,6 +30,9 @@ export default new Vuex.Store({
     },
     signUp(context, payload) {
       context.commit("signUp", payload)
+    },
+    isAdminTrue(context) {
+      context.commit("isAdminTrue")
     }
   }
 });

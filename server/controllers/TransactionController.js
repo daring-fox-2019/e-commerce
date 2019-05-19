@@ -40,6 +40,41 @@ class TransactionController {
             res.status(400).json(err)
         })
     }
+
+    static findAllOrders(req, res) {
+        Transaction
+        .find()
+        .populate({
+            path: 'carts',
+            populate: {
+                path: 'product'
+            }
+        })
+        .populate('userId')
+        .then(transactions=>{
+            res.status(200).json(transactions)
+        })
+        .catch(err => {
+            res.status(400).json(err)
+        })
+    }
+
+    static changeStatusToPaid(req, res) {
+        const user = Helper.verifyJWT(req.headers.token)
+
+        Transaction
+        .findOneAndUpdate({
+            userId: user.id
+        }, {
+            status: 'paid'
+        })
+        .then(transactions=>{
+            res.status(200).json(stat)
+        })
+        .catch(err => {
+            res.status(400).json(err)
+        })
+    }
 }
 
 
