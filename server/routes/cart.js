@@ -6,7 +6,8 @@ router.use(authentication)
 router.get('/', cart.findCart)
 router.post('/', cart.create)
 
-router.delete('/:id', authorizationCard, cart.delete)
-router.put('/:id', authorizationCard, cart.update)
+router.use('/:id', authorizationCard)
+router.delete('/:id', cart.delete)
+router.put('/:id', cart.update)
 
 module.exports = router

@@ -1,5 +1,6 @@
 const User = require('../models/user')
 const Cart = require('../models/cart')
+const Product = require('../models/product')
 const Transaction = require('../models/transaction')
 const { verify } = require('../helpers/jwt')
 
@@ -34,6 +35,20 @@ function authorizationCart(req, res, next){
     })
 }
 
+function authorizationProduct(req, res, next){
+    Product.findById(req.params.id)
+    .then(data=>{
+        if(String(data.userId)===String(req.userId)){
+            next()
+        }else{
+            res.status(401).json({message: 'Unauthorized'})
+        }
+    })
+    .catch(err=>{
+        res.status(500).json({message: 'Unauthorized'})
+    })
+}
+
 function authorizationTransaction(req, res, next){
     Transaction.findById(req.params.id)
     .then(data=>{
@@ -48,4 +63,4 @@ function authorizationTransaction(req, res, next){
     })
 }
 
-module.exports={authentication, authorizationCart, authorizationTransaction}
+module.exports={authentication, authorizationCart, authorizationTransaction, authorizationProduct}

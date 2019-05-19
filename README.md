@@ -10,6 +10,8 @@ npm install
 ```javascript
 -server
 npm run dev
+-client
+npm run serve
 ```
 
 ## Routes Users
@@ -36,3 +38,27 @@ npm run dev
 | `/cart/:id` |     GET     | token: String |                none                | Success: [{ object }],<br /> Error: Internal server error | List cart a user              |
 | `/cart/:id` |     PUT     | token: String | productId: String, <br />quality: Number | Success: { object },<br /> Error: Internal server error   | Update a cart                 |
 | `/cart/:id` |    DELETE   | token: String |                none                | Success: { object },<br /> Error: Internal server error   | Delete a product in user cart |
+
+## Routes Transaction
+|   Routes  | HTTP Method |    Headers    |                Body                |                          Response                         |          Description          |
+|:---------:|:-----------:|:-------------:|:----------------------------------:|:---------------------------------------------------------:|:-----------------------------:|
+| `/transaction`     |     POST    | token: String | cart: [String], <br />totalPrice: Number | Success: { object },<br /> Error: Internal server error   | Add user transaction      |
+| `/transaction` |     GET     | token: String |                none                | Success: [{ object }],<br /> Error: Internal server error | List transaction all user              |
+| `/transaction/user` |     GET     | token: String |                none                | Success: [{ object }],<br /> Error: Internal server error | List transaction a user              |
+| `/transaction/:id` |     GET     | token: String |                none                | Success: [{ object }],<br /> Error: Internal server error | Get a user transaction              |
+| `/transaction/:id` |     PATCH     | token: String | status: String | Success: { object },<br /> Error: Internal server error   | Update status transaction                 |
+| `/transaction/:id` |    DELETE   | token: String |                none                | Success: { object },<br /> Error: Internal server error   | Delete a user transaction |
+
+## Routes Rajaongkir
+|   Routes  | HTTP Method |    Headers    |                Body                |                          Response                         |          Description          |
+|:---------:|:-----------:|:-------------:|:----------------------------------:|:---------------------------------------------------------:|:-----------------------------:|
+| `/rajaongkir/province`     |     GET    | none | none | Success: [{ object }],<br /> Error: Internal server error   | List all province      |
+| `/rajaongkir/city` |     POST     | none |                idProvince: String                | Success: [{ object }],<br /> Error: Internal server error | List all city in one province              |
+| `/rajaongkir/cost` |     POST     | none | idCity: String | Success: [{ object }],<br /> Error: Internal server error   | Get cost one delivery                 |
+
+## Link Deploy
+
+```
+e-commerce.mprasetiodc.com
+
+```
