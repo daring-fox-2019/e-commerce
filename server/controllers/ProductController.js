@@ -54,6 +54,7 @@ class ProductController {
 
     static create(req, res) {
         const { name, price, stock, category, description } = req.body
+        const picture = req.file.cloudStoragePublicUrl
 
         Product
         .create({
@@ -61,12 +62,14 @@ class ProductController {
             price,
             stock,
             category,
-            description
+            description,
+            picture
         })
         .then(function (product) {
             res.status(201).json(product);
         })
         .catch(function (err) {
+            console.log(err);
             res.status(400).json({
                 message: 'Internal server error',
                 err

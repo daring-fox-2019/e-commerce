@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 item-photo">
-                <img style="max-width:100%;" src="https://i.ebayimg.com/images/g/9VsAAOSw1NFaOWSC/s-l640.jpg" />
+                <img style="max-width:100%;" :src="product.picture ? product.picture : 'https://via.placeholder.com/150x150'" />
             </div>
             <div class="col-md-5" style="border:0px solid gray">
                 <h3>{{product.name}}</h3>
@@ -15,9 +15,9 @@
                 >
                     <div>
                         <h6 class="title-attr"><small>Quantity</small></h6>         <div style="display: flex;">
-                            <div class="btn-minus"> - </div>
+                            <div @click="subsQty" class="btn-minus"> - </div>
                             <input v-model="quantity" value="1" />
-                            <div class="btn-plus"> + </div>
+                            <div @click="plusQty"  class="btn-plus"> + </div>
                         </div>    
                     </div>
                 </div>                
@@ -27,7 +27,7 @@
                     <button
                         @click="buyItem(product._id)"
                         class="btn btn-success"><i class="fas fa-shopping-cart" style="margin-right:5px;"></i> Buy Now</button>
-                    <h6 @click="addToCart(product._id)">Add to cart</h6>
+                    <h6 class="btn-cart" @click="addToCart(product._id)">Add to cart</h6>
                 </div>                                        
             </div>                              
     
@@ -52,7 +52,6 @@
     import {convertToRupiah } from '@/helpers/convertToRupiah.js'
 
     export default {
-        props:['id'],
         data() {
             return {
                 product : {},
@@ -66,7 +65,7 @@
         methods: {
             fetchDetailProduct() {
                 api
-                .get(`/products/${this.id}`)
+                .get(`/products/${this.$route.params.id}`)
                 .then(({data}) => {
                     this.product = data
                 })
@@ -92,11 +91,24 @@
                 api
                 .post(`/carts/${productId}`, {
                     name: productId,
-                    quantity: this.quantity
+                    quantity: this.quantity,
+                    total: this.quantity*this.product.price
                 })
                 .then(({data}) => {
-                    this.$route.push(`/cart/${productId}`)
+                    Swal.fire(
+                        'Product added to cart!',
+                    )
                 })
+            },
+            plusQty() {
+                this.quantity++
+            },
+            subsQty() {
+                if(this.quantity<=0) {
+                    this.quantity=1
+                }else{
+                    this.quantity--
+                }
             }
         },
     }
@@ -118,4 +130,12 @@ div.section > div {width:100%;display:inline-flex;}
 div.section > div > input {margin:0;padding-left:5px;font-size:10px;padding-right:5px;max-width:18%;text-align:center;}
 .attr,.attr2{cursor:pointer;margin-right:5px;height:20px;font-size:10px;padding:2px;border:1px solid gray;border-radius:2px;}
 .attr.active,.attr2.active{ border:1px solid orange;}
+.btn-cart {
+    cursor: pointer;
+    color: orangered;
+    display: block;
+    text-align: center;
+    font-weight: 600;
+    margin: 10px auto 0px;
+}
 </style>

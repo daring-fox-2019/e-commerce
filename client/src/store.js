@@ -11,27 +11,6 @@ export default new Vuex.Store({
     cart: 0
   },
   mutations: {
-    signIn(state, payload) {
-      const { email, password } = payload;
-
-      api
-      .post('/users/signin', {
-        email,
-        password
-      })
-      .then(({data}) => {
-        Swal.fire(
-          'Success!',
-          '',
-          'success'
-        )
-        state.isLoggedIn = true
-        localStorage.token = data.token
-      })
-      .catch(err => {
-        console.log('err: ', err);
-      })
-    },
     signUp(state, payload) {
       const {name, email, password} = payload;
 
@@ -54,30 +33,23 @@ export default new Vuex.Store({
         console.log(err);
       })
     },
-    getCart(state) {
-      if(localStorage.token) {
-        api.defaults.headers.common['token'] = localStorage.token
-  
-        api
-        .get('/carts')
-        .then(({data}) => {
-          state.cart = data.length
-        })
-        .catch(err=> {
-          console.log('err cart: ', err);
-        })
-      }
-    }
+    setCart(state, payload) {
+      state.cart = payload
+    },
+    signIn(state) {
+      state.isLoggedIn = true
+    },
+
   },
   actions: {
-      signIn(context, payload) {
-          context.commit("signIn", payload)
-      },
-      signUp(context, payload) {
-        context.commit("signUp", payload)
-      },
-      getCartLoggedInUser(context) {
-        context.commit("getCart")
-      }
+    setCart(context, payload) {
+      context.commit('setCart', payload)
+    },
+    signIn(context) {
+      context.commit('signIn')
+    },
+    signUp(context, payload) {
+      context.commit("signUp", payload)
+    }
   }
 });

@@ -14,6 +14,7 @@ class UserController {
             } else {
                 if( Helper.comparePassword(password, user.password) ) {
                     let token = Helper.generateJWT({
+                        role: user.role,
                         email: user.email,
                         name: user.name,
                         id: user._id
@@ -23,7 +24,8 @@ class UserController {
                         token,
                         id: user._id,
                         name: user.name,
-                        email: user.email
+                        email: user.email,
+                        role: user.role
                     };
 
                     res.status(200).json(finalToken)
@@ -34,7 +36,7 @@ class UserController {
         })
         .catch(err => {
             console.log(err);
-            res.status(400).json({msg: err})
+            res.status(400).json({message: err})
         })
     }
 
@@ -45,14 +47,34 @@ class UserController {
         .create({
             name,
             email,
-            password
+            password,
+            role: 'Customer'
         })
         .then(user => {
             res.status(201).json(user)
         })
         .catch(err => {
             console.log(err);
-            res.status(400).json({msg:err})
+            res.status(400).json({message:err})
+        })
+    }
+
+    static signupAdmin(req, res) {
+        const {name, email, password} = req.body
+
+        User
+        .create({
+            name,
+            email,
+            password,
+            role: 'Admin'
+        })
+        .then(user => {
+            res.status(201).json(user)
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).json({message:err})
         })
     }
 }

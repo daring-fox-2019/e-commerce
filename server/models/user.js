@@ -39,10 +39,17 @@ const userSchema = new Schema({
         type: String,
         required: true,
         minlength: [4, 'Password min length is 4'],
+    },
+    role: {
+        type: String,
+        required: true
     }
 });
 
 userSchema.pre('save', function(next, done) {
+    if(!this.role) {
+        this.role = 'Customer'
+    }
     this.password = Helper.hashPassword(this.password)
     next()
 });

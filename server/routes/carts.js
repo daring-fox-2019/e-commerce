@@ -3,10 +3,10 @@ const routes = express.Router();
 const CartController = require('../controllers/CartController')
 const Authentication = require('../middlewares/authentication')
 
-routes.get('/', CartController.findAll)
-routes.post('/:id', CartController.create)
-// routes.put('/:id', ProductController.update)
-// routes.patch('/:id', ProductController.update)
-// routes.delete('/:id', ProductController.delete)
+routes.get('/', Authentication, CartController.findAll)
+routes.post('/:id', Authentication, CartController.create)
+// routes.put('/:id', Authentication, ProductController.update)
+// routes.patch('/:id', Authentication, ProductController.update)
+routes.delete('/:id', Authentication, CartController.delete)
 
 module.exports = routes

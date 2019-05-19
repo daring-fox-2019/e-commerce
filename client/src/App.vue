@@ -6,6 +6,7 @@
     <div class="container">
       <router-view
         @signup-admin="signupAdmin"
+        @sign-in="signIn"
         @submit-product="submitProduct"
       />
     </div>
@@ -32,7 +33,6 @@
       }
     },
     mounted() {
-      this.$store.dispatch('getCartLoggedInUser')
       this.token = localStorage.token || ''
 
       if(localStorage.token) {
@@ -43,7 +43,6 @@
     },
     methods: {
       submitProduct(data) {
-        console.log('data payload create: ', data);
         const { name, price, stock, category, description, picture } = data
 
         let formData = new FormData()
@@ -69,7 +68,36 @@
           )
         })
         .catch(err=> {
-          console.log(err.response);
+
+          Swal.fire({
+            type: 'error',
+            title: 'Create product denied',
+            text: `${err.response.data.message}`,
+          })
+        })
+      },
+      signIn(payload) {
+        const { email, password } = payload;
+
+        api
+        .post('/users/signin', {
+          email,
+          password
+        })
+        .then(({data}) => {
+          Swal.fire(
+            'Success!',
+            'success'
+          )
+          this.$store.dispatch('signIn')
+          localStorage.token = data.token
+          this.$router.push('/')
+        })
+        .catch(err => {
+          Swal.fire({
+            type: 'error',
+            title: `${err.response.data.message}`
+          })
         })
       },
       logout() {

@@ -22,7 +22,7 @@
                     <router-link to="/cart">
                         <div class="cart">
                             <i class="fas fa-baby-carriage"></i>
-                            <span class="count">{{nCart}}</span>
+                            <span class="count">{{countCart}}</span>
                         </div>
                     </router-link>
                 </li>
@@ -95,11 +95,11 @@
 </template>
 
 <script>
+import api from '@/api/localapi'
+
 export default {
     data() {
-        return {
-            nCart: 0
-        }
+        return { cart: 0 }
     },
     computed: {
         isLoggedIn() {
@@ -110,11 +110,27 @@ export default {
         }
     },
     mounted() {
-        this.nCart = this.$store.state.cart
+        this.getCart()
+        this.cart = this.$store.state.cart
     },
     methods: {
         clickLogout() {
             this.$emit('click-logout')
+        },
+        getCart() {
+            if(localStorage.token) {
+                api.defaults.headers.common['token'] = localStorage.token
+        
+                api
+                .get('/carts')
+                .then(({data}) => {
+                    console.log('data length: ', data.length);
+                    this.$store.dispatch('setCart', data.length)
+                })
+                .catch(err=> {
+                    console.log('err cart: ', err);
+                })
+            }
         }
     },
 }

@@ -79,6 +79,9 @@ const router = new Router({
         component: Shipment
     },
     {
+        path: '/checkout'
+    },
+    {
         path: '/404',
         name: '404',
         component: NotFound,

@@ -1,5 +1,9 @@
 <template>
   <b-form @submit.prevent="onSubmitRegister">
+    <div class="mt-3 mb-4 text-center">
+      <h4>Signup Admin</h4>
+    </div>
+
     <b-form-group>
       <b-form-input 
         v-model="adminSignupForm.name" 

@@ -29,9 +29,13 @@
     export default {
         name: 'signin',
         methods: {
-            onSubmitLogin() {
-              this.$store.dispatch('signIn', this.loginForm)
-            }
+            // onSubmitLogin() {
+            //   this.$store.dispatch('signIn', this.loginForm)
+            // }
+
+          onSubmitLogin() {
+              this.$emit('sign-in', this.loginForm)
+          }
         },
         data() {
           return {

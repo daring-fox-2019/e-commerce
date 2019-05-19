@@ -2,19 +2,29 @@
     <div class="row">
         <div class="col-md-8">
             <div 
+                class="card mb-3" 
                 v-for="(cart, index) in carts"
-                class="card"
-                :key="index" 
             >
-                <div class="card-body">
-                    <h5 class="card-title">{{cart.product.name}}</h5>
-                    <div 
-                        style="display: 
-                            flex; 
-                            display: space-evenly;"
-                    >
-                        <p class="card-text">{{cart.product.description}}</p>
-                        <p>{{convertToRupiah(cart.product.price)}}</p>
+                <div class="row no-gutters">
+                    <div class="col-md-3">
+                    <img :src="cart.product.picture ? cart.product.picture : 'https://via.placeholder.com/50x50'" class="card-img" alt="...">
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <h5 class="card-title">{{cart.product.name}}</h5>
+                            <p class="card-text">{{cart.product.description}}</p>
+                            <p class="card-text">{{convertToRupiah(cart.product.price)}} x {{cart.quantity}} = <span style="color: orangered;">{{convertToRupiah(cart.total)}}</span></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card-body">
+                            <div 
+                                class="cart--delete"
+                                @click="deleteCart(cart._id)"
+                            >
+                                <i class="far fa-trash-alt"></i> Delete
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -44,26 +54,56 @@ export default {
         }
     },
     mounted() {
-        api.defaults.headers.common['token'] = localStorage.token
-
-        api
-        .get('/carts')
-        .then(({data}) => {
-            this.carts = data
-
-            data.forEach(element => {
-                this.totalPayment += element.product.price
-            });
-
-        })
-        .catch(err=> {
-            console.log(err);
-        })
+        this.fetchCart()
     },
-    methods: { convertToRupiah },
+    computed: {
+        
+    },
+    methods: { 
+        convertToRupiah,
+        fetchCart() {
+            api.defaults.headers.common['token'] = localStorage.token
+
+            api
+            .get('/carts')
+            .then(({data}) => {
+                this.carts = data
+
+                data.forEach(element => {
+                    this.totalPayment += element.total
+                });
+
+            })
+            .catch(err=> {
+                console.log(err);
+            })
+        },
+        deleteCart(id) {
+            api.defaults.headers.common['token'] = localStorage.token
+
+            api
+            .delete(`/carts/${id}`)
+            .then(({data}) => {
+                this.totalPayment=0
+
+                this.carts = this.carts.filter(el => {
+                    if(el._id !== data._id) {
+                        this.totalPayment+=el.product.price
+                        return el
+                    }
+                })
+            })
+            .catch(err=> {
+                console.log(err);
+            })
+        }
+    },
 }
 </script>
 
-<style>
-
+<style scope>
+    .cart--delete {
+        color: #dc3545;
+        cursor: pointer;
+    }
 </style>
