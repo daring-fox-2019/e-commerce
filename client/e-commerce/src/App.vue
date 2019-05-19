@@ -30,7 +30,7 @@
         <li class="nav-item">
           <router-link class="nav-link" to="/products">Products</router-link>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="isLogin === true && userId !== 'no user'">
           <router-link class="nav-link" to="/transactions">Transactions</router-link>
         </li>
         <li class="nav-item">
@@ -46,10 +46,17 @@
             to="/join"
           >join us to start shopping</router-link>
         </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            v-if="isLogin === true"
+            @click="logout"
+          >Log Out</a>
+        </li>
       </ul>
     </nav>
     <div>
-      <router-view :isLogin="isLogin" :userId="userId" :page="''"/>
+      <router-view v-on:login="login" :isLogin="isLogin" :userId="userId" :page="''"/>
     </div>
     <footer></footer>
   </div>
@@ -86,6 +93,19 @@ export default {
     this.checkLogin()
   },
   methods: {
+    login (data) {
+      this.isLogin = data.isLogin
+      this.userId = data.userId
+    },
+    logout () {
+      this.items = []
+      this.isLogin = false
+      this.userId = 'no user'
+      localStorage.removeItem('tokern')
+      localStorage.removeItem('email')
+      localStorage.removeItem('_id')
+      this.$router.push('/')
+    },
     showModalCart () {
       this.$refs['my-modal'].show()
     },
