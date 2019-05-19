@@ -14,6 +14,22 @@ export default new Router({
       component: Home,
     },
     {
+      path: '/products/:id',
+      component: () => import(/* webpackChunkName: "product-detail" */ './views/ProductHome.vue'),
+      children: [
+        {
+          path: '/',
+          name: 'product-detail',
+          component: () => import(/* webpackChunkName: "product-detail" */ './components/ProductDetail.vue'),
+        },
+        {
+          path: 'update',
+          name: 'product-update',
+          component: () => import(/* webpackChunkName: "product-update" */ './views/UpdateProduct.vue'),
+        },
+      ],
+    },
+    {
       path: '/products',
       name: 'products',
       component: () => import(/* webpackChunkName: "products" */ './views/Products.vue'),

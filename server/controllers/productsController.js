@@ -46,7 +46,7 @@ class ProductController {
             })
     }
     static delete(req, res) {
-        Product.delete({_id: req.params.id})
+        Product.findOneAndDelete({_id: req.params.id})
             .then(deleted => {
                 res.status(200).json(deleted)
             })

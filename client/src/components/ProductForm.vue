@@ -17,7 +17,7 @@
         <v-textarea
           box
           auto-grow
-          v-bind:value="product.description"
+          v-model="product.description"
           placeholder="Enter your product description"
         ></v-textarea>
         <v-flex xs12 md6 lg4>

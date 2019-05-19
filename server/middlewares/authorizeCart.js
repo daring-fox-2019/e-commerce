@@ -1,4 +1,4 @@
-const Product = require('../models/product')
+const Cart = require('../models/cart')
 
 module.exports = function(req, res, next) {
     let id
@@ -8,10 +8,10 @@ module.exports = function(req, res, next) {
     }
     else {
         id = req.params.id
-        Product.findOne({_id: id})
-            .then(product => {
-                if(product) {
-                    if(product.user === req.user._id) {
+        Cart.findOne({_id: id})
+            .then(cart => {
+                if(cart) {
+                    if(cart.user === req.user._id) {
                         next()
                     }
                     else {
@@ -23,7 +23,7 @@ module.exports = function(req, res, next) {
                 }
             })
             .catch(err => {
-                console.log('authorizeProduct error ==> ',err);
+                console.log('authorizeCart error ==> ',err);
                 res.status(500).json(`Error during authorization. Please try again.`)
             })
         

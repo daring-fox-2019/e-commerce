@@ -1,13 +1,13 @@
 <template>
     <div class="quantity-toggle">
-        <button type="button" @click="decrement">&mdash;</button>
-            <input style="min-width: 60px;" v-model="finalquantity" type="text"  @change="updateQty">
-        <button type="button" @click="increment">&#xff0b;</button>
+        <button :disabled="disabledInput" @click="decrement">&mdash;</button>
+            <input :disabled="disabledInput" style="min-width: 60px; font-weight: bold;" v-model="finalquantity" type="text"  @change="updateQty">
+        <button :disabled="disabledInput" type="button" @click="increment">&#xff0b;</button>
     </div>
 </template>
 <script>
 export default {
-  props: ['quantity'],
+  props: ['quantity', 'readonly'],
   data () {
     return {
       internalquantity: 0,
@@ -19,15 +19,24 @@ export default {
       }
   },
   computed: {
-      finalquantity: {
-          get: function() {
-              return this.internalquantity;
-          },
-          set: function(value){
-              this.internalquantity = Number(value) !== NaN ? Number(value) : 0
-              console.log(this.internalquantity);
-          }
+    disabledInput() {
+      if(this.$props.readonly) {
+        console.log('disabled...');
+        return true;
       }
+      else {
+        return false;
+      }
+    },
+    finalquantity: {
+        get: function() {
+            return this.internalquantity;
+        },
+        set: function(value){
+            this.internalquantity = Number(value) !== NaN ? Number(value) : 0
+            console.log(this.internalquantity);
+        }
+    }
   },
   mounted() {
       if(this.$props.quantity) {
@@ -40,7 +49,6 @@ export default {
         this.$emit('updatequantity', this.internalquantity)
     },
     decrement (e) {
-        console.log('dec...', e);
       if(this.internalquantity > 0) {
         this.internalquantity--
       }
@@ -74,6 +82,7 @@ export default {
     font-size: 1rem;
     cursor: pointer;
   }
+
 </style>
 
 

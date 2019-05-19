@@ -24,9 +24,19 @@
             <v-list-tile-title>Home</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <!-- Public Products Page -->
+        <v-list-tile v-if="!isLogin" to="/shop">
+          <v-list-tile-action>
+            <v-icon>assignment</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Explore Products</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
         <!-- Products -->
         <v-list-group
           prepend-icon="assignment"
+          v-if="isLogin"
           value="true">
           <template v-slot:activator>
             <v-list-tile>
@@ -35,7 +45,7 @@
               </v-list-tile-content>
             </v-list-tile>
           </template>
-          <v-list-tile class="ml-4" to="/products">
+          <v-list-tile v-if="$store.state.user" class="ml-4" to="/products">
             <v-list-tile-action>
               <v-icon>assignment</v-icon>
             </v-list-tile-action>
@@ -43,7 +53,7 @@
               <v-list-tile-title>Products List</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-list-tile class="ml-4" to="/addproduct">
+          <v-list-tile v-if="$store.state.user && $store.state.user.role ==='admin'" class="ml-4" to="/addproduct">
             <v-list-tile-action>
               <v-icon>add</v-icon>
             </v-list-tile-action>
@@ -78,8 +88,8 @@
         prepend-inner-icon="search"
       ></v-text-field>
       <v-toolbar-items v-if="!isLogin">
-        <v-btn flat to="register">Register</v-btn>
-        <v-btn light to="login" color="yellow">Login</v-btn>
+        <v-btn flat to="/register">Register</v-btn>
+        <v-btn light to="/login" color="yellow">Login</v-btn>
       </v-toolbar-items>
       <v-toolbar-items v-else>
         <v-btn flat to="/user" class="navtitle">
@@ -88,10 +98,10 @@
           </v-avatar>
           &nbsp;{{userDisplayName}}
         </v-btn>
-        <v-btn to="/cart">
+        <v-btn to="/cart" v-if="itemsInCart > 0">
           <v-badge right overlap class="black--text" color="red">
           <template v-slot:badge>
-            <span>6</span>
+            <span>{{ itemsInCart }}</span>
           </template>
           <v-icon color="grey lighten-1">shopping_cart</v-icon>
         </v-badge>
@@ -120,6 +130,19 @@ export default {
     };
   },
   computed: {
+    itemsInCart() {
+      if(this.isLogin) {
+        if(this.cart && this.cart.items.length > 0) {
+          return this.cart.items.length
+        }
+        else {
+          return 0
+        }
+      }
+      else {
+        return 0
+      }
+    },
     userPic() {
       if (this.user && this.user.image) {
         return this.user.image;
@@ -136,23 +159,17 @@ export default {
         return "default_user";
       }
     },
-    ...mapState(["isLogin", "user"])
+    ...mapState(["isLogin", "user", "cart"])
   },
   mounted() {
+    const token = localStorage.getItem("ecomm_token");
+    this.getUserData();
     //load Google Logout client
-    if (gapi) {
+    if (typeof(gapi) !== undefined) {
       gapi.load("auth2", () => {
+        console.log('gapi load...');
         gapi.auth2.init();
-        if (localStorage.getItem("ecomm_token")) {
-          this.getUserData();
-        }
       });
-    } else {
-      if (localStorage.getItem("ecomm_token")) {
-        this.getUserData();
-      } else {
-        // this.$router.push('/login')
-      }
     }
   },
   methods: {
@@ -164,6 +181,7 @@ export default {
         .then(({ data }) => {
           this.$store.commit("setIsLogin", true);
           this.$store.commit("setUser", data);
+          this.$store.dispatch('getCurrentCart');
         })
         .catch(({ response }) => {
           swal.fire("Error", response.data, "error");

@@ -1,8 +1,5 @@
 <template>
-    <v-container column>
-        <h1>Add Product</h1>
-        <ProductForm type="add" @onadd="createProduct"></ProductForm>
-    </v-container>
+    <ProductForm type="update" @onupdate="updateProduct" :data="formData"></ProductForm>
 </template>
 <script>
 import ProductForm from '@/components/ProductForm.vue'
@@ -17,7 +14,20 @@ export default {
             formData: null,
         }
     },
+    mounted() {
+        this.fetchData();
+    },
     methods: {
+        fetchData() {
+            api.get('/products/' + this.$route.params.id, { headers: {'Authorization': localStorage.ecomm_token}})
+            .then(({data}) => {
+                console.log(this.internalProduct);
+                this.formData = data
+            })
+            .catch(err => {
+                swal.fire('Error', err.response.data,'error')
+            })
+        },
         getFormData(object) {
             const formData = new FormData();
             Object.keys(object).forEach(key => { 
@@ -29,8 +39,8 @@ export default {
 
             return formData;
         },
-        createProduct(data) {
-            console.log(data, ' <---- create fire');
+        updateProduct(data) {
+            console.log(data, ' <---- update fired');
             this.formData = data
             const formData = this.getFormData(this.formData)
 
@@ -40,10 +50,10 @@ export default {
                 }
             };
 
-            api.post('/products', formData, config)
+            api.put('/products', formData, config)
                 .then(({data}) => {
-                    console.log(`created successfully...${data}`);
-                    this.$router.push('/products')
+                    swal.fire('Success', "Product updated successfully!", 'success')
+                    this.$router.push('/products/' + this.$props.product._id)
                 })
                 .catch(err => {
                     swal.fire('Error', err.response.data, 'error')

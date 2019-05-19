@@ -88,10 +88,11 @@ export default {
       if(this.linkedinCode) {
         api.get('/auth/linkedin/redirect/?code='+this.linkedinCode)
           .then(({data}) => {
-            swal.fire('Great!', `Welcome, ${data.user.firstname}`, 'success')
+            swal.fire('Login Success!', `Welcome, ${data.user.firstname}`, 'success')
             localStorage.setItem('ecomm_token', data.access_token)
             this.$store.commit('setUser', data.user)
             this.$store.commit('setIsLogin', true)
+            this.$store.dispatch('getCurrentCart');
             this.$router.push('/')
           })
           .catch(({response}) => {

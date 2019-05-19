@@ -5,33 +5,63 @@
         <v-expand-transition>
           <div
             v-if="hover"
-            class="d-flex transition-fast-in-fast-out yellow darken-2 v-card--reveal display-3 white--text"
+            class="d-flex transition-fast-in-fast-out yellow lighten-4 v-card--reveal display-1 black--text"
             style="height: 100%;"
-          >$14.99</div>
+          >Rp. {{formattedPrice}}</div>
         </v-expand-transition>
       </v-img>
       <v-card-text class="pt-4" style="position: relative;">
-        <v-btn absolute color="yellow" class="grey--text" fab large right top>
+        <v-btn absolute color="yellow" class="grey--text" fab large right top @click="addToCart">
           <v-icon>shopping_cart</v-icon>
         </v-btn>
-        <div class="font-weight-light grey--text title mb-2">Fiqh</div>
-        <h3 class="grey--text mb-2">Sifat Shalat Nabi</h3>
+        <!-- <router-link :to="`/products/${product._id}`"><div class="font-weight-light grey--text title mb-2">Fiqh</div></router-link> -->
+        <router-link :to="`/products/${product._id}`">
+          <h3 class="grey--text mb-2">
+           {{ product.name }}
+          </h3>
+        </router-link>
         <div class="font-weight-light black--text mb-2 text-truncate">
-          Our Vintage kitchen utensils delight any chef.Made of bamboo by hand
+          {{ product.description }}
         </div>
       </v-card-text>
       <v-layout row v-if="$store.state.user && $store.state.user.role === 'admin'">
         <v-flex>
-          <v-btn color="blue" small>Update</v-btn>
-          <v-btn color="red" small>Delete</v-btn>
+          <v-btn color="blue" small :to="'products/'+product._id+'/update'">Update</v-btn>
+          <v-btn color="red" small @click="deleteProduct">Delete</v-btn>
         </v-flex>
       </v-layout>
     </v-card>
   </v-hover>
 </template>
 <script>
+import commaFormat from '@/helpers/priceFormat.js'
+
 export default {
-    props: ['product']
+    props: ['product'],
+    computed: {
+      formattedPrice() {
+        return commaFormat(this.$props.product.price);
+      }
+    },
+    methods: {
+      addToCart() {
+        this.$store
+            .dispatch('addCartItem', this.product)
+            .then(({ data }) => {
+                this.$store.dispatch('getCurrentCart');
+            })
+            .catch((err) => {
+              let msg  = err.response.data
+              if(msg.includes('dup')) {
+                msg = 'Product existing in the cart!'
+              }
+              swal.fire('AddItem Error', msg , 'error');
+            });
+      },
+      deleteProduct() {
+        this.$emit('deleteproduct', this.$props.product._id);
+      } 
+    }
 }
 </script>
 
@@ -40,9 +70,12 @@ export default {
   align-items: center;
   bottom: 0;
   justify-content: center;
-  opacity: .5;
+  opacity: .7;
   position: absolute;
   width: 100%;
+}
+a:link, a:active {
+  text-decoration: none;
 }
 </style>
 
