@@ -17,7 +17,7 @@ app.use(
 
 app.use(express.json());
 
-mongoose.connect("mongodb+srv://novi:novi@phase2-porto-novi-l3m3t.gcp.mongodb.net/ecommerce" + process.env.NODE_ENV + "?retryWrites=true", {
+mongoose.connect(process.env.MONGODB_URL + "?retryWrites=true", {
   useNewUrlParser: true
 });
 
@@ -29,11 +29,9 @@ db.once("open", function callback() {
 
 app.use("/", routes);
 
+// dipake di env dev aja
+app.listen(port, ()=>{
+  console.log("listen", port)
+})
 
-// listen dipake untuk testing di env dev aja ya
-// app.listen(port, ()=>{
-//   console.log("listen")
-// })
-
-
-module.exports = app
+// module.exports = app // dipake di env testing aja

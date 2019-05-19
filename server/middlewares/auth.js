@@ -8,7 +8,7 @@ function authentication(req, res, next) {
     next();
   } catch (err) {
     res.status(500).json({
-      message: `Internal server error ${err} 1`
+      message: `Internal server error`
     });
   }
 }
@@ -18,10 +18,10 @@ function authorization(req, res, next) {
     _id: req.params.id,
     userId: req.headers.id
   };
-  console.log(`mencari data ini di authorization => ${condition}`);
+  // console.log(`mencari data ini di authorization => ${condition}`);
   Cart.findOne(condition)
     .then(result => {
-      console.log(`dapat data ini => ${result}`);
+      // console.log(`dapat data ini => ${result}`);
       if (result) {
         next();
       } else {
@@ -32,7 +32,7 @@ function authorization(req, res, next) {
     })
     .catch(err => {
       res.status(500).json({
-        message: `Internal server error ${err} 2`
+        message: `Internal server error`
       });
     });
 }
