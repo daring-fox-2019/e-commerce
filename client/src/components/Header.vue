@@ -1,12 +1,13 @@
 <template>
   <div>
     <v-toolbar app fixed clipped-left>
-      <v-flex xs3 d-flex>
-        <v-img src="/logo.png" alt="tess" aspect-ratio="4"></v-img>
+      <v-spacer></v-spacer>
+
+      <v-flex xs1>
+        <router-link to="/" style="text-decoration: none;">
+          <v-img src="/logo.png" alt="logo" height="50"></v-img>
+        </router-link>
       </v-flex>
-      <v-toolbar-title>
-        <router-link to="/" style="text-decoration: none;">Application</router-link>
-      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon to="/cart" v-if="this.$store.state.islogin && !this.$store.state.isAdmin">
         <v-icon>shopping_cart</v-icon>
@@ -19,7 +20,7 @@
           <template v-slot:activator="{ on }">
             <v-toolbar-title v-on="on" style="cursor: pointer">
               <v-icon class="mr-2">account_circle</v-icon>
-              <span>Hai</span>
+              <span>{{name}}</span>
               <v-icon>arrow_drop_down</v-icon>
             </v-toolbar-title>
           </template>
@@ -47,15 +48,20 @@
 
 <script>
 export default {
+  data(){
+    return{
+      name: localStorage.name
+    }
+  },
   methods: {
     signout() {
-      this.$store.commit('setLogin', false);
-      this.$store.commit('setAdmin', false);
-      localStorage.removeItem('token');
-      localStorage.removeItem('name');
-      swal('Logout Success!', '', 'success');
-      this.$router.push('/');
-    },
-  },
+      this.$store.commit("setLogin", false);
+      this.$store.commit("setAdmin", false);
+      localStorage.removeItem("token");
+      localStorage.removeItem("name");
+      swal("Logout Success!", "", "success");
+      this.$router.push("/");
+    }
+  }
 };
 </script>

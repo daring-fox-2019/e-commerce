@@ -10,7 +10,7 @@
         >
           <v-flex>
             <v-card>
-              <v-img :src="product.image" aspect-ratio="2.75" left></v-img>
+              <v-img :src="product.image" aspect-ratio="2.75"></v-img>
               <v-card-title primary-title>
                 <div>
                   <h3 class="headline mb-0">{{product.name}}</h3>
