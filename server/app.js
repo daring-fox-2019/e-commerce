@@ -16,6 +16,11 @@ mongoose.connect('mongodb://localhost/e-commerce-' + NODE_ENV ,{ useNewUrlParser
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
 
+app.get('/', (req, res) => {res.status(200).json({message: 'Welcome'})})
+
+app.post('/login', UserController.login)
+app.post('/register', image.multer.single('profilePic'), image.sendUploadToGCS, UserController.create)
+
 app.get('/products', ProductController.findAll)
 app.post('/products', ProductController.create)
 app.get('/products/:id', ProductController.findOne)
