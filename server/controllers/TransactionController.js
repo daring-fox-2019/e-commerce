@@ -78,7 +78,8 @@ static async update(req, res) {
         ...req.body
       }
     }, {
-      new: true
+      new: true,
+      runValidators : true
     })
     if (trans) res.status(200).json(trans)
     else res.status(404).json({

@@ -7,7 +7,8 @@ const transactionSchema = new Schema({
         ref: 'User'
     },
     recipientName : {
-        type : String
+        type : String,
+        required : true
     },
     carts: [{
         productId : {
@@ -22,7 +23,8 @@ const transactionSchema = new Schema({
     },
     total: {
         type: Number,
-        default: null
+        default: 0,
+        min : [0, 'Cannot be less than 0']
     },
     status: {
         type: Boolean,
@@ -30,6 +32,7 @@ const transactionSchema = new Schema({
     },
     deliverPrice : {
         type: Number,
+        required : true
     }
 }, {
     timestamps: true

@@ -24,31 +24,34 @@ class ProductController {
 
     static async findAll(req, res) {
         try {
+            console.log(req.query, 'COY ADA G');
+            
+            let { name, category } = req.query
+            let obj = {}
+
+            if( name || category ) { 
+                obj = 
+                {
+                    $or: 
+                    [
+                        {'name' :{ $regex: name , $options: 'i' }}
+                    ]
+                }
+             }
+
             // console.log('hii mau cari semua barang');
-           let found = await Product.find({}).populate('category')
+           let found = await Product.find(obj).populate('category')
            res.status(200).json(found) 
-        //    console.log('apa temuan', found);
+           console.log('apa temuan', found);
            
         } catch (error) {
+            console.log(error);
+            
             if (error.errors) res.status(400).json(error)
             else {
                 res.status(500).json(error)
             } 
         }
-    }
-
-    static deductStock(id, amount) {
-        Product.findById(id)
-        .then(foundProduct => {
-            // console.log(foundProduct, 'apakah dapat produk tsb');
-            // console.log('====================-=', foundProduct.stock, '///////' ,amount);
-            foundProduct.stock -= +amount
-            return foundProduct.save()
-            
-        })
-        .catch(err => {
-            res.status(400).json(err)
-        })
     }
 
     static async findOne(req, res) {

@@ -10,7 +10,6 @@ export default {
   },
   created() {
     this.getMo()
-    console.log(this.monthlyRevenue, 'HOW MUCH MONEY DO I MAKE??');
     
   },
   data() {
@@ -20,35 +19,51 @@ export default {
     };
   },
   mounted() {
-    this.getMo()
-    this.fillData();
+    console.log(this.monthlyRevenue, '..', 'HOW MUCH MONEY DO I MAKE??');
+
   },
   methods: {
     getMo() {
+      let pembanding = []
+      let temp = []
       this.monthlyRevenue = []
       this.axios.get('/transactions/revenue/months', {
         headers : {'token' : localStorage.getItem('token')}
       })
       .then(({data}) => {
-       
-
-
-        for (let i = 0; i < 12; i++) {
-          console.log(temp);
-          
-          data.forEach(mo => {
-            console.log(mo, 'sssss');
-            
-            if (i != mo._id) {
-              temp.push(0)
-            } else if (i == mo._id) {
-              temp.push(mo.revenue)
-            }
-          });
+       console.log(data, '.....'); 
+        for(let i =1; i < 13; i++) {
+          let flag = false
+          let obj = {
+            _id : i,
+            revenue : 0
+          }
+          for (let j = 0; j < data.length; j++) {
+            if (data[j]._id == obj._id) {
+              flag = true
+              obj.revenue = data[j].revenue
+            } 
+          }
+          if (flag) {
+            pembanding.push(obj)
+          } else {
+            pembanding.push({
+              _id : i,
+              revenue : 0
+            })
+          }
         }
+        console.log(pembanding);
+        for (let i = 0; i < pembanding.length; i++) {
+          temp.push(pembanding[i].revenue); 
+        }
+        
         this.monthlyRevenue = temp
+        this.fillData();
+
       })
       .catch(err => {
+        console.log(err, '////');
         this.swal.fire('Something is wrong', 'Please reload the page', 'error')
       })
 
@@ -94,5 +109,5 @@ export default {
   }
 };
 </script>
-    <style>
+<style>
 </style>

@@ -2,7 +2,8 @@
   <div id="app">
     <div style="background-color: transparent; height:14vh; z-index:100;" class="row">
       <div class="container my-3">
-        <ul style="display:flex;" class="nav justify-content-end">
+        
+        <ul style="display:flex;" class="nav justify-content-between">
           <li v-if="!isLogin" class="nav-item">
             <a
               data-toggle="modal"
@@ -23,11 +24,26 @@
           <li v-if="isLogin" class="nav-item">
             <router-link class="nav-link navclr active" to="/user">User</router-link>
           </li>
-          <li  v-if="isLogin && role == 'admin'" class="nav-item">
-            <router-link class="nav-link navclr active" to="/admin">Admin</router-link>
+          <li v-if="isLogin && role == 'admin'" class="nav-item">
+            <router-link v-if="role == 'admin'" class="nav-link navclr active" to="/admin">Admin</router-link>
           </li>
           <li v-if="isLogin" @click="signOut" class="nav-item">
             <router-link class="nav-link navclr active" to="/">Sign out</router-link>
+          </li>
+          <li>
+            <form @submit.prevent="pushSearch">
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  v-model="searchInput"
+                  class="form-control p-2"
+                  placeholder="Enter to search.."
+                  aria-label="Search.."
+                  aria-describedby="basic-addon1"
+                  style="border-radius:24px"
+                >
+              </div>
+            </form>
           </li>
         </ul>
       </div>
@@ -41,6 +57,7 @@
       v-on:getsinglepage="getsinglepage"
       v-bind:is-login="isLogin"
       v-on:fetch-category="fetchCategory"
+      v-bind:search-result="searchResult"
     />
 
     <footer class="footer">
@@ -70,10 +87,6 @@ export default {
       this.fetchProducts();
     }
 
-    if(localStorage.getItem('role')) {
-      this.role = localStorage.getItem('role')
-    }
-
     if (this.$route.name == "carts") {
       this.fetchCartData();
     }
@@ -81,9 +94,11 @@ export default {
   data() {
     return {
       isLogin: false,
-      role: "",
       categoryList: [],
-      productList: []
+      productList: [],
+      searchResult : [],
+      role: "",
+      searchInput : ""
     };
   },
   methods: {
@@ -101,8 +116,9 @@ export default {
     },
     loginsuccess() {
       this.isLogin = true;
+      this.role = localStorage.getItem("role");
       this.fetchProducts();
-      this.$router.push('/products')
+      this.$router.push("/products");
     },
     getsinglepage(id) {
       this.$router.push(`/products/${id}`);
@@ -110,7 +126,7 @@ export default {
     signOut() {
       localStorage.clear();
       this.isLogin = false;
-      this.role = ''
+      this.role = "";
       this.swal.fire("Logged out", "Have a nice day", "success");
       this.$router.push("/");
     },
@@ -123,6 +139,18 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    pushSearch() {
+      this.axios
+        .get(`/products`, {params : {name : this.searchInput, category : this.searchInput}})
+        .then(({data}) => {
+          this.searchResult = data
+          this.$router.push('/search')
+          this.searchInput = ''
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     fetchCategory() {
       this.axios

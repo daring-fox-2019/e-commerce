@@ -39,6 +39,11 @@ export default new Router({
       component: () => import(/* webpackChunkName: "productcategory" */ './views/ProductPageCategory.vue')
     },
     {
+      path: '/search',
+      name: 'search',
+      component: () => import(/* webpackChunkName: "search" */ './views/SearchResult.vue')
+    },
+    {
       path: '/products/:id',
       name: 'singleproduct',
       component: () => import(/* webpackChunkName: "productcategory" */ './views/SingleProduct.vue')

@@ -1,8 +1,7 @@
 <template>
-  <div class="container">
+  <div class="container ">
     <Visualisation v-bind:product-list="productList"></Visualisation>
     <Revenue></Revenue>
-
   </div>
 </template>
 

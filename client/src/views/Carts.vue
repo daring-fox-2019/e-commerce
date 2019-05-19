@@ -37,37 +37,17 @@
                     <i class="fas fa-angle-down"></i>
                   </button>
                 </td>
-                <td>IDR {{subtotal(cart.amount, cart.productId.price)}}</td>
                 <td>
                   <small>Items will be dispatched in {{random}} days</small>
+                </td>
+                <td>IDR {{subtotal(cart.amount, cart.productId.price)}}</td>
+                <td>
+                  <small id="cancelan" href v-on:click="deleteCart(cart._id)" style="color:red">Cancel</small>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-
-        <!-- <div class="summ col-4 border text-center">
-          <div style="background-color: rgb(233, 233, 233)" class="px-2 pt-2 mb-2 row">
-            <p class="yc">ORDER SUMMARY</p>
-          </div>
-          <div class="row mb-3">
-            <div class="col-6 text-left">Total Items</div>
-            <div class="col-6 text-right">{{this.totalProductsInCart}}</div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-6 text-left">Estimated Sales Tax (Included)</div>
-            <div class="col-6 text-right">IDR 27500</div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-6 text-left">Total Price</div>
-            <div class="col-6 text-right">IDR {{getTotalCart}}</div>
-          </div>
-          <br>
-          <br>
-          <br>
-          <br>
-          <button class="btn atc btn-dark">Proceed To Checkout</button>
-        </div>-->
       </div>
     </div>
 
@@ -471,8 +451,34 @@ export default {
 
         this.deliverPrice = data.info[0].costs[0].cost[0].value;
       } catch (error) {
-        console.log(error);
+        this.swal.fire(
+            "Something is wrong",
+            "Please reload the page",
+            "warning"
+          );
       }
+    },
+    deleteCart(id) {
+      this.axios.delete(`/carts/${id}`, 
+      { headers: { token: localStorage.getItem("token"), cartid: id } })
+      .then(() => {
+        this.swal.fire(
+            "Item deleted",
+            "You may continue shopping",
+            "success"
+          );
+        this.fetchCartData()
+      })
+      .catch(err => {
+        console.log(err);
+        
+        this.swal.fire(
+            "Something is wrong",
+            "Please reload the page",
+            "warning"
+          );
+      })
+
     },
     proceedToCheckout() {
       this.axios
@@ -560,5 +566,10 @@ export default {
   color: black;
 
   background-color: rgb(230, 230, 230);
+}
+
+#cancelan:hover {
+    cursor: pointer;
+    text-decoration: underline;
 }
 </style>

@@ -60,5 +60,11 @@ export default {
   },
 };
 </script>
-    <style>
+<style>
+.stoknya {
+max-width: 600px;
+margin:  150px auto;
+
+}
+
 </style>
