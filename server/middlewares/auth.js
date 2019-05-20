@@ -49,7 +49,7 @@ module.exports = {
 
         transactionModel.findById( _id )
         .then( data => {
-            if( data.buyer_id == req.decoded.id || req.decoded.role == 'admin'){
+            if( data.seller_id == req.decoded.id || data.buyer_id == req.decoded.id || req.decoded.role == 'admin'){
                 next()
             } else {
                 next({ message: 'Unauthorize'})

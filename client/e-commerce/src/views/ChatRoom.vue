@@ -6,10 +6,9 @@
       </div>
     </div>
     <b-from @submit.prevent="sendChat">
-        <input type="text" v-model="chatText">
-        <b-button type="submit"> send </b-button>
+      <input type="text" v-model="chatText">
+      <b-button type="submit">send</b-button>
     </b-from>
-    
   </div>
 </template>
 
@@ -34,6 +33,9 @@ export default {
           let data = querySnapshot.data();
           this.game = data;
         });
+    },
+    sendChat() {
+        db.collection('chat')
     }
   }
 };
