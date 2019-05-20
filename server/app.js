@@ -6,9 +6,9 @@ const route = require('./routes')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const error = require('./middlewares/error')
-mongoose.connect('mongodb://localhost:27017/e-commerce',{ useNewUrlParser : true, useFindAndModify: false }, (err) => {
-  // if(err) console.log('Failed connecting to database.')
-  // else console.log('Success connecting to database!')
+mongoose.connect('mongodb://localhost:27017/e-commerce-test',{ useNewUrlParser : true, useFindAndModify: false }, (err) => {
+  if(err) console.log('Failed connecting to database.')
+  else console.log('Success connecting to database!')
 })
 
 app.use(cors())
@@ -18,7 +18,7 @@ app.use(route)
 app.use(error)
 
 app.listen(port,() => {
-  // console.log(`listening on port: ${port}!`)
+  console.log(`listening on port: ${port}!`)
 })
 
 module.exports = app

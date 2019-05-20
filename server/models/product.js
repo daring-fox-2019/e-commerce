@@ -10,7 +10,7 @@ let productSchema = new mongoose.Schema({
     required: [true, 'Product description required.']
   },
   featuredImg: {
-    type: String,
+    type: [String],
     default: ''
   },
   stock: {
@@ -25,6 +25,12 @@ let productSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Product price required.'],
     min: 0
+  },
+  shortkey: {
+    type: String
+  },
+  priceStr: {
+    type: String
   }
 })
 

@@ -17,6 +17,8 @@ class ControllerCart {
   }
   static findAll(req, res, next) {
     Cart.find()
+      .populate('user', 'name')
+      .populate('product')
       .then(carts => {
         res.status(200).json(carts)
       })
@@ -25,7 +27,9 @@ class ControllerCart {
       })
   }
   static findOne(req, res, next) {
-    Cart.findOne({_id: req.params.id})
+    Cart.findOne({_id: req.params.cartId})
+      .populate('user', 'name')
+      .populate('product')
       .then(cart => {
         res.status(200).json(cart)
       })
@@ -34,10 +38,18 @@ class ControllerCart {
       })
   }
   static findMy(req, res, next) {
-
+    Cart.find({ user: req.user._id })
+      .populate('user', 'name')
+      .populate('product')
+      .then(cart => {
+        res.status(200).json(cart)
+      })
+      .catch(err => {
+        next({ status: 500, message: err.message, origin: 'ControllerCart.findOne'})
+      })
   }
   static update(req, res, next) {
-    Cart.findOneAndUpdate({_id: req.params.id}, req.body, { new: true })
+    Cart.findOneAndUpdate({_id: req.params.cartId}, req.body, { new: true })
     .then(cart => {
       res.status(200).json(cart)
     })
@@ -46,11 +58,11 @@ class ControllerCart {
     })
   }
   static delete(req, res, next) {
-    Cart.findOneAndDelete({_id: req.params.id})
+    Cart.findOneAndDelete({_id: req.params.cartId})
       .then(cart => {
         const response = {
           message: 'Successfully deleted cart.',
-          id: req.params.id
+          id: req.params.cartId
         }
         res.status(200).json(response)
       })

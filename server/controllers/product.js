@@ -2,9 +2,18 @@ const { Product, User } = require('../models')
 
 class ControllerProduct {
   static create(req, res, next) {
-    let { name, description, featuredImg, price, stock, tags } = req.body
+    let { name, description, featuredImg, price, stock, tags, shortkey } = req.body
+    // featuredImg = req.cloudStoragePublicUrl
     let newProduct = {
       name, description, featuredImg, price, stock, tags
+    }
+    if(shortkey) {
+      newProduct.shortkey = shortkey
+    }
+    if(price > 0) {
+      newProduct.priceStr = 'Rp ' + price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    } else {
+      newProduct.priceStr = 'Free To Play'
     }
     Product.create(newProduct)
       .then(product => {

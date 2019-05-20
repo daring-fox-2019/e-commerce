@@ -5,9 +5,12 @@ const { sign } = require('../helpers/jwt')
 
 class ControllerUser {
   static create(req, res, next) {
-    let { name, email, password } = req.body
+    let { name, email, password, role } = req.body
     let newUser = {
       name, email, password
+    }
+    if(role) {
+      newUser.role = role
     }
     User.create(newUser)
       .then(data => {
@@ -90,41 +93,21 @@ class ControllerUser {
           } else {
             let obj = {
               id: user._id,
+              email: user.email
             }
             let token = sign(obj)
-            res.status(201).json({
+            res.status(200).json({
               token,
               id: user._id,
-              email
+              email,
+              name: user.name,
+              role: user.role
             })
           }
         }
       })
       .catch(err => {
         next({ status: 500, message: err.message, origin: 'ControllerUser.login' })
-      })
-  }
-  static cart(req, res, next) {
-    User.findOne({ _id: req.user._id })
-      .then(user => {
-        // let isInCart = false
-        // user.carts.forEach(item => {
-        //   if (item.toString() == req.params.productId.toString()) {
-        //     isInCart = true
-        //   }
-        // })
-        console.log({ body: req.body, params: req.params, user, masuk: 'cart'})
-        if (req.body.method == 'add') {
-          return User.findOneAndUpdate({ _id: req.user._id }, { $push: { carts: req.params.productId } }, { new: true })
-        } else if((req.body.method == 'remove')) {
-          return User.findOneAndUpdate({ _id: req.user._id }, { $pull: { carts: req.params.productId } }, { new: true })
-        }
-      })
-      .then(user => {
-        res.status(200).json(user)
-      })
-      .catch(err => {
-        next({ status: 500, message: err.message, origin: 'ControllerUser.cart'})
       })
   }
 }
