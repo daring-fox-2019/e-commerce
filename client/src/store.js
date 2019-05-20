@@ -11,6 +11,7 @@ export default new Vuex.Store({
     isLogin: false,
     role: '',
     loading: false,
+    products: [],
   },
   mutations: {
     setLoading(state, payload) {
@@ -39,6 +40,10 @@ export default new Vuex.Store({
       state.role = '';
       localStorage.removeItem('token');
       localStorage.removeItem('role');
+    },
+    fetchProducts(state, payload) {
+      // eslint-disable-next-line
+      state.products = payload;
     },
   },
   actions: {
@@ -116,6 +121,24 @@ export default new Vuex.Store({
         })
         .catch((err) => {
           context.commit('setLoading', false);
+          const { message } = err.response.data;
+          Swal.fire({
+            position: 'top',
+            type: 'error',
+            title: message,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        });
+    },
+    fetchProducts(context) {
+      axios
+        .get('/products')
+        .then(({ data }) => {
+          const { products } = data;
+          context.commit('fetchProducts', products);
+        })
+        .catch((err) => {
           const { message } = err.response.data;
           Swal.fire({
             position: 'top',

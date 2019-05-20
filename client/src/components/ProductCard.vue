@@ -1,6 +1,7 @@
 <template>
   <v-card>
     <v-img
+      v-if="product.imageURL"
       :src="product.imageURL"
       :aspect-ratio="ratio"
     >
@@ -15,10 +16,20 @@
       </v-container>
     </v-img>
 
+    <v-progress-linear
+      v-show="!productInput && loading"
+      color="teal"
+      :indeterminate="true">
+    </v-progress-linear>
+
     <v-card-title primary-title>
       <h1 class="title mb-2">{{ product.name }}</h1>
-      <v-container fluid class="pa-0">
-        <v-layout class="mb-1" justify-space-between row>
+      <v-container fluid class="pa-0" >
+        <v-layout
+          v-if="product.imageURL"
+          class="mb-1"
+          justify-space-between row
+        >
           <span class="green--text">{{ currency }}</span>
           <span class="grey--text">Stock: {{ product.stock }}</span>
         </v-layout>
@@ -36,7 +47,13 @@
     </v-card-title>
 
     <v-card-actions>
-      <v-btn flat color="teal"><v-icon>add_shopping_cart</v-icon>Add to Cart</v-btn>
+      <v-btn
+        v-if="product.imageURL"
+        flat color="teal"
+      >
+        <v-icon>add_shopping_cart</v-icon>
+        Add to Cart
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -49,6 +66,10 @@
 </style>
 
 <script>
+import axios from '@/api/server';
+import Swal from 'sweetalert2';
+import { mapState } from 'vuex';
+
 export default {
   name: 'productCard',
   props: {
@@ -57,30 +78,69 @@ export default {
     productInput: Object,
   },
   computed: {
+    ...mapState([
+      'loading',
+    ]),
     currency() {
       let format = 'Rp ';
       format += this.product.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
       return format;
     },
   },
+  watch: {
+    // eslint-disable-next-line
+    '$route.params'() {
+      if (this.productInput) {
+        this.product = this.productInput;
+      } else {
+        this.getProduct();
+      }
+    },
+  },
   mounted() {
     if (this.productInput) {
       this.product = this.productInput;
+    } else {
+      this.getProduct();
     }
   },
   data() {
     return {
       product: {
-        _id: '1',
-        name: 'Iphone 6S',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vitae felis ac turpis fermentum lobortis ac a ante. Aenean eget libero tortor. Aenean laoreet tincidunt congue. Aliquam lacinia, orci at rhoncus eleifend, lacus lorem pharetra diam, eu laoreet tortor felis nec odio. Donec pretium euismod ipsum. Aliquam euismod, leo eu cursus auctor, mauris mauris posuere risus, in venenatis nibh velit nec ex. Nulla sed viverra eros. Phasellus congue urna ut pulvinar dignissim. Aenean tristique nisl ac libero ultricies, nec imperdiet ligula vestibulum. Fusce vel mauris ac nibh viverra faucibus. Proin non vehicula nibh. Ut venenatis fringilla magna non porttitor. Cras et laoreet est. Praesent euismod lorem lectus, elementum vulputate sem accumsan a. Nulla dignissim ante non nibh sagittis, eu pulvinar nisl ullamcorper.',
-        price: 6000000,
-        stock: 100,
-        imageURL: 'http://static1.businessinsider.com/image/596e282cc50c291e008b4fb4-1190-625/the-best-apple-products-to-buy-from-apples-refurbished-mac-store.jpg',
+        _id: '',
+        name: '',
+        description: '',
+        price: 0,
+        stock: 0,
+        imageURL: null,
         created: null,
         updated: null,
       },
     };
+  },
+  methods: {
+    getProduct() {
+      const { id } = this.$route.params;
+      this.$store.commit('setLoading', true);
+      axios
+        .get(`/products/${id}`)
+        .then(({ data }) => {
+          this.$store.commit('setLoading', false);
+          const { product } = data;
+          this.product = product;
+        })
+        .catch((err) => {
+          this.$store.commit('setLoading', false);
+          const { message } = err.response.data;
+          Swal.fire({
+            position: 'top',
+            type: 'error',
+            title: message,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        });
+    },
   },
 };
 </script>

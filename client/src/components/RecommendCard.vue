@@ -35,10 +35,14 @@ a {
 
 <script>
 export default {
+  name: 'recommendCard',
   props: {
     iStyle: Number,
+    productInput: Object,
   },
-  name: 'recommendCard',
+  mounted() {
+    this.product = this.productInput;
+  },
   data() {
     return {
       style: [
@@ -54,9 +58,9 @@ export default {
         },
       ],
       product: {
-        _id: '1',
-        name: 'Samsung Note 10',
-        imageURL: 'https://cdn2.techadvisor.co.uk/cmsdata/features/3647841/samsung_note_809.jpg',
+        _id: '',
+        name: '',
+        imageURL: '',
         created: null,
         updated: null,
       },
