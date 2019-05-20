@@ -8,8 +8,8 @@ const cors = require('cors')
 
 app.use(cors())
 mongoose.set('useFindAndModify', false);
-mongoose.connect('mongodb://localhost/richiebaby', { useNewUrlParser: true });
-// mongoose.connect('mongodb+srv://admin:root@cluster0-r5gmo.gcp.mongodb.net/richiebaby?retryWrites=true', { useNewUrlParser: true });
+// mongoose.connect('mongodb://localhost/richiebaby', { useNewUrlParser: true });
+mongoose.connect('mongodb+srv://admin:root@cluster0-r5gmo.gcp.mongodb.net/richiebaby?retryWrites=true', { useNewUrlParser: true });
 
 
 app.use(express.json())
