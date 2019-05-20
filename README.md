@@ -1,8 +1,10 @@
 # e-commerce
+# client : http://tokocamera.sukmaranggapradeta.com
+# server : http://tokocamera-server.sukmaranggapradeta.com
 
 ### Add Product :
 ```sh
-http://localhost:3000/products
+http://tokocamera-server.sukmaranggapradeta.com/products
 METHOD : POST
 Authenticated Required : YES
 Authorized Required : NO
@@ -51,9 +53,9 @@ Output :
 ### List Product :
 
 ```sh
-http://localhost:3000/products
+http://tokocamera-server.sukmaranggapradeta.com/products
 METHOD : GET
-Authenticated Required : NO
+Authenticated Required : YES
 Authorized Required : NO
     
 Response Status : 200
@@ -62,6 +64,10 @@ Data Output :
         {...},{...},{...}
     ]
     
+Response Status : 400
+Output :
+    "Token wrong!"
+    
 Response Status : 500
 Output :
     "Internal Server Error"
@@ -69,10 +75,10 @@ Output :
 
 ### Update Product :
 ```sh
-http://localhost:3000/products/:productId
+http://tokocamera-server.sukmaranggapradeta.com/products/:productId
 METHOD : PUT
 Authenticated Required : YES
-Authorized Required : YES
+Authorized Required : NO
 Data Input :
     {
         name: "HDD",
@@ -119,10 +125,10 @@ Output :
 
 ### Delete Product :
 ```sh
-http://localhost:3000/products/:productId
+http://tokocamera-server.sukmaranggapradeta.com/products/:productId
 METHOD : DELETE
 Authenticated Required : YES
-Authorized Required : YES
+Authorized Required : NO
 
 Response Status : 200
 Data Output :
@@ -152,7 +158,7 @@ Output :
 ### Sign In :
 
 ```sh
-URL: http://127.0.0.1:3000/users/signin
+http://tokocamera-server.sukmaranggapradeta.com/users/signin
 METHOD : POST
 Authenticated Required : NO
 Authorized Required : NO
@@ -184,7 +190,7 @@ Output :
 ### Sign Up :
 
 ```sh
-http://127.0.0.1:3000/users/signup
+http://tokocamera-server.sukmaranggapradeta.com/users/signup
 METHOD : POST
 Authenticated Required : NO
 Authorized Required : NO
