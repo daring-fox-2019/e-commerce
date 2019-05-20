@@ -48,7 +48,7 @@ Run `npm run build` then `npm run serve` to start the client
 | `carts/:id` | **DELETE** | Auhtenticated JWT Token,  Authorized Cart Token | None | Deleted specified cart | Show response  in `object` of deleted cart : {userId : {ObjectId}, productId : {ObjectId}, amount : *Number*} | Status code 500 if `internal server error` or 400 if `bad request` |
 | `carts/:id` | **PATCH** | Auhtenticated JWT Token, Authorized Cart Token | type : 'inc' `OR`, 'dec', `or` `NONE` **(required)**, userId : {ObjectId}, amount : Number, productId : amount | Update specified cart. 'Inc' refers to increment amount by 1 and 'dec' refers to decrement amount by 1 | Show response  in `object` of updated cart : {userId : {ObjectId}, productId : {ObjectId}, amount : *Number*} | Status code 500 if `internal server error` or 400 if `bad request` |
 
-### Transaction Controller 
+### List of Transaction Routes
 
 | Route | HTTP | Headers(s) | Body | Description | Response Success | Response Error |
 | ----- | ---- | ---------- | ---- | ----------- | ---------------- | -------------- |
