@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "wordtree-1557289891094",
+  "private_key_id": "747df0673addbbbdc940acedd5343d1747cb7650",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC+7H5T20yHFiIi\nPuH15xmoJBCu1NUVGOxdS2L2n+D5X8w24nCjaFWEce5BtbCUzaBTf60+Yi4CPpTP\nHaNZcfSeLuGvPVjaFceriAS4UcWmbazSDtQtFpRkfFNnfxoDwDvTqfTJBPiLHlsY\ny0Iv+Dkzx39PLdrFnxb+riwGb7159pvYXBnBd6YWR2ijMdIwDQM8mgNtsdv8osvF\n1p8dNPITYIwuU0fTFX2A3ZuPQm8rdzAh4lvU1HhMWETyU4cbjnA7vMls9l4DrxyC\n9koddjHxlxWjISJ1FldKQBeVOVT8Pgiyw44cc8aTh26hOVjzKhsbpqTMSZeu7sRn\nk0OnNpINAgMBAAECggEAGJ6gb6nQxX6qKiZXtwD1AwSbjh/t1kmfeSxWd50IQsAC\nsnUitz+l/209nwWR3q5hZUMKkQfSDQIK6GZXARq7w4YiHhnYEk9KryjcCvSoexyb\nc37sB2BpBEgv7SGrth4c2N+KrD1S24Wvk5PqVgs5PR8VoJ02H9OzAGZvUOkp0scs\nIPSfzh0sXL21fRdwDdAoclgiV4Kgi5jevDfmrZ5wuZQToLL3GHnPWC4eqXtHX+hZ\niK7OWSsp731BX01JnWoBwK5fOBr6wSpL83pR9NQjXu1TLU9UcutNe0+1RxyU/jBl\nPODGqZ6Ji6q6PFhY9VO9NN0GjcZy4vGHooC4ytij4QKBgQDnBDdIM/mW7cxqRX1L\nTHOuJR/9xve5iUP1GmiS8taCdHLJyPOTNsnH61mtkome2NoMHAYaGSfdsdsBEare\nIPvJdMVeXShowOtZt41HIolLSGtjPBDn5xlUC39RmukdDHqPQ/gAt0cdWWp/Gh40\nYT16ZOFfzCmXWOn7fSdFpIfoRQKBgQDTkkvAWsinl2iZaG5OFVzcc+F6zWGHKmoB\nnxTmhtj89shIFSRWwG/xvqsh81VHF9MrM4AjE/2xdFC1m7GRiqeEjm/0RXI0/cmi\nU/1mfFyFofhorqiycaRtCZWWybLREinwr2h672weTOqQA5bwLJsYWaUlp23c2hSU\nctEwlNRTKQKBgEQB5LhXvKkm1h+O12S8W+2vNizCTxkKhLv6C0D/RhDfcQ9gHfx/\ni4VUDnFfiy39Dquz8EPsleTYv+0fo1qDATx8KMIv0H6OFHqz415Gl35XEm4DN8Ld\nMIKiY9fFL80CaG4Wh0LGsaO9N/G04aFv4uZOHl7SPog0f6UuYcpJtky1AoGAbTjk\nRGxZlDNU+4VvFH5wzxo/uC7Y/3eE/EtM9el9kbIxGQ1ZEjQMVoexPziouKfzCyVu\nLC3A1WCP3gF/fPxQmN0TrM5BNFwkQNoNQmBHP3GrlRc93clPMj81a3+7AbXX0voq\n/PQnI8lfenNv85ODieGVoUe7Lr2izDQuDF948WkCgYEAwNHyHVIc8nlVp6qXS4HE\njs3yOV5v8DpDk5+F266lEq3Lxk9Z9nBEi7yBfM1XUEb4Hg9W2lKf8eDFjbb+krR+\n/wHJ2iQJs1M5cBb7zDCQht1O10RraiI07YQIQDhwdddHnx34NK2tDD8GOBbizYKv\nCMFL0FrANsFyxGn5+iWXITU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "hacktiv8-wordtree@wordtree-1557289891094.iam.gserviceaccount.com",
+  "client_id": "110817790195052780245",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/hacktiv8-wordtree%40wordtree-1557289891094.iam.gserviceaccount.com"
+}
