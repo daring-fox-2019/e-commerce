@@ -1,0 +1,36 @@
+{
+  "name": "e-commerce",
+  "version": "1.0.0",
+  "description": "URL : '/PRODUCT METHOD : POST DATA INPUT : {     name : 'Buah',     description : 'Buah Buahan Segar dua rebu 3',     price : 2000 } RESPONSE STATUS : 201 OUTPUT : {     _id : \"62vyv2ys7s9879sahba8\",     name : \"Buah\",     description : \"Buah Buahan Segar dua rebu 3\",     price : 2000 }",
+  "main": "app.js",
+  "scripts": {
+    "test": "npx mocha --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muhamadnabila/e-commerce.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/muhamadnabila/e-commerce/issues"
+  },
+  "homepage": "https://github.com/muhamadnabila/e-commerce#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^6.1.4"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "^1.2.0",
+    "axios": "^0.18.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.7",
+    "multer": "^1.3.0",
+    "dotenv": "^8.0.0"
+  }
+}
