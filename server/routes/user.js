@@ -3,11 +3,11 @@ const router = require('express').Router()
 const { authenticate } = require('../middlewares/auth')
 const { check } = require('../middlewares/stock')
 
-    
 router.post('/register', controller.register)
 router.post('/login', controller.login)
 
 router.use(authenticate)
+router.get('/', controller.getCartData)
 router.patch('/cart', check, controller.updateCart)
 
 

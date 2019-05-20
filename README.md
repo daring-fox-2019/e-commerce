@@ -343,9 +343,41 @@ Example Output
 ```
 ### Get all user's transaction history
 ```sh
-GET /products
+GET /transactions
 ```
-* Headers : none
+* Headers : {token: user_token}
+* Body    : none
+* Success : Status:200, dataTypes:{}
+* Error : Status:500 , dataTypes:{}
+
+Example Output
+```javascript
+[
+    {
+        "items": [
+            "5ce020f975608d3afde47097"
+        ],
+        "status": "waiting for payment",
+        "_id": "5ce038f287efec3ed3975a29",
+        "user": "5ce016ffc07e47377880c344",
+        "created_at": "2019-05-18T16:55:14.055Z",
+        "updatedAt": "2019-05-18T16:55:14.055Z",
+        "__v": 0
+    }
+]
+```
+Error Example
+```javascript
+{
+    "message" : "please include valid access token"
+}
+```
+
+### Get all transaction (admin)
+```sh
+GET /transactions
+```
+* Headers : {token: token_admin}
 * Body    : none
 * Success : Status:200, dataTypes:{}
 * Error : Status:500 , dataTypes:{}
@@ -427,3 +459,32 @@ Error Example
 {
 }
 ```
+
+## Image Route
+### Upload image
+
+```sh
+POST /images
+```
+* Headers : {token: token_admin}
+* Body    : formData -> {"image": image.jpeg}
+* Success : Status:201, dataTypes:{}
+* Error : Status:500 , dataTypes:{}
+
+Example Output
+```javascript
+{
+    "_id": "5ce0ed37e0eb2221303699fd",
+    "image": "https://storage.googleapis.com/greens.michaelryans.club/1558244657972corgi.jpeg",
+    "user": "5ce020e275608d3afde47096",
+    "__v": 0
+}
+```
+Error Example
+```javascript
+{
+    "message" : "not authorized"
+}
+```
+
+

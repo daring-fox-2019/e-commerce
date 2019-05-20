@@ -64,6 +64,23 @@ class UserController {
         })
     }
 
+    static getCartData(req,res) {
+        const { _id } = req.decoded
+        console.log(req.decoded, '--------getcartdata')
+
+        User.findOne({_id})
+        .populate({path: 'cart', populate: {path: 'product'}})
+        .then(found => {
+            res.status(200).json(found)
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: 'error getCartData',
+                message:err.message,
+            })
+        })
+    }
+
     static updateCart(req,res) {
         const { _id } = req.decoded
         let update_obj
@@ -80,6 +97,7 @@ class UserController {
 
 
         User.findOneAndUpdate({_id}, update_obj , {new:true})
+        .populate({path: 'cart', populate: {path: 'product'}})
         .then(updated => {
             // console.log(updated, ' ---- updated')
             res.status(200).json(updated)

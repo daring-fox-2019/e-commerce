@@ -25,16 +25,28 @@ export default new Router({
       path: '/products',
       name: 'products',
       component: () => import(/* webpackChunkname: "product" */ './views/Products.vue'),
+      children: [
+        {
+          path: ':id',
+          name: 'detail',
+          component: () => import(/* webpackChunkname: "productDetail" */ './views/ProductDetail.vue'),
+        },
+      ],
     },
     {
       path: '/carts',
-      name: 'products',
-      component: () => import(/* webpackChunkname: "product" */ './views/Cart.vue'),
+      name: 'carts',
+      component: () => import(/* webpackChunkname: "cart" */ './views/Cart.vue'),
     },
     {
       path: '/admin',
       name: 'admin',
-      component: () => import(/* webpackChunkname: "product" */ './views/Admin.vue'),
+      component: () => import(/* webpackChunkname: "admin" */ './views/Admin.vue'),
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import(/* webpackChunkname: "login" */ './views/Register.vue'),
     },
   ],
 });

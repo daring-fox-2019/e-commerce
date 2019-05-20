@@ -3,30 +3,37 @@
         class="border"
         cols=3
         >
-        <b-row class="">
-            <div class="m-1 border d-flex flex-column w-100">
-                <div class="border">
-                    <img src="https://ecs7.tokopedia.net/img/cache/200-square/product-1/2018/9/18/29000392/29000392_2b37cf84-3c5a-40c9-8620-5f13fcf08e83_1280_1280.jpg"
-                        style="width:100%;"
+        <router-link :to="'/products/'+product._id">
+            <b-row class="p-1">
+            <div class="border d-flex flex-column w-100">
+                <div class="border"
+                    style="overflow:hidden;">
+                    <img :src="product.image"
+                        style="
+                        height: 198px;"
                         alt="">
                 </div>
                 <div>
-                    {Item Name}
+                    {{product.name}}
                 </div>
                 <div>
-                    {Seller}
+                    Available stock: {{product.stock}}
                 </div>
                 <div>
-                    Price etc
+                    Price : {{product.price}}
+                </div>
+                <div>
+
                 </div>
             </div>
-        </b-row>
+        </b-row> </router-link>
     </b-col>
 </template>
 
 <script>
 export default {
   name: 'ProductCard',
+  props: ['product'],
 };
 </script>
 

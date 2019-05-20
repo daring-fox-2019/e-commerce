@@ -2,8 +2,8 @@ const Product = require('../models/product')
 
 class ProductController {
     static create(req,res) {
-        const { name, stock, price, img } = req.body;
-        const new_product = { name, stock, price, img }
+        const { name, stock, price, image } = req.body;
+        const new_product = { name, stock, price, image }
         Product.create(new_product)
         .then(created => {
             res.status(201).json(created)
@@ -135,6 +135,7 @@ class ProductController {
     static deleteOne(req,res) {
         Product.findOneAndDelete({_id: req.params.id})
         .then(deleted => {
+            console.log('deleted - controller')
             res.status(200).json(deleted)
         })
         .catch(err => {

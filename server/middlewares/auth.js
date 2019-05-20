@@ -34,10 +34,10 @@ module.exports = {
         })
     },
     authorizeTransaction(req,res,next) {
-        Transaction.findOne({_id: req.params.id, user: req.decoded._id})
+        Transaction.findOne({_id: req.params.id})
         .then(found => {
-            if(found) next()
-            // else if(compare('admin', found.role)) next()
+            if(found && found.user == req.decoded._id) next()
+            else if(compare('admin', found.role)) next()
             else {
                 res.status(401).json({message: 'Not authorized'})
             }
@@ -50,9 +50,13 @@ module.exports = {
         })
     },
     adminAuthorization(req,res,next) {
+        // console.log('masuk authorization')
+        // console.log(req.headers.token)
+        // console.log(req.decoded)
         User.findOne({email: req.decoded.email})
         .then(found => {
-            console.log(compare('user', found.role))
+            // console.log(found)
+            // console.log(compare('admin', found.role))
             if(found) {
                 // console.log(found, 'found <--')
                 if(compare('admin', found.role)) next()
