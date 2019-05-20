@@ -1,0 +1,83 @@
+<template>
+    <div class="ui container middle aligned center aligned grid">
+    <div class="six wide column" style="margin-top: 14rem;">
+      <h2 class="ui black image header">
+        <div class="content" id="title">{{ typeForm }}</div>
+      </h2>
+
+      <form class="ui large form" @keyup.enter.prevent="action">
+        <div class="ui basic segment">
+          <div class="field" v-if="type === 'register'">
+            <div class="ui left icon input">
+              <i class="user icon"></i>
+              <input type="text" name="name" placeholder="Name" v-model="name">
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="mail icon"></i>
+              <input type="text" name="email" placeholder="E-mail address" v-model="email">
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="lock icon"></i>
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                v-model="password"
+              >
+            </div>
+          </div>
+
+          <div class="ui fluid large black submit button" @click="action">
+            <p>Sign Up</p>
+          </div>
+        </div>
+
+        <div class="ui error message"></div>
+      </form>
+
+      <div class="ui message" v-if="type === 'Login'">
+        <p>
+          Already have account?
+          <router-link to="/login">Login</router-link>
+        </p>
+      </div>
+
+      <div class="ui message" v-if="type === 'Register'">
+        <p>
+          New to us? 
+          <router-link to="/register">Sign Up</router-link>
+        </p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+    props: {
+        type: String
+    },
+    computed: {
+        typeForm() {
+            if (this.type === 'Login') {
+                return 'Log-in to Your Account'
+            } else {
+                return 'Create New Account'
+            }
+        }
+    },
+    methods: {
+        action() {}
+    }
+}
+</script>
+
+<style>
+
+</style>
