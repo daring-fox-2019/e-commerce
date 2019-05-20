@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const url = `mongodb://localhost/e-commerce`
+const url = `mongodb+srv://admin:admin@e-commerce-alvinchristian7-vyatv.gcp.mongodb.net/test?retryWrites=true`
 const port = process.env.PORT || 3000
 const routes = require('./routes')
 
