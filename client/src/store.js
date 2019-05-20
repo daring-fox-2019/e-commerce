@@ -32,7 +32,7 @@ export default new Vuex.Store({
   actions: {
     loadCartCustomer(context) {
       axios
-        .get('http://35.198.240.251/cart', {
+        .get('http://localhost:3000/cart', {
           headers: {
             token: localStorage.token,
           },
@@ -52,7 +52,7 @@ export default new Vuex.Store({
     },
     loadProduct(context) {
       axios
-        .get('http://35.198.240.251/products')
+        .get('http://localhost:3000/products')
         .then(({ data }) => {
           context.commit('setProduct', data);
         })

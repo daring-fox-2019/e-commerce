@@ -41,7 +41,7 @@ export default {
   },
   created() {
     axios
-      .get('http://35.198.240.251/products')
+      .get('http://localhost:3000/products')
       .then(({ data }) => {
         this.listProduct = data;
       })

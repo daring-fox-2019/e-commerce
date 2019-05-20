@@ -71,7 +71,7 @@ export default {
     },
     signUp() {
       axios
-        .post('http://35.198.240.251/user/signup', this.signup)
+        .post('http://localhost:3000/user/signup', this.signup)
         .then(() => {
           this.reset();
           swal('Signup Success!', 'success');

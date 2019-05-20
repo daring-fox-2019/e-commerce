@@ -136,7 +136,7 @@ export default {
   methods: {
     fetchData() {
       axios
-        .get(`http://35.198.240.251/products/${this.$route.params.id}`)
+        .get(`http://localhost:3000/products/${this.$route.params.id}`)
         .then(({ data }) => {
           this.product = data;
         })
@@ -148,7 +148,7 @@ export default {
       if (this.product.stock > 0) {
         axios
           .post(
-            'http://35.198.240.251/cart',
+            'http://localhost:3000/cart',
             { productId: this.product._id },
             { headers: { token: localStorage.token } },
           )
@@ -206,7 +206,7 @@ export default {
       }
 
       axios
-        .put(`http://35.198.240.251/products/${this.product._id}`, data, {
+        .put(`http://localhost:3000/products/${this.product._id}`, data, {
           headers: { token: localStorage.token },
         })
         .then(() => {

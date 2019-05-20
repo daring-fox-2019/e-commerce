@@ -96,7 +96,7 @@ export default {
   },
   created() {
     axios
-      .get('http://35.198.240.251/rajaongkir/province')
+      .get('http://localhost:3000/rajaongkir/province')
       .then(({ data }) => {
         this.province = data;
       })
@@ -107,7 +107,7 @@ export default {
   watch: {
     selectedProvince(val) {
       axios
-        .post('http://35.198.240.251/rajaongkir/city', {
+        .post('http://localhost:3000/rajaongkir/city', {
           idProvince: val.province_id,
         })
         .then(({ data }) => {
@@ -119,7 +119,7 @@ export default {
     },
     selectedCity(val) {
       axios
-        .post('http://35.198.240.251/rajaongkir/cost', {
+        .post('http://localhost:3000/rajaongkir/cost', {
           idCity: val.city_id,
         })
         .then(({ data }) => {
@@ -142,7 +142,7 @@ export default {
     buyin() {
       axios
         .post(
-          'http://35.198.240.251/transaction',
+          'http://localhost:3000/transaction',
           {
             cart: this.products,
             totalPrice: this.grandTotal,

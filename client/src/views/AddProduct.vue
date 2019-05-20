@@ -122,7 +122,7 @@ export default {
       }
 
       axios
-        .post('http://35.198.240.251/products', data, {
+        .post('http://localhost:3000/products', data, {
           headers: { token: localStorage.token },
         })
         .then(() => {

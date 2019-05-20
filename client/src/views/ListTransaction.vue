@@ -72,7 +72,7 @@ export default {
     loadData() {
       if (this.$store.state.isAdmin) {
         axios
-          .get('http://35.198.240.251/transaction', {
+          .get('http://localhost:3000/transaction', {
             headers: {
               token: localStorage.token,
             },
@@ -111,7 +111,7 @@ export default {
           });
       } else {
         axios
-          .get('http://35.198.240.251/transaction/user', {
+          .get('http://localhost:3000/transaction/user', {
             headers: {
               token: localStorage.token,
             },
@@ -160,7 +160,7 @@ export default {
       }
       axios
         .patch(
-          `http://35.198.240.251/transaction/${id}`,
+          `http://localhost:3000/transaction/${id}`,
           {
             status,
           },

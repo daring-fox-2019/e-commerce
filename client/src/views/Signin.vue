@@ -59,7 +59,7 @@ export default {
   methods: {
     signIn() {
       axios
-        .post('http://35.198.240.251/user/signin', this.signin)
+        .post('http://localhost:3000/user/signin', this.signin)
         .then(({ data }) => {
           this.signin.email = '';
           this.signin.password = '';
