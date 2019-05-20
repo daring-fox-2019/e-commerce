@@ -18,7 +18,7 @@
         </div>
         <input v-if="isAdmin === false && data.status === 'wait for payment'" type="file" class="form-control" @change="previewFile" id="addproductimage">
         <button @click="uploadtransfer(data._id)" v-if="isAdmin === false && data.status === 'wait for payment'" class="btn btn-secondary">upload transfer</button><br>
-        <button @click="accept(data._id)" v-if="isAdmin === true && data.status === 'paid'" class="btn btn-primary">Accept Order</button>
+        <button @click="accept(data._id, data.products)" v-if="isAdmin === true && data.status === 'paid'" class="btn btn-primary">Accept Order</button>
         <button @click="reject(data._id)" v-if="isAdmin === true && data.status === 'paid'" class="btn btn-danger" >reject order</button>
         <button v-if="isAdmin === false && data.status === 'paid'"> Waiting for shipping. . .</button>
         <p v-if="data.status === 'cancelled' ">Order Cancelled by Admin, because of stock are not ready</p>
@@ -158,7 +158,7 @@ export default {
           })
       }
     },
-    accept (id) {
+    accept (id, products) {
       this.$axios({
               method: 'put',
               url: 'http://localhost:3000/cart/'+id,
@@ -174,7 +174,29 @@ export default {
                 console.log('created => ' + JSON.stringify(data))
                 this.tfimage = ""
                 this.$swal('Success', 'Your Order Updated', 'success')
-                this.populateAdmin()
+                
+                for(let i =0; i < products.length; i++){
+                  this.$axios({
+                    method: 'put',
+                    url: 'http://localhost:3000/product/'+products[i]._id,
+                    headers : {
+                      token : localStorage.getItem('token'),
+                      id : localStorage.getItem('user')
+                    },
+                    data : {
+                      stock : products[i].stock - products[i].total
+                    }
+                  })
+                  .then(({response})=>{
+                    this.populateAdmin()
+                  })
+                  .catch(err=>{
+                    this.populateAdmin()
+                    this.$swal('Error', 'Internal Server Error',    'error')
+                    console.log(err)
+                    console.log('error di db pas update stock')
+                  })
+                }
               })
               .catch(err => {
                 this.tfimage = ""
