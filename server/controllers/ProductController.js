@@ -13,6 +13,9 @@ class ProductController {
     }
 
     static findOne(req, res) {
+        console.log(`masuk findone`);
+        console.log(req.params.id);
+        
         Product
             .findOne({ _id: req.params.id })
             .then(product => {
