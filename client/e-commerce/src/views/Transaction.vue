@@ -11,15 +11,17 @@
         total  ->  {{data.total}} item <br>
         amount -> $ {{data.amount}}<br>
         sent to -> {{data.userDetail.address}} <br>
+        email -> {{data.userDetail.email}}
         phone number -> {{data.userDetail.phonenumber}} <br>
         status -> {{data.status}} <br>
+        <img style="height:200px; width:200px;" v-bind:src="data.transfer" v-if="data.transfer" >
         </div>
         <input v-if="isAdmin === false && data.status === 'wait for payment'" type="file" class="form-control" @change="previewFile" id="addproductimage">
         <button @click="uploadtransfer(data._id)" v-if="isAdmin === false && data.status === 'wait for payment'" class="btn btn-secondary">upload transfer</button><br>
-        <button v-if="isAdmin && data.status === 'paid'" class="btn btn-danger" >reject</button>
+        <button @click="accept(data._id)" v-if="isAdmin === true && data.status === 'paid'" class="btn btn-primary">Accept Order</button>
+        <button @click="reject(data._id)" v-if="isAdmin === true && data.status === 'paid'" class="btn btn-danger" >reject order</button>
         <button v-if="isAdmin === false && data.status === 'paid'"> Waiting for shipping. . .</button>
-        <button v-if="isAdmin === true && data.status === 'paid'" class="btn btn-primary">reject order</button>
-        <button v-if="isAdmin === false && data.status === 'shipped'" class="btn btn-primary">send order</button>
+        <p v-if="data.status === 'cancelled' ">Order Cancelled by Admin, because of stock are not ready</p>
         <!-- <b-button</b-button> -->
       </li>
     </ul>
@@ -38,11 +40,18 @@ export default {
       transactions: []
     };
   },
+  created(){
+    if(this.isAdmin === false){
+      this.populateUser()
+    } else {
+      this.populateAdmin()
+    }
+  },
   mounted() {
     if(this.isAdmin === false){
       this.populateUser()
     } else {
-      // this.populateAdmin()
+      this.populateAdmin()
     }
   },
   methods : {
@@ -149,11 +158,56 @@ export default {
           })
       }
     },
-    accept () {
-
+    accept (id) {
+      this.$axios({
+              method: 'put',
+              url: 'http://localhost:3000/cart/'+id,
+              headers: {
+                id: localStorage.getItem('user'),
+                token: localStorage.getItem('token')
+              },
+              data: {
+                status : "shipped"
+              }
+            })
+              .then(({ data }) => {
+                console.log('created => ' + JSON.stringify(data))
+                this.tfimage = ""
+                this.$swal('Success', 'Your Order Updated', 'success')
+                this.populateAdmin()
+              })
+              .catch(err => {
+                this.tfimage = ""
+                this.$swal('Error', 'Internal Server Error', 'error')
+                console.log('error di db')
+                console.log(err)
+              })
     },
-    reject () {
-
+    reject (id) {
+      this.$axios({
+              method: 'put',
+              url: 'http://localhost:3000/cart/'+id,
+              headers: {
+                id: localStorage.getItem('user'),
+                token: localStorage.getItem('token')
+              },
+              data: {
+                status : "cancelled"
+              }
+            })
+              .then(({ data }) => {
+                console.log('created => ' + JSON.stringify(data))
+                this.tfimage = ""
+                this.$swal('Success', 'Your Order Updated', 'success')
+                this.populateAdmin()
+              })
+              .catch(err => {
+                this.tfimage = ""
+                this.$swal('Error', 'Internal Server Error', 'error')
+                console.log('error di db')
+                console.log(err)
+                this.populateAdmin()
+              })
     },
     previewFile (e) {
       this.tfimage = e.target.files[0]
