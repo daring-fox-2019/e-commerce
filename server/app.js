@@ -16,8 +16,8 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended:false }))
 
-mongoose.connect('mongodb://localhost/ecommerce_'+ NODE_ENV, { useNewUrlParser:true }, (err)=>{
-// mongoose.connect(process.env.ATLAS_URI, { useNewUrlParser:true }, (err)=>{
+// mongoose.connect('mongodb://localhost/ecommerce_'+ NODE_ENV, { useNewUrlParser:true }, (err)=>{
+mongoose.connect(`${process.env.ATLAS_URI}`, { useNewUrlParser:true }, (err)=>{
     if(err) console.log(`Please make sure your database is ON`)
     else console.log(`Database Connected!`)
 })
