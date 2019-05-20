@@ -78,6 +78,7 @@ describe('Product tests', function() {
                 .post('/admin/products')
                 .send(newProduct)
                 .end(function(err, res) {
+                    console.log(JSON.stringify(res.body, null, 2 ));
                     expect(err).to.be.null;
                     expect(res).to.have.status(201);
                     expect(res.body).to.be.an('object');
@@ -107,7 +108,7 @@ describe('Product tests', function() {
         };
         chai
             .request(app)
-            .put(`/products/${productId}`)
+            .put(`/admin/products/${productId}`)
             .send(newProduct)
             .end(function(err, res) {
                 expect(err).to.be.null;
@@ -125,6 +126,16 @@ describe('Product tests', function() {
                 done();
             });
         });
+        it("failed update when token is invalid/user not logged in", function(done){
+            chai
+            .request(app)
+            .put(`/admin/products/5cb4c91945915a175607648f`)
+            .set({authorization:"alknfalknfalkfnaleknf"})
+            .end(function(err,res){
+                expect(res).to.have.status(500);
+                done()
+            })
+        })
     });
 
     describe('DELETE /products/:id', function() {
@@ -132,7 +143,7 @@ describe('Product tests', function() {
 
         chai
             .request(app)
-            .delete(`/products/${productId}`)
+            .delete(`/admin/products/${productId}`)
             .send()
             .end(function(err, res) {
                 expect(err).to.be.null;
@@ -152,7 +163,6 @@ describe('Product tests', function() {
             chai
             .request(app)
             .delete(`/products/5cb4c91945915a175607648f`)
-            .set({authorization:tokenAdmin})
             .end(function(err,res){
                 testFunction.errorTest(err,res,400,"Item id not found")
                 done()

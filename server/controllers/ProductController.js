@@ -99,8 +99,7 @@ class ProductController {
             res.status(201).json(product);
         })
         .catch(function (err) {
-            console.log(err);
-            res.status(400).json({
+            res.status(500).json({
                 message: 'Internal server error',
                 err
             });
