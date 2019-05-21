@@ -6,7 +6,6 @@ Route | HTTP | Params | Headers | Body | Authentication | Authorization | Descri
 --- | --- | --- | --- | --- | --- | --- | --- | ---
 ```/api/login``` | POST | none | none | email:String, fullName:String, password:String | no | no | Sign in and get an access token based on credentials | Success: Return token, email, fullName and status 200. Error: Return error message and status 500.
 ```/api/register``` | POST | none | none | email:String, fullName:String, password:String | no | no | Sign up with new user info | Success: Return token, email, fullName and status 200. Error: Return error message and status 500.
-```/api/google-login``` | POST | none | none | none | no | no | Sign in or sign up with google account | Success: Return token, email, fullName and status 200. Error: Return error message and status 500.
 
 ## List of item routes:
 
