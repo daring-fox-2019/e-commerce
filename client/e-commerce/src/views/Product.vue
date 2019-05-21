@@ -3,7 +3,7 @@
     <div>
       <div>
         <b-row class="row">
-          <b-col v-if="isAdmin === true" class="col-3" style="margin: 50px;">
+          <b-col v-if="isAdmin" class="col-3" style="margin: 50px;">
             <h3>Add Product</h3>
             <div class="form-group">
               <label for="productname">Product Name</label>
@@ -99,10 +99,9 @@ import swal from 'sweetalert'
 
 export default {
   name: 'Product',
-  props: ['isLogin', 'userId'],
+  props: ['isLogin', 'userId', 'isAdmin'],
   data: function () {
     return {
-      isAdmin: false,
       items: [],
       product: {
         _id: '',
@@ -115,12 +114,8 @@ export default {
       mode: 'add'
     }
   },
-  mounted () {
+  created () {
     this.populateItem()
-    let id = localStorage.getItem('user')
-    if (id === '5ce158d52edb972b1e4dc5c4') {
-      this.isAdmin = true
-    }
   },
   components: {
     listitems

@@ -235,9 +235,6 @@ export default {
     },
     login(data) {
       this.isLogin = data.isLogin;
-      if (data.userId === "5ce158d52edb972b1e4dc5c4") {
-          this.isAdmin = true;
-        }
       this.userId = data.userId;
       this.cart = data.cart;
       this.checkLogin()
