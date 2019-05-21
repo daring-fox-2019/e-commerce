@@ -42,23 +42,31 @@ export default {
   },
   created(){
     if(this.isAdmin === false){
-      this.populateUser()
-    } else {
-      this.populateAdmin()
+      setTimeout( ()=>{
+        this.populateUser()
+      }, 2000)
+    } else { 
+      setTimeout(()=>{
+        this.populateAdmin()
+      }, 2000)
     }
   },
   mounted() {
     if(this.isAdmin === false){
-      this.populateUser()
-    } else {
-      this.populateAdmin()
+      setTimeout( ()=>{
+        this.populateUser()
+      }, 2000)
+    } else { 
+      setTimeout(()=>{
+        this.populateAdmin()
+      }, 2000)
     }
   },
   methods : {
     populateUser () {
       this.$axios({
         methods: "get",
-        url: "http://localhost:3000/cart/"+localStorage.getItem('user'),
+        url: "http://localhost:3000/cart/"+ localStorage.getItem('user'),
         headers: {
           token: localStorage.getItem('token'),
           id: localStorage.getItem('user')
@@ -69,7 +77,7 @@ export default {
           this.transactions = data
         })
         .catch(err=>{
-          console.log(err.response)
+          console.log(JSON.stringify(err))
           this.$swal("error","internal server error", "error")
         })
     },
