@@ -66,7 +66,7 @@ export default {
     populateUser () {
       this.$axios({
         methods: "get",
-        url: "http://localhost:3000/cart/"+ localStorage.getItem('user'),
+        url: "http://35.240.223.244/cart/"+ localStorage.getItem('user'),
         headers: {
           token: localStorage.getItem('token'),
           id: localStorage.getItem('user')
@@ -84,7 +84,7 @@ export default {
     populateAdmin () {
       this.$axios({
         methods: "get",
-        url: "http://localhost:3000/carts",
+        url: "http://35.240.223.244/carts",
         headers: {
           token: localStorage.getItem('token'),
           id: localStorage.getItem('user')
@@ -116,7 +116,7 @@ export default {
         formdata.append('image', blob)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:3000/uploadimg',
+          url: 'http://35.240.223.244/uploadimg',
           headers: {
             token: localStorage.getItem('token'),
             id: localStorage.getItem('user')
@@ -132,7 +132,7 @@ export default {
             })
             this.$axios({
               method: 'put',
-              url: 'http://localhost:3000/cart/'+id,
+              url: 'http://35.240.223.244/cart/'+id,
               headers: {
                 id: localStorage.getItem('user'),
                 token: localStorage.getItem('token')
@@ -169,7 +169,7 @@ export default {
     accept (id, products) {
       this.$axios({
               method: 'put',
-              url: 'http://localhost:3000/cart/'+id,
+              url: 'http://35.240.223.244/cart/'+id,
               headers: {
                 id: localStorage.getItem('user'),
                 token: localStorage.getItem('token')
@@ -186,7 +186,7 @@ export default {
                 for(let i =0; i < products.length; i++){
                   this.$axios({
                     method: 'put',
-                    url: 'http://localhost:3000/product/'+products[i]._id,
+                    url: 'http://35.240.223.244/product/'+products[i]._id,
                     headers : {
                       token : localStorage.getItem('token'),
                       id : localStorage.getItem('user')
@@ -216,7 +216,7 @@ export default {
     reject (id) {
       this.$axios({
               method: 'put',
-              url: 'http://localhost:3000/cart/'+id,
+              url: 'http://35.240.223.244/cart/'+id,
               headers: {
                 id: localStorage.getItem('user'),
                 token: localStorage.getItem('token')

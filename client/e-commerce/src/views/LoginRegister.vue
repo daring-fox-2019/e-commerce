@@ -113,7 +113,7 @@ export default {
     login () {
       this.$axios({
         method: 'post',
-        url: 'http://localhost:3000/login',
+        url: 'http://35.240.223.244/login',
         data: {
           email: this.emaillogin,
           password: this.passwordlogin
@@ -141,7 +141,7 @@ export default {
       this.emailregister !== '') {
         this.$axios({
           method: 'post',
-          url: 'http://localhost:3000/register',
+          url: 'http://35.240.223.244/register',
           data: {
             email: this.emailregister,
             password: this.passwordregister,

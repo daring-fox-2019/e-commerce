@@ -139,7 +139,7 @@ export default {
           console.log('jadi ngehapus')
           this.$axios({
             method: 'delete',
-            url: 'http://localhost:3000/product/' + e,
+            url: 'http://35.240.223.244:3000/product/' + e,
             headers: {
               token: localStorage.getItem('token'),
               id: localStorage.getItem('user')
@@ -177,7 +177,7 @@ export default {
       if (this.product.image === '') {
         this.$axios({
           method: 'put',
-          url: 'http://localhost:3000/product/' + this.product._id,
+          url: 'http://35.240.223.244:3000/product/' + this.product._id,
           headers: {
             token: localStorage.getItem('token'),
             id: localStorage.getItem('user')
@@ -235,7 +235,7 @@ export default {
     populateItem () {
       this.$axios({
         method: 'get',
-        url: 'http://localhost:3000/products',
+        url: 'http://35.240.223.244/products',
         headers: {
           id: localStorage.getItem('user'),
           token: localStorage.getItem('token')
@@ -244,8 +244,8 @@ export default {
         .then(({ data }) => {
           this.items = data
         })
-        .catch(({ response }) => {
-          console.log(response)
+        .catch((err) => {
+          console.log(JSON.stringify(err))
           this.$swal(`${response.status}`, response.data.message, 'error')
         })
     },
@@ -279,7 +279,7 @@ export default {
 
         this.$axios({
           method: 'post',
-          url: 'http://localhost:3000/uploadimg',
+          url: 'http://35.240.223.244/uploadimg',
           headers: {
             token: localStorage.getItem('token'),
             id: localStorage.getItem('user')
@@ -294,7 +294,7 @@ export default {
             })
             this.$axios({
               method: 'post',
-              url: 'http://localhost:3000/product',
+              url: 'http://35.240.223.244/product',
               headers: {
                 id: localStorage.getItem('user'),
                 token: localStorage.getItem('token')

@@ -162,7 +162,7 @@ export default {
         }   
       this.$axios({
           method: 'post',
-          url: 'http://localhost:3000/cart',
+          url: 'http://35.240.223.244/cart',
           headers: {
             id: localStorage.getItem('user'),
             token: localStorage.getItem('token')
@@ -186,7 +186,7 @@ export default {
     updateCart(i) {
       this.$axios({
         method: "put",
-        url: "http://localhost:3000/user/" + this.userId,
+        url: "http://35.240.223.244/user/" + this.userId,
         headers: {
           token: localStorage.getItem("token"),
           id: localStorage.getItem("user")
@@ -259,7 +259,7 @@ export default {
     getCartItem() {
       this.$axios({
         method: "get",
-        url: "http://localhost:3000/user/" + this.userId,
+        url: "http://35.240.223.244/user/" + this.userId,
         headers: {
           id: localStorage.getItem("user"),
           token: localStorage.getItem("token")
