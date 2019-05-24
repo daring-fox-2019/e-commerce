@@ -1,4 +1,8 @@
-# e-commerce
+# e-commerce(warung)
+
+Link: [warung.emrido.site](http://warung.emrido.site/)
+
+Server: [warung-server.emrido.site](http://warung-server.emrido.site/)
 
 ## Basic Routes
 
@@ -258,7 +262,7 @@
         }
     ]
     ```
-    
+
 ## Usage
 
 Run this command: 
