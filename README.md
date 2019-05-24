@@ -1,5 +1,7 @@
 # e-commerce
 
+URL: http://f-commerce.sutansyah.co/
+
 | Path | Method | Request | Success Response | Error Response |
 |------------------|:------:|------------------------------------------------------------------------------|-------------------------------------------|----------------|
 | /users | POST | body:{name,email,password} | 201, {data: created user} | 500 |
