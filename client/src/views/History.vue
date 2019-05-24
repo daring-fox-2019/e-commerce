@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import swal from 'sweetalert'
+
 export default {
   data() {
     return {
@@ -56,10 +58,10 @@ export default {
   props: ["isLoggedIn"],
   methods: {
     claimPurchase(id) {
-      swal.fire(id)
+      swal(id)
       axios({
         method: 'put',
-        url: `http://localhost:3000/transactions/${id}`,
+        url: `http://34.87.56.140/transactions/${id}`,
         headers: {
           token: localStorage.token
         },
@@ -68,7 +70,7 @@ export default {
         }
       })
         .then(({ data }) => {
-          swal.fire('Purchase claimed!', 'Play your games now!', 'success')
+          swal('Purchase claimed!', 'Play your games now!', 'success')
           this.getTransaction()
         })
         .catch(err => {
@@ -78,7 +80,7 @@ export default {
     getTransaction() {
       axios({
         method: "get",
-        url: "http://localhost:3000/transactions/myTransaction",
+        url: "http://34.87.56.140/transactions/myTransaction",
         headers: {
           token: localStorage.token
         }
@@ -100,7 +102,7 @@ export default {
           console.log({ err });
           // console.log(response)
           // let { status, statusText, data } = response
-          // swal.fire(`Error ${status}: ${statusText}`, data.message, 'error')
+          // swal(`Error ${status}: ${statusText}`, data.message, 'error')
         });
     }
   },

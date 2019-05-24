@@ -2,7 +2,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Vuelidate from 'vuelidate';
-import Swal from 'sweetalert2';
+import swal from 'sweetalert'
+
 
 Vue.use(Vuex);
 Vue.use(Vuelidate);
@@ -40,7 +41,7 @@ export default new Vuex.Store({
       console.log({payload})
       axios({
         method: 'post',
-        url: 'http://localhost:3000/users/login',
+        url: 'http://34.87.56.140/users/login',
         data: payload
       })
         .then(({ data }) => {
@@ -48,7 +49,7 @@ export default new Vuex.Store({
         })
         .catch(({response}) => {
           let { data } = response
-          Swal.fire({
+          swal({
             type: 'error',
             title: 'Ooopss....',
             text: data.message

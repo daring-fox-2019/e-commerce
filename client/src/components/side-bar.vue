@@ -1,9 +1,18 @@
 <template>
-  <v-navigation-drawer class="dark-default-1" fixed :clipped="$vuetify.breakpoint.mdAndUp" app v-model="drawer"
-  > <!-- v-model="drawer" -->
+  <v-navigation-drawer
+    class="dark-default-1"
+    fixed
+    :clipped="$vuetify.breakpoint.mdAndUp"
+    app
+    v-model="drawer"
+  >
     <v-list dense>
-      <template v-for="item in items" >
-        <v-list-tile :key="item.text" style="cursor: pointer;" @click.prevent="switchPage(item.route)">
+      <template v-for="item in items">
+        <v-list-tile
+          :key="item.text"
+          style="cursor: pointer;"
+          @click.prevent="switchPage(item.route)"
+        >
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -12,7 +21,11 @@
           </v-list-tile-content>
         </v-list-tile>
       </template>
-      <v-list-tile style="cursor: pointer;" @click.prevent="switchPage('/allHistory')" v-show="role == 'admin'">
+      <v-list-tile
+        style="cursor: pointer;"
+        @click.prevent="switchPage('/allHistory')"
+        v-show="role == 'admin'"
+      >
         <v-list-tile-action>
           <v-icon>history</v-icon>
         </v-list-tile-action>
@@ -26,36 +39,35 @@
 
 <script>
 export default {
-  name: 'side-bar',
-  props: [
-    'drawer',
-    'items',
-    'isLoggedIn'
-  ],
+  name: "side-bar",
+  props: ["drawer", "items", "isLoggedIn"],
   data() {
     return {
-      role: ''
+      role: ""
     };
   },
   methods: {
     switchPage(route) {
-      this.$router.push(route)
+      this.$router.push(route);
     }
   },
   created() {
-    if(localStorage) {
-      this.role = localStorage.role
+    if (localStorage) {
+      this.role = localStorage.role;
     } else {
-      this.role = ''
+      this.role = "";
     }
   },
   watch: {
     isLoggedIn() {
-      if(this.isLoggedIn) {
-        this.role = localStorage.role
+      if (this.isLoggedIn) {
+        this.role = localStorage.role;
       } else {
-        this.role = ''
+        this.role = "";
       }
+    },
+    drawer() {
+      // this.$emit('toggle')
     }
   }
 };

@@ -7,7 +7,7 @@
       @login="login"
       @logout="logout"
     />
-    <sidebar :drawer="drawer" :items="items" :isLoggedIn="isLoggedIn"/>
+    <sidebar :drawer="drawer" :items="items" :isLoggedIn="isLoggedIn"/><!-- @toggle="drawer = !drawer" -->
     <v-content class="dark-default">
       <router-view
         class="dark-default"
@@ -24,6 +24,7 @@
 import toolbar from "./components/v-toolbar.vue";
 import sidebar from "./components/side-bar.vue";
 import LoginForm from "./components/login-form.vue";
+import swal from "sweetalert";
 
 export default {
   name: "App",
@@ -31,6 +32,8 @@ export default {
     toolbar,
     sidebar,
     LoginForm
+  },
+  mounted() {
   },
   data() {
     return {
@@ -60,25 +63,7 @@ export default {
           icon: "history",
           text: "Order History",
           route: "/orderHistory"
-        },
-        // {
-        //   id: 5,
-        //   icon: "history",
-        //   text: "All Users Order History",
-        //   route: "/allHistory"
-        // },
-        // {
-        //   id: 5,
-        //   icon: "power_settings_new",
-        //   text: "Login",
-        //   route: "/login"
-        // },
-        // {
-        //   id: 6,
-        //   icon: "power_settings_new",
-        //   text: "Log out",
-        //   route: "/logout"
-        // }
+        }
       ],
       games: [],
       loginData: {
@@ -95,20 +80,17 @@ export default {
   },
   methods: {
     updateCart(data) {
-      // console.log("jalan update")
       this.getCart();
     },
     getCart() {
-      // console.log('masuk get cart')
       axios({
         method: "get",
-        url: "http://localhost:3000/carts/myCart",
+        url: "http://34.87.56.140/carts/myCart",
         headers: {
           token: localStorage.token
         }
       })
         .then(({ data }) => {
-          // console.log({ data, dari: "getmycarts" });
           this.userCart = data;
         })
         .catch(err => {
@@ -118,17 +100,17 @@ export default {
     getProducts() {
       axios({
         method: "get",
-        url: "http://localhost:3000/products"
+        url: "http://34.87.56.140/products"
       })
         .then(({ data }) => {
           this.games = data;
           data.forEach(item => {
-            if(item.price > 0) {
-              item.priceStr = 'Rp ' + item.price
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            if (item.price > 0) {
+              item.priceStr =
+                "Rp " +
+                item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             } else {
-              item.priceStr = 'Free to Play'
+              item.priceStr = "Free to Play";
             }
           });
         })
@@ -137,10 +119,9 @@ export default {
         });
     },
     login(input) {
-      // console.log({ input });
       axios({
         method: "post",
-        url: "http://localhost:3000/users/login",
+        url: "http://34.87.56.140/users/login",
         data: input
       })
         .then(({ data }) => {
@@ -160,30 +141,22 @@ export default {
           this.isLoggedIn = true;
           this.getCart();
           this.drawer = false;
-          swal.fire({
+          swal({
             type: "success",
             title: `Logged in!`,
             text: `Welcome, ${name}! 👋🏻`
           });
         })
         .catch(err => {
-          console.log({err})
-          // let { data } = response;
-          // Swal.fire({
-          //   type: "error",
-          //   title: "Ooopss....",
-          //   text: data.message
-          // });
+          console.log({ err });
         });
     },
     checkLog() {
       if (localStorage.token != undefined) {
-        // console.log('logged in')
         this.isLoggedIn = true;
         this.getCart();
       } else {
-        // console.log('not logged in')
-        this.userCart = []
+        this.userCart = [];
         this.isLoggedIn = false;
       }
     },
@@ -192,7 +165,7 @@ export default {
       window.localStorage.removeItem("id");
       window.localStorage.removeItem("email");
       window.localStorage.removeItem("role");
-      swal.fire("Signed out", `Goodbye, ${localStorage.name}!`, "success");
+      swal("Signed out", `Goodbye, ${localStorage.name}!`, "success");
       window.localStorage.removeItem("name");
       this.isLoggedIn = false;
       this.checkLog();
@@ -210,5 +183,8 @@ a {
 }
 .dark-default-1 {
   background-color: #033f74 !important;
+}
+.swal-modal {
+  font-family: Helvetica;
 }
 </style>

@@ -10,10 +10,10 @@
             </v-toolbar>
             <v-card-text>
               <v-form>
-                <v-text-field prepend-icon="person" name="name" label="name" type="text" v-model="registerForm.name"
+                <v-text-field prepend-icon="person" name="name" label="Name" type="text" v-model="registerForm.name"
                   :rules="[v => !!v || 'Name is required']"
                 ></v-text-field>
-                <v-text-field prepend-icon="alternate_email" name="login" label="Login" type="text" v-model="registerForm.email"
+                <v-text-field prepend-icon="alternate_email" name="email" label="Email" type="text" v-model="registerForm.email"
                   :rules="[v => !!v || 'Email is required']"
                 ></v-text-field>
                 <v-text-field
@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import swal from 'sweetalert'
+
 export default {
   name: 'login-form',
   data: () => ({
@@ -57,14 +59,14 @@ export default {
       let { name, email, password } = this.registerForm
       axios({
         method: 'post',
-        url: 'http://localhost:3000/users/register',
+        url: 'http://34.87.56.140/users/register',
         data: {
           name, email, password
         },
       })
         .then(({ data }) => {
           console.log(data)
-          swal.fire({
+          swal({
             type: 'success',
             title: 'Registered',
             text: `Welcome to the club, ${name}!`
@@ -73,7 +75,7 @@ export default {
         })
         .catch(({ response }) => {
           let { status, statusText, data } = response
-          swal.fire(`Error ${status}: ${statusText}`, data.message, 'error')
+          swal(`Error ${status}: ${statusText}`, data.message, 'error')
           console.log({ response })
         })
     }

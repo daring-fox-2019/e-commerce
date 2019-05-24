@@ -54,6 +54,8 @@
 </template>
 
 <script>
+import swal from 'sweetalert'
+
 export default {
   name: "cart",
   props: ["isLoggedIn"],
@@ -64,21 +66,17 @@ export default {
       totalStr: ""
     };
   },
-  // props: ['userCart'],
   methods: {
     getCart() {
-      // console.log('masuk get cart')
       axios({
         method: "get",
-        url: "http://localhost:3000/carts/myCart",
+        url: "http://34.87.56.140/carts/myCart",
         headers: {
           token: localStorage.token
         }
       })
         .then(({ data }) => {
-          // console.log({ data, dari: "getmycarts" });
           data.forEach(item => {
-            // let { product } = item
             item.product.priceStr =
               "Rp " +
               item.product.price
@@ -95,16 +93,15 @@ export default {
         });
     },
     removeFromCart(id) {
-      // swal.fire(id)
       axios({
         method: "delete",
-        url: `http://localhost:3000/carts/${id}`,
+        url: `http://34.87.56.140/carts/${id}`,
         headers: {
           token: localStorage.token
         }
       })
         .then(({ data }) => {
-          swal.fire("Item Deleted", " ", "success");
+          swal("Item Deleted", " ", "success");
           this.total = 0;
           this.getCart();
           this.$emit("update-cart");
@@ -114,18 +111,15 @@ export default {
         });
     },
     checkOut() {
-      swal
-        .fire({
+      swal({
           title: "Confirm checkout?",
           text: `The total amount you need to pay is ${this.totalStr}`,
-          type: "question",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, delete it!"
+          icon: "warning",
+          buttons: true,
+          // dangerMode: true,
         })
         .then(result => {
-          if (result.value) {
+          if (result) {
             let games = [];
             this.cart.forEach(item => {
               games.push(item.product);
@@ -133,7 +127,7 @@ export default {
             console.log({ products: games, total: this.total });
             axios({
               method: "post",
-              url: "http://localhost:3000/transactions",
+              url: "http://34.87.56.140/transactions",
               headers: {
                 token: localStorage.token
               },
@@ -143,7 +137,7 @@ export default {
               }
             })
               .then(({ data }) => {
-                swal.fire(
+                swal(
                   "Success!",
                   "Have fun playing your new games.",
                   "success"
@@ -153,7 +147,7 @@ export default {
               })
               .catch(({ response }) => {
                 let { status, statusText, data } = response;
-                swal.fire(`Error ${status}: ${statusText}`, data.message);
+                swal(`Error ${status}: ${statusText}`, data.message);
                 console.log({ response });
               });
           }
@@ -176,4 +170,5 @@ export default {
 </script>
 
 <style>
+
 </style>

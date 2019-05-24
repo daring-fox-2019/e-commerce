@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import swal from 'sweetalert'
+
 export default {
   name: "gameDetail",
   props: {},
@@ -49,7 +51,7 @@ export default {
       } else {
         axios({
           method: 'post',
-          url: 'http://localhost:3000/carts',
+          url: 'http://34.87.56.140/carts',
           headers: {
             token: localStorage.token
           },
@@ -58,7 +60,7 @@ export default {
           }
         })
           .then(({data}) => {
-            swal.fire('Added to cart!', this.currentGame.name, 'success')
+            swal('Added to cart!', this.currentGame.name, 'success')
             this.$emit('update-cart', data)
           })
           .catch(err => {
@@ -71,7 +73,7 @@ export default {
     // console.log(this.$route.params);
     axios({
       method: "get",
-      url: `http://localhost:3000/products/${this.$route.params.id}`
+      url: `http://34.87.56.140/products/${this.$route.params.id}`
     })
       .then(({ data }) => {
         // console.log({ data });

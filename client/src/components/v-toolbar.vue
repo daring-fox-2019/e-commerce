@@ -74,6 +74,8 @@
 </template>
 
 <script>
+import swal from 'sweetalert'
+
 export default {
   name: "toolbar",
   props: ["isLoggedIn", "userCart"],
@@ -103,7 +105,7 @@ export default {
         this.snackbar = true;
         this.login();
       } else {
-        swal.fire("Invalid Input");
+        swal("Invalid Input");
       }
     },
     emptyForm() {

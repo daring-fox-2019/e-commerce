@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import swal from 'sweetalert'
+
 export default {
   name: 'login-form',
   data: () => ({
@@ -57,14 +59,14 @@ export default {
       let { name, email, password } = this.registerForm
       axios({
         method: 'post',
-        url: 'http://localhost:3000/users/register',
+        url: 'http://34.87.56.140/users/register',
         data: {
           name, email, password
         },
       })
         .then(({ data }) => {
           console.log(data)
-          swal.fire({
+          swal({
             type: 'success',
             title: 'Registered',
             text: `Welcome to the club, ${name}!`

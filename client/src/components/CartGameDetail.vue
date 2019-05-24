@@ -46,7 +46,7 @@ export default {
     fetchGame() {
       axios({
         method: "get",
-        url: `http://localhost:3000/products/${this.$route.params.id}`
+        url: `http://34.87.56.140/products/${this.$route.params.id}`
       })
         .then(({ data }) => {
           // console.log({ data });

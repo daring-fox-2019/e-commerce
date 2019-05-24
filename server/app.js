@@ -6,7 +6,7 @@ const route = require('./routes')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const error = require('./middlewares/error')
-mongoose.connect('mongodb://localhost:27017/e-commerce-test',{ useNewUrlParser : true, useFindAndModify: false }, (err) => {
+mongoose.connect(process.env.MONGODB_LINK,{ useNewUrlParser : true, useFindAndModify: false }, (err) => {
   if(err) console.log('Failed connecting to database.')
   else console.log('Success connecting to database!')
 })

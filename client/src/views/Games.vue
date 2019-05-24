@@ -57,7 +57,7 @@ export default {
     fetchGames() {
       axios({
         method: "get",
-        url: `http://localhost:3000/products`
+        url: `http://34.87.56.140/products`
       })
         .then(({ data }) => {
           data.forEach(item => {

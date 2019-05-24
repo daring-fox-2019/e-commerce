@@ -1,5 +1,14 @@
 <template>
   <v-container grid-list-md>
+    <v-flex class="mb-4">
+      <v-card>
+        <v-card-title>
+          <h1>Purchase Summary</h1>
+        </v-card-title>
+        <canvas id="chart2" width="400" height="100"></canvas>
+      </v-card>
+    </v-flex>
+
     <v-flex>
       <v-card>
         <v-card-text v-show="isLoggedIn">
@@ -13,27 +22,33 @@
                   <h2>Total: {{ item.totalStr }}</h2>
                 </div>
                 <v-layout>
-                  <v-card v-for="(game, index) in item.products" :key="index" width="270" class="ma-2">
+                  <v-card
+                    v-for="(game, index) in item.products"
+                    :key="index"
+                    width="270"
+                    class="ma-2"
+                  >
                     <v-card-title>{{ game.name }} {{ game.priceStr }}</v-card-title>
                     <v-card-text>
                       <v-layout row>
                         <v-flex>
-                          <v-img :src="require(`../assets/game/${game.shortkey}-1.jpg`)" width="230"></v-img>
+                          <v-img
+                            :src="require(`../assets/game/${game.shortkey}-1.jpg`)"
+                            width="230"
+                          ></v-img>
                         </v-flex>
                       </v-layout>
                     </v-card-text>
                   </v-card>
                 </v-layout>
               </v-card-text>
-              <v-card-footer>
+              <v-card-actions>
                 <v-container>
-                  <v-btn color="success" v-show="!item.deliveryStatus" @click.prevent="claimPurchase(item._id)">Claim your purchase</v-btn>
+                  <v-btn v-show="!item.deliveryStatus" disabled>Not yet claimed</v-btn>
                   <v-btn disabled v-show="item.deliveryStatus">Claimed</v-btn>
                 </v-container>
-                <v-layout>
-
-                </v-layout>
-              </v-card-footer>
+                <v-layout></v-layout>
+              </v-card-actions>
             </v-card>
             <v-divider class="mt-2"></v-divider>
           </div>
@@ -47,19 +62,75 @@
 </template>
 
 <script>
+import swal from "sweetalert";
+import { Bar } from "vue-chartjs";
+import Chart from "chart.js";
+
 export default {
   data() {
     return {
       orders: []
     };
   },
+  extends: Bar,
+  mounted() {
+    console.log('mounted')
+    axios({
+      method: 'get',
+      url: 'http://34.87.56.140/transactions',
+      headers: {
+        token: localStorage.token
+      }
+    })
+      .then(({ data }) => {
+        // console.table(data)
+        let labels = []
+        let dataset = []
+        data.forEach(item => {
+          let time = new Date(item.createdAt).toDateString()
+          let income = item.total / 1000
+          labels.push(time)
+          dataset.push(income)
+        })
+        var ctx = document.getElementById("chart2").getContext("2d");
+        var myChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels,
+            datasets: [
+              {
+                label: "Income (in Rp 1.000,-)",
+                data: dataset,
+                backgroundColor: 
+                  "rgba(54, 162, 235, 0.5)",
+                borderWidth: 1
+              }
+            ]
+          },
+          options: {
+            scales: {
+              yAxes: [
+                {
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }
+              ]
+            }
+          }
+        });
+      })
+      .catch(err => {
+        swal(err.message)
+      })
+  },
   props: ["isLoggedIn"],
   methods: {
     claimPurchase(id) {
-      swal.fire(id)
+      swal(id);
       axios({
-        method: 'put',
-        url: `http://localhost:3000/transactions/${id}`,
+        method: "put",
+        url: `http://34.87.56.140/transactions/${id}`,
         headers: {
           token: localStorage.token
         },
@@ -68,17 +139,18 @@ export default {
         }
       })
         .then(({ data }) => {
-          swal.fire('Purchase claimed!', 'Play your games now!', 'success')
-          this.getTransaction()
+          swal("Purchase claimed!", "Play your games now!", "success");
+          this.getTransaction();
         })
         .catch(err => {
-          console.log({ err })
-        })
+          console.log({ err });
+        });
     },
     getTransaction() {
+      console.log('get transaction start')
       axios({
         method: "get",
-        url: "http://localhost:3000/transactions",
+        url: "http://34.87.56.140/transactions",
         headers: {
           token: localStorage.token
         }
@@ -93,28 +165,30 @@ export default {
               "Rp " +
               item.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           });
-          console.log(data);
+          // console.log(data);
           this.orders = data;
+          console.log('get transaction end')
         })
         .catch(err => {
           console.log({ err });
           // console.log(response)
           // let { status, statusText, data } = response
-          // swal.fire(`Error ${status}: ${statusText}`, data.message, 'error')
+          // swal(`Error ${status}: ${statusText}`, data.message, 'error')
         });
     }
   },
   created() {
+    console.log('created')
     this.getTransaction();
   },
   watch: {
     isLoggedIn() {
-      if(this.isLoggedIn) {
-        this.getTransaction()
+      if (this.isLoggedIn) {
+        this.getTransaction();
       } else {
-        this.orders = []
+        this.orders = [];
       }
-    },
+    }
   }
 };
 </script>
