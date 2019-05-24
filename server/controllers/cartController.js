@@ -104,10 +104,19 @@ class CartController{
         let productId  =req.params.productid
         console.log('masuk remove item',cartId,productId);
         Cart
-        .findOneAndUpdate({_id : cartId},{$pull : {products : productId}},{new : true})
+        .findOne({_id : cartId})
         .then(data =>{
-            console.log('success di remove item',data);
-            
+            console.log('dapet cart',data);
+            let checkProduct = data.products.indexOf(productId)
+            if(checkProduct !== -1){
+                console.log('ada data dan mau splice',checkProduct);
+                data.products.splice(checkProduct,1)
+                return data.save()
+            }else{ 
+                return data
+            }
+        })
+        .then(data =>{
             res.status(200).json(data)
         })
         .catch(err =>{

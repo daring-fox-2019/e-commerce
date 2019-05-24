@@ -7,6 +7,7 @@
   <b-nav-form>
     <b-form-input v-model="searchQuery" type="text" class="col-8 offset-2 mr-sm-2" placeholder="Search"></b-form-input>
   </b-nav-form>
+  
     <div class="dflex justify-content-center jumbotron" style="background-color : transparent">
       <!-- <div class="card col">
         <h1 class="card">Product List</h1>
@@ -21,7 +22,7 @@
     </div> -->
     <div class="card col-8 offset-2">
     <div class="row justify-content-center">
-      <div v-for="product in products" :key="product._id">
+      <div v-for="product in filteredResources" :key="product._id">
       <router-link :to="product._id + '/detailPage'" style="text-decoration: none; color: black">
       <b-card
         :img-src="product.image"
@@ -85,9 +86,10 @@ export default {
     }
   },
   computed: {
-    filteredResources(){
-      console.log(this.searchQuery);
+    filteredResources: function(){
       if(this.searchQuery){
+        // console.log(this.searchQuery,'==========');
+        
           return this.products.filter((item)=>{
               return item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
           })
@@ -118,6 +120,8 @@ export default {
         // console.log(element);
         this.products.push(element)
       });
+      // console.log('ini array products',this.products);
+      
     })
     .catch(err =>{
       console.log(err);
