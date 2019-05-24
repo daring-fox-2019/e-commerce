@@ -59,6 +59,7 @@ export default {
       this.$store.commit('setAdmin', false);
       localStorage.removeItem('token');
       localStorage.removeItem('name');
+      localStorage.removeItem('role');
       swal('Logout Success!', '', 'success');
       this.$router.push('/');
     },

@@ -1,10 +1,10 @@
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 const app = require('../app')
-const clearProduct = require('../helpers/clearProduct')
+const { product } = require('../helpers/clear')
 const fs = require('fs')
 const modelUser = require('../models/user')
-const { hash, compare } = require('../helpers/bcrypt')
+const { compare } = require('../helpers/bcrypt')
 const { sign } = require('../helpers/jwt')
 
 chai.should()
@@ -25,7 +25,7 @@ let newProduct = {
 }
 
 before(function (done) {
-  clearProduct(done)
+  product(done)
 });
 
 before(function (done) {
@@ -46,7 +46,7 @@ before(function (done) {
 describe('Product', function () {
   describe('POST /', function () {
     it('should send a new object product', function (done) {
-      
+
       this.timeout(10000)
       chai
         .request(app)

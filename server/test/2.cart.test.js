@@ -5,6 +5,7 @@ const modelUser = require('../models/user')
 const modelProduct = require('../models/product')
 const { compare } = require('../helpers/bcrypt')
 const { sign } = require('../helpers/jwt')
+const { cart } = require('../helpers/clear')
 
 chai.should()
 chai.use(chaiHttp);
@@ -13,6 +14,11 @@ let token = null
 let cartId = null
 let product = null
 let userId = null
+
+before(function (done) {
+  cart(done)
+});
+
 
 let user = {
   name: 'pras',
@@ -27,8 +33,8 @@ before(function (done) {
     .then(userFound => {
       if (userFound) {
         if (compare(user.password, userFound.password)) {
-          token = sign({ _id: userFound._id, name: userFound.name, email: userFound.email }) 
-          userId = userFound._id    
+          token = sign({ _id: userFound._id, name: userFound.name, email: userFound.email })
+          userId = userFound._id
         }
       }
       done()
@@ -44,10 +50,10 @@ let newProduct = {
 }
 before(function (done) {
   modelProduct.create(newProduct)
-  .then(data => {
-    product = data._id
-    done()
-  })
+    .then(data => {
+      product = data._id
+      done()
+    })
 });
 
 
@@ -59,7 +65,7 @@ describe('Cart', function () {
       let newCart = {
         productId: product,
         quantity: 3,
-      }      
+      }
       chai
         .request(app)
         .post('/cart')

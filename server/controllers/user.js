@@ -1,16 +1,22 @@
 const modelUser = require('../models/user')
 const { compare } = require('../helpers/bcrypt')
 const { sign } = require('../helpers/jwt')
+const { mailOptions, transporter } = require('../helpers/nodemailer')
+const kue = require('kue')
+const queue = kue.createQueue()
 
 class userController {
   static signup(req, res) {
     let newUser = {
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      role: req.body.role
     }
     modelUser.create(newUser)
       .then(data => {
+        mailOptions.to = req.body.email
+        queue.create('email').save()
         res.status(201).json(data)
       })
       .catch(err => {
@@ -40,7 +46,18 @@ class userController {
         res.status(500).json(err)
       })
   }
-
 }
+
+
+queue.process('email', function (job, done) {
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      return console.log(error);
+    } else {
+      done()
+    }
+  })
+})
+
 
 module.exports = userController

@@ -43,15 +43,16 @@ class Product {
       })
       .then(() => {
         req.body.cart.forEach(element => {
-          return modelProduct.findById(element.productId._id)
+          return modelCart.findById(element)
+            .populate('productId')
             .then((data) => {
-              let stock = data.stock - element.quantity
-              return modelProduct.findOneAndUpdate({ _id: element.productId._id }, { $set: { stock: stock } }, { useFindAndModify: false, new: true })
+              let stock = data.productId.stock - data.quantity
+              return modelProduct.findByIdAndUpdate(data.productId._id, { $set: { stock: stock } }, { useFindAndModify: false, new: true })
             })
-            .then(() => {
-            })
+            .then(() => {})
         });
         res.status(201).json(newData)
+
       })
       .catch(err => {
         res.status(500).json(err)

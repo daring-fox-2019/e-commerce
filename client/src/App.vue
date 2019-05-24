@@ -31,6 +31,8 @@ export default {
   created() {
     if (localStorage.token) {
       this.$store.commit('setLogin', true);
+    }
+    if (localStorage.role) {
       this.$store.commit('setAdmin', true);
     }
     this.$store.dispatch('loadProduct');

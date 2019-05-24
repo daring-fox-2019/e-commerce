@@ -1,13 +1,13 @@
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 const app = require('../app')
-const clearUser = require('../helpers/clearUser')
+const { user } = require('../helpers/clear')
 
 chai.should()
 chai.use(chaiHttp)
 
 before(function (done) {
-  clearUser(done)
+  user(done)
 });
 
 let newUser = {
@@ -30,7 +30,7 @@ describe('User', function () {
         .request(app)
         .post('/user/signup')
         .send(newUser)
-        .end(function (err, res) {
+        .end(function (err, res) {          
           res.should.to.have.status(201);
           res.body.should.be.a('object');
           res.body.should.have.property('name');
@@ -44,7 +44,7 @@ describe('User', function () {
           res.body.password.should.not.equal(newUser.password);
           res.body.should.have.property('role');
           res.body.role.should.be.a('string');
-          res.body.role.should.not.equal(newUser.role);
+          res.body.role.should.equal(newUser.role);
           done();
         })
     })

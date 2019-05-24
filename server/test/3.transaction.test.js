@@ -4,7 +4,7 @@ const app = require('../app')
 const modelUser = require('../models/user')
 const modelProduct = require('../models/product')
 const modelCart = require('../models/cart')
-const clearTransaction = require('../helpers/clearTransaction')
+const { transaction } = require('../helpers/clear')
 const { compare } = require('../helpers/bcrypt')
 const { sign } = require('../helpers/jwt')
 
@@ -18,7 +18,7 @@ let userId = null
 let transactionId = null
 
 before(function (done) {
-  clearTransaction(done)
+  transaction(done)
 });
 
 let user = {
@@ -89,7 +89,7 @@ describe('Transaction', function () {
           res.body.should.have.property('totalPrice');
           res.body.totalPrice.should.be.a('number');
           res.body.should.have.property('status');
-          res.body.status.should.be.a('boolean');
+          res.body.status.should.be.a('string');
           transactionId = res.body._id
 
           done();
@@ -102,21 +102,20 @@ describe('Transaction', function () {
       chai
         .request(app)
         .get('/transaction')
-        .send({status: true})
         .set('token', token)
         .end(function (err, res) {
           res.should.to.have.status(200);
           res.body.should.be.a('array');
           res.body[0].should.have.property('_id');
-          res.body[0].userId.should.be.a('string');
+          res.body[0]._id.should.be.a('string');
           res.body[0].should.have.property('userId');
-          res.body[0].userId.should.be.a('string');
+          res.body[0].userId.should.be.an('object');
           res.body[0].should.have.property('cart');
           res.body[0].cart.should.be.a('array');
           res.body[0].should.have.property('totalPrice');
           res.body[0].totalPrice.should.be.a('number');
           res.body[0].should.have.property('status');
-          res.body[0].status.should.be.a('boolean');
+          res.body[0].status.should.be.a('string');
 
           done();
         })
@@ -124,20 +123,21 @@ describe('Transaction', function () {
   })
 
   describe('PATCH /:id', function () {
-    it('should send a object of transaction with status true', function (done) {
+    it('should send a object of transaction with status different value', function (done) {
       chai
         .request(app)
         .patch(`/transaction/${transactionId}`)
+        .send({ status: 3 })
         .set('token', token)
         .end(function (err, res) {
+          console.log();
+          
           res.should.to.have.status(200);
           res.body.should.be.a('object');
           res.body.should.have.property('_id');
           res.body.userId.should.be.a('string');
           res.body.should.have.property('status');
-          res.body.status.should.be.a('boolean');
-          res.body.status.should.be.equal(true);
-
+          res.body.status.should.be.a('string');
           done();
         })
     })
