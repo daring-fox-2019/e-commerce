@@ -17,31 +17,31 @@
         </div>
       </div>
       <div v-else>
-        <b-form @submit.prevent="addItemFormSubmit">
+        <b-form @submit.prevent="editItemFormSubmit">
           <b-form-group id="add-item-form-name" label="Name:" label-for="add-item-name">
-            <b-form-input id="add-item-name" v-model="addItemForm.name" type="text" required></b-form-input>
+            <b-form-input id="add-item-name" v-model="editItemForm.name" type="text" required></b-form-input>
           </b-form-group>
 
           <b-form-group id="add-item-form-price" label="Price:" label-for="add-item-price">
-            <b-form-input id="add-item-price" v-model="addItemForm.price" required></b-form-input>
+            <b-form-input id="add-item-price" v-model="editItemForm.price" required></b-form-input>
           </b-form-group>
 
           <b-form-group id="add-item-form-stock" label="Stock:" label-for="add-item-stock">
-            <b-form-input id="add-item-stock" v-model="addItemForm.stock" type="text" required></b-form-input>
+            <b-form-input id="add-item-stock" v-model="editItemForm.stock" type="text" required></b-form-input>
           </b-form-group>
 
           <b-form-group id="add-item-form-image" label="Image:" label-for="add-item-image">
             <b-form-file
-              v-model="addItemForm.image"
-              :state="Boolean(addItemForm.image)"
+              v-model="editItemForm.image"
+              :state="Boolean(editItemForm.image)"
               placeholder="Choose a file..."
               drop-placeholder="Drop file here..."
             ></b-form-file>
-            <div class="mt-3">Selected file: {{ addItemForm.image ? addItemForm.image.name : '' }}</div>
+            <div class="mt-3">Selected file: {{ editItemForm.image ? editItemForm.image.name : '' }}</div>
           </b-form-group>
-          <b-button type="submit" size="sm" block variant="primary">Add Item</b-button>
+          <b-button type="submit" size="sm" block variant="success">Edit Item</b-button>
           <router-link to="/">
-            <b-button size="sm" class="mt-2" block variant="outline-primary">Cancel</b-button>
+            <b-button size="sm" class="mt-2" block variant="outline-success">Cancel</b-button>
           </router-link>
         </b-form>
       </div>
@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 import axios from "@/api/axios";
 import Swal from "sweetalert2";
 
@@ -57,32 +58,44 @@ export default {
   name: "Navbar1",
   data() {
     return {
-      addItemForm: {
+      editItemForm: {
         name: "",
         image: [],
         price: "",
         stock: ""
       },
-      isLoading: false
+      isLoading: false,
     };
   },
+  created() {
+    console.log(this.$route.params);
+    this.getCurrentItem(this.$route.params.id);
+    console.log(this.currentItem);
+    this.editItemForm.name = this.currentItem.name;
+    this.editItemForm.price = this.currentItem.price;
+    this.editItemForm.stock = this.currentItem.stock;
+  },
+  computed: {
+    ...mapState(["currentItem"]),
+  },
   methods: {
-    addItemFormSubmit() {
+    ...mapActions(["getCurrentItem"]),
+    editItemFormSubmit() {
       this.isLoading = true;
 
       const itemData = new FormData();
-      itemData.append("name", this.addItemForm.name);
-      itemData.append("price", this.addItemForm.price);
-      itemData.append("stock", this.addItemForm.stock);
-      itemData.append("image", this.addItemForm.image);
-      itemData.append("tags", this.addItemForm.tags);
+      itemData.append("name", this.editItemForm.name);
+      itemData.append("price", this.editItemForm.price);
+      itemData.append("stock", this.editItemForm.stock);
+      itemData.append("image", this.editItemForm.image);
+      itemData.append("tags", this.editItemForm.tags);
 
-      console.log(this.addItemForm.image);
+      console.log(this.editItemForm.image);
       console.log(itemData);
 
       axios({
-        method: "POST",
-        url: `/items`,
+        method: "PUT",
+        url: `/items/${this.$route.params.id}`,
         data: itemData,
         headers: { token: localStorage.token }
       })
@@ -98,10 +111,10 @@ export default {
 
           Toast.fire({
             type: "success",
-            title: "Your item has been added"
+            title: "Your item has been edited"
           });
           
-          this.addItemForm = {
+          this.editItemForm = {
             title: "",
             content: "",
             visibility: "",
@@ -112,8 +125,8 @@ export default {
           this.isLoading = false;
           this.$router.push("/");
 
-          // this.getaddItemForms();
-          // this.getAlladdItemForms();
+          // this.geteditItemForms();
+          // this.getAlleditItemForms();
         })
         .catch(err => {
           console.log(err.message);
@@ -129,7 +142,7 @@ export default {
 
           Toast.fire({
             type: "error",
-            title: "Invalid input"
+            title: err.response.data.message
           });
         });
     }

@@ -62,19 +62,7 @@ export default new Vuex.Store({
           console.log(err);
         });
     },
-    deleteItem(context, id) {
-      axios({
-        method: "DELETE",
-        url: `/items/${id}`,
-      })
-        .then(({ data }) => {
-          console.log(data);
-          this.test();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+    
     test(context) {
       console.log("invoked")
     }

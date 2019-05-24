@@ -1,7 +1,7 @@
 <template>
   <div id="navbar-2">
     <b-navbar toggleable="lg" type="dark" class="flex-between" style="padding-top: 0;">
-      <b-navbar-brand href="#" class="flex-center" style="padding-left: 8px; padding-right: 8px;">
+      <b-navbar-brand href="#" class="flex-center" style="padding-left: 8px; padding-right: 8px;" to="/">
         <img
           src="@/assets/website-logo.png"
           style="width: 50px; height: 50px; border-radius: 50%;"

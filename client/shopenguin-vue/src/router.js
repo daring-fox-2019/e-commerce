@@ -1,10 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import Login from './views/Login.vue'
-import Register from './views/Register.vue'
 import Profile from './views/Profile.vue'
-import AddItem from './views/AddItem.vue'
 import Item from './views/Item.vue'
 import ShoppingCart from './views/ShoppingCart.vue'
 
@@ -22,12 +19,12 @@ export default new Router({
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: () => import(/* webpackChunkName: "Login" */ './views/Login.vue')
     },
     {
       path: '/register',
       name: 'register',
-      component: Register
+      component: () => import(/* webpackChunkName: "Register" */ './views/Register.vue')
     },
     {
       path: '/profile',
@@ -37,12 +34,17 @@ export default new Router({
     {
       path: '/add',
       name: 'add-item',
-      component: AddItem
+      component: () => import(/* webpackChunkName: "AddItem" */ './views/AddItem.vue')
     },
     {
       path: '/item/:id',
       name: 'item',
-      component: Item
+      component: () => import(/* webpackChunkName: "Item" */ './views/Item.vue')
+    },
+    {
+      path: '/item/:id/edit',
+      name: 'EditItem',
+      component: () => import(/* webpackChunkName: "EditItem" */ './views/EditItem.vue')
     },
     {
       path: '/cart',

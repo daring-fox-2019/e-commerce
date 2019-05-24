@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <div class="container" style="width: 30%;">
+    <div class="container" style="width: 30%; padding-top: 5%;">
       <b-form @submit.prevent="loginFormSubmit">
         <b-form-group id="login-form-email" label="Email address:" label-for="login-email">
           <b-form-input id="login-email" v-model="loginForm.email" type="email" required></b-form-input>

@@ -46,9 +46,21 @@ class ItemController {
   }
 
   static updateItem(req, res, next) {
-    const {} = req.body;
-    const updatedItem = {};
+    console.log(req.body);
+    const { name, price, stock } = req.body;
+    const updatedItem = {
+      name,
+      price,
+      stock,
+      image: req.file.cloudStoragePublicUrl,
+    };
     const options = { new: true, useFindAndModify: false };
+
+    if (!req.file.cloudStoragePublicUrl) {
+      const err = { status: 400, message: "Image can't be empty" };
+      next(err);
+      return;
+    }
 
     Item.findByIdAndUpdate(req.params.id, updatedItem, options)
       .then((item) => {

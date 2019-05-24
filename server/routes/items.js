@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/", ItemController.getItems);
 router.get("/:id", ItemController.getItem);
 router.post("/", authentication, multer.single("image"), sendUploadToGCS, ItemController.createItem);
-router.put("/:id", authentication, authorization, ItemController.updateItem);
+router.put("/:id", authentication, authorization, multer.single("image"), sendUploadToGCS, ItemController.updateItem);
 router.delete("/:id", authentication, authorization, ItemController.deleteItem);
 
 module.exports = router;

@@ -1,6 +1,6 @@
 <template>
   <div class="register">
-    <div class="container" style="width: 30%;">
+    <div class="container" style="width: 30%; padding-top: 5%;">
       <b-form @submit.prevent="registerFormSubmit">
         <b-form-group id="register-form-email" label="Email address:" label-for="register-email">
           <b-form-input id="register-email" v-model="registerForm.email" type="email" required></b-form-input>

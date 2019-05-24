@@ -29,7 +29,7 @@ module.exports = {
   authorization: function(req, res, next) {
     Item.findById(req.params.id)
       .then((item) => {
-        if (String(item.userId) === req.authenticatedUser.id) {
+        if (String(item.sellerId) === req.authenticatedUser.id) {
           next();
         } else {
           res.status(401).json({ message: "You have no access to do that" });
