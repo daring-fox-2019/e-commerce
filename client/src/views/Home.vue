@@ -2,11 +2,11 @@
   <div class="home">
     <Carousel />
 
-    <b-container fluid class="px-0">
+    <b-container fluid class="px-0" v-if="token">
       <b-row>
         User Transaction List
       </b-row>
-      <b-row 
+      <b-row
         v-for="(transaction, index) in userTransactions"
         :key="transaction._id">
         <b-col cols=1>
@@ -27,13 +27,13 @@
           </div>
         </b-col>
         <b-col cols=2>
-          <button 
-            type="button" 
-            class="btn btn-info" 
+          <button
+            type="button"
+            class="btn btn-info"
             v-if="transaction.status == 'paid'"
             @click="confirmDelivery(transaction._id)">Confirm Delivery</button>
         </b-col>
-        
+
       </b-row>
     </b-container>
   </div>
@@ -49,20 +49,20 @@ export default {
     Carousel,
   },
   created() {
-    this.fetchUserTransactions()
+    this.fetchUserTransactions();
   },
   methods: {
     fetchUserTransactions() {
-      this.$store.dispatch('fetchUserTransactions')
+      this.$store.dispatch('fetchUserTransactions');
     },
     confirmDelivery(transaction_id) {
-      this.$store.dispatch('confirmDelivery', transaction_id)
-    }
+      this.$store.dispatch('confirmDelivery', transaction_id);
+    },
   },
   computed: {
     userTransactions() {
-      return this.$store.state.userTransactions
-    }
-  }
+      return this.$store.state.userTransactions;
+    },
+  },
 };
 </script>

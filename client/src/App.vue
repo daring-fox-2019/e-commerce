@@ -1,37 +1,21 @@
 <template>
   <div id="app">
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div> -->
-    <div class="container border px-0">
-      <!-- <b-row>
-        <b-col>
-          <b-nav>
-            <b-nav-item active><router-link to="/">Home</router-link></b-nav-item>
-            <b-nav-item active><router-link to="/about">About</router-link></b-nav-item>
-            <b-nav-item><router-link to="/products">Product</router-link></b-nav-item>
-            <b-nav-item><router-link to="/carts">Cart</router-link></b-nav-item>
-            <b-nav-item><router-link to="/admin">Admin</router-link></b-nav-item>
-            <LoginModal />
-            <RegisterModal />
-          </b-nav>
-        </b-col>
-      </b-row> -->
+    <div class="container px-0">
       <!-- nav start here -->
       <div>
         <b-navbar toggleable="lg" type="light" variant="light">
-          <b-navbar-brand to="/">Greens</b-navbar-brand>
+          <b-navbar-brand to="/products">Greens</b-navbar-brand>
 
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
           <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
               <!-- <b-nav-item active><router-link to="/">Home</router-link></b-nav-item> -->
-              <b-nav-item><router-link to="/products">Product</router-link></b-nav-item>
-              <b-nav-item><router-link to="/carts">My Cart</router-link></b-nav-item>
-              <b-nav-item><router-link to="/admin">Admin</router-link></b-nav-item>
-              <b-nav-item><router-link to="/about">About</router-link></b-nav-item>
+              <b-nav-item><router-link to="/products" >Product</router-link></b-nav-item>
+              <b-nav-item><router-link to="/carts" v-if="isLogin">My Cart</router-link></b-nav-item>
+              <b-nav-item><router-link to="/" v-if="isLogin">My Transactions</router-link></b-nav-item>              
+              <b-nav-item><router-link to="/admin" v-if="role == 'admin'">Admin</router-link></b-nav-item>
+              <!-- <b-nav-item><router-link to="/about">About</router-link></b-nav-item> -->
 
             </b-navbar-nav>
 
@@ -60,7 +44,7 @@
     </div>
 
     <!-- main container -->
-    <b-container class="border">
+    <b-container class="">
       <b-row>
         <b-col>
           <router-view/>
@@ -82,8 +66,8 @@ export default {
     RegisterModal,
   },
   created() {
-    if(localStorage.token) {
-      this.$store.commit('userIsLoggedIn')
+    if (localStorage.token) {
+      this.$store.commit('userIsLoggedIn');
     }
   },
   methods: {
@@ -105,9 +89,15 @@ export default {
   },
   computed: {
     isLogin() {
-      return this.$store.state.session.isLogin
+      return this.$store.state.session.isLogin;
+    },
+    role() {
+      return localStorage.role
+    },
+    token() {
+      return localStorage.token
     }
-  }
+  },
 };
 </script>
 

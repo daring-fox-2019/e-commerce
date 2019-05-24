@@ -32,7 +32,7 @@
 
 <script>
 import CartCard from '@/components/CartCard.vue';
-import CartCheckout from '@/components/CartCheckout'
+import CartCheckout from '@/components/CartCheckout';
 
 export default {
   props: ['item'],
@@ -42,21 +42,21 @@ export default {
     CartCheckout,
   },
   created() {
-    this.fetchUserData()
+    this.fetchUserData();
   },
   methods: {
     fetchUserData() {
-      this.$store.dispatch('fetchUserData', localStorage._id)
-    }
+      this.$store.dispatch('fetchUserData', localStorage._id);
+    },
   },
   computed: {
     cart() {
-      return this.$store.state.user.cart
+      return this.$store.state.user.cart;
     },
     username() {
-      return localStorage.name
-    }
-  }
+      return localStorage.name;
+    },
+  },
 };
 </script>
 

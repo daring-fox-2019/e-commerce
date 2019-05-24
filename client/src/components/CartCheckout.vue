@@ -13,7 +13,7 @@
         <b-col cols="2" class="border">Qty</b-col>
         <b-col cols="4" class="border">Price</b-col>
       </b-row>
-      <b-row 
+      <b-row
         v-for="item in cart"
         :key="item._id">
         <b-col cols="1" class="px-0 border">1</b-col>
@@ -33,23 +33,23 @@
 
 <script>
 export default {
-    name: 'cart-checkout',
-    computed: {
-        cart() {
-            return this.$store.state.user.cart
-        }
+  name: 'cart-checkout',
+  computed: {
+    cart() {
+      return this.$store.state.user.cart;
     },
-    methods: {
-      checkout() {
-        const cartIdArray = []
-        this.cart.forEach(el => {
-          cartIdArray.push(el._id)
-        })
-        // console.log(cartIdArray)
+  },
+  methods: {
+    checkout() {
+      const cartIdArray = [];
+      this.cart.forEach((el) => {
+        cartIdArray.push(el._id);
+      });
+      // console.log(cartIdArray)
 
-        this.$store.dispatch('checkoutCart', cartIdArray)
-      }
-    }
+      this.$store.dispatch('checkoutCart', cartIdArray);
+    },
+  },
 };
 </script>
 

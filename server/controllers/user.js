@@ -48,7 +48,13 @@ class UserController {
                     const to_be_signed = { _id, email, name }
                     const token = sign(to_be_signed)
 
-                    res.status(200).json({ token, _id, name, email })
+                    const to_be_send = { token, _id, name, email }
+                    if(compare('admin', found.role)) {
+                        to_be_send.role="admin"
+                        console.log('masuk sini')
+                    }
+
+                    res.status(200).json(to_be_send)
                 } else {
                     res.status(400).json({message: 'Invalid email/password'})
                 }

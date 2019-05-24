@@ -1,6 +1,6 @@
 <template>
     <b-col
-        class="border"
+        class="mt-1"
         cols=3
         >
         <router-link :to="'/products/'+product._id">

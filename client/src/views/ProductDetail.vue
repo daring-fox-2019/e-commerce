@@ -34,17 +34,18 @@
                         v-model="quantity"
                         placeholder="Input Item Quantity"></b-form-input>
                 </b-form-group>
-                
+
             </b-col>
             <b-col class="px-0" cols=4 >
-                <b-button 
-                    variant="outline-primary" 
+                <b-button
+                    variant="outline-primary"
                     class="ml-2 px-2"
+                    :disabled="!isLogin"
                     @click="addToCart">Add To <i class="fas fa-shopping-cart"></i></b-button>
                 </b-col>
         </b-row>
         <b-row>
-            
+
         </b-row>
     </div>
 </template>
@@ -53,9 +54,9 @@
 export default {
   name: 'product-detail',
   data() {
-      return {
-          quantity: ''
-      }
+    return {
+      quantity: '',
+    };
   },
   created() {
     // console.log(this.$route.params.id)
@@ -75,8 +76,8 @@ export default {
       // console.log(this.$route.params.id)
       const cart_obj = {
         product: this.$route.params.id,
-        quantity: this.quantity
-      }
+        quantity: this.quantity,
+      };
       // console.log(cart_obj)
       this.$store.dispatch('addToCart', cart_obj);
     },
@@ -85,6 +86,9 @@ export default {
     product() {
       return this.$store.state.singleProductDetail;
     },
+    isLogin() {
+      return this.$store.state.session.isLogin
+    }
   },
 };
 </script>

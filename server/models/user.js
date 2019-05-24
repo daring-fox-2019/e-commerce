@@ -36,22 +36,6 @@ const userSchema = new Schema({
         default: 'user',
     },
     cart: [{type: Schema.Types.ObjectId, ref: 'Cart'}]
-    // cart: [{
-    //     product: {type: Schema.Types.ObjectId, ref: 'Product'},
-    //     quantity: {
-    //         type: Number,
-    //         validate: {
-    //             validator(quantity) {
-    //                 if(quantity <= 0) return false;
-    //             },
-    //             message: 'Quantity must be greater than 0'
-    //         }
-    //     },
-    //     price: {
-    //         type: Number,
-    //         min: [1, 'price cannot be lower or equal than 0']
-    //     }
-    // }]
 });
 
 userSchema.pre('save', function(next) {

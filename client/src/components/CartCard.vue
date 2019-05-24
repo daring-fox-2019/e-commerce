@@ -52,15 +52,15 @@ export default {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Yes, delete it!',
       })
-      .then((result) => {
+        .then((result) => {
           if (result.value) {
-          this.$store.dispatch('removeFromCart', cart_id)
-        }
-      })
-    }
-  }
+            this.$store.dispatch('removeFromCart', cart_id);
+          }
+        });
+    },
+  },
 };
 </script>
 

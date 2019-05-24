@@ -2,7 +2,7 @@
   <b-row>
     <b-container fluid>
       <b-row class>
-        <b-col class="px-0">test</b-col>
+        <b-col class="mt-5"></b-col>
       </b-row>
       <b-row>
         <b-col class="px-0">
@@ -11,10 +11,10 @@
             <b-tab title="Transactions List" active>
               <b-container>
                 <b-row>
-                  <b-col cols="7" class="border">
+                  <b-col cols="7" class="">
                     <!-- transaction card header -->
-                    <div class="row border">
-                      <b-col cols="1" class="border d-flex justify-content-end px-1">No</b-col>
+                    <div class="row text-center">
+                      <b-col cols="1" class="border px-0">No</b-col>
                       <b-col cols="4" class="border px-0">Transaction ID</b-col>
                       <b-col cols="3" class="border px-0">Status</b-col>
                       <b-col cols="2" class="border px-0">Order by</b-col>
@@ -30,7 +30,7 @@
                       :key="transaction._id"
                     />
                   </b-col>
-                  <b-col cols="5" class="border">
+                  <b-col cols="5" class="">
                     <div class="row">
                       <!-- transaction detail -->
                       <TransactionDetail/>
@@ -87,18 +87,18 @@
 </template>
 
 <script>
-import AddItemForm from "@/components/AddItemForm.vue";
-import ProductListCard from "@/components/ProductListCard.vue";
-import TransactionDetail from "@/components/TransactionDetail.vue";
-import TransactionListCard from "@/components/TransactionListCard.vue";
+import AddItemForm from '@/components/AddItemForm.vue';
+import ProductListCard from '@/components/ProductListCard.vue';
+import TransactionDetail from '@/components/TransactionDetail.vue';
+import TransactionListCard from '@/components/TransactionListCard.vue';
 
 export default {
-  name: "Admin",
+  name: 'Admin',
   components: {
     AddItemForm,
     ProductListCard,
     TransactionListCard,
-    TransactionDetail
+    TransactionDetail,
   },
   data() {
     return {};
@@ -109,12 +109,12 @@ export default {
   },
   methods: {
     fetchProductData() {
-      this.$store.dispatch("fetchProductData");
+      this.$store.dispatch('fetchProductData');
     },
     fetchTransactionDataAdmin() {
       // console.log('fetching transaction data')
-      this.$store.dispatch("fetchTransactionDataAdmin");
-    }
+      this.$store.dispatch('fetchTransactionDataAdmin');
+    },
   },
   computed: {
     productList() {
@@ -122,8 +122,8 @@ export default {
     },
     adminTransactions() {
       return this.$store.state.adminTransactions;
-    }
-  }
+    },
+  },
 };
 </script>
 

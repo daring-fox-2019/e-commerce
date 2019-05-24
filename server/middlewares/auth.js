@@ -59,7 +59,10 @@ module.exports = {
             // console.log(compare('admin', found.role))
             if(found) {
                 // console.log(found, 'found <--')
-                if(compare('admin', found.role)) next()
+                if(compare('admin', found.role)) {
+                    req.decoded.role = 'admin'
+                    next()
+                }
                 else {
                     res.status(401).json({message: 'Not authorized'})
                 }

@@ -4,7 +4,9 @@ const transactionSchema = new Schema({
     items: [{type: Schema.Types.ObjectId, ref: 'Cart'}],
     status: {
         type: String,
-        default: 'waiting for payment'
+        default: 'waiting for payment',
+        enum:['waiting for payment', 'paid', 'delivered']
+        //pilihan dan validasi
     },
     paidAt: Date,
     total: Number,
