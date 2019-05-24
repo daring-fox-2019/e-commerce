@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="$emit('submitted',email,password)" class="col-4 mx-auto">
+  <form @submit.prevent="submitForm" class="col-4 mx-auto">
     <h1>{{ title }}</h1>
     <slot></slot>
     <div class="form-group">
@@ -22,5 +22,12 @@ export default {
       password: '',
     };
   },
+  methods: {
+    submitForm(){
+      this.$emit('submitted',this.email,this.password)
+      this.email = ''
+      this.password = ''
+    }
+  }
 };
 </script>

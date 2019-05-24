@@ -29,6 +29,11 @@ export default {
     };
   },
   props: ['product'],
+  watch: {
+    '$route'(to, from){
+      console.log(to,from)
+    }
+  },
   methods: {
     addToCart(id){
       this.buttonText = ''

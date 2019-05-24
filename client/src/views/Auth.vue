@@ -38,6 +38,7 @@ export default {
       this.$store.dispatch('register', {
         name: this.name, email, password,
       });
+      this.name = ''
     },
     login(email, password) {
       this.$store.dispatch('login', {

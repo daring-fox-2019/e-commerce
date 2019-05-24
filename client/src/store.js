@@ -15,6 +15,7 @@ export default new Vuex.Store({
     },
     name: localStorage.getItem('name') || '',
     products: [],
+    categories: [],
     user: {},
   },
   mutations: {
@@ -34,6 +35,11 @@ export default new Vuex.Store({
         state.logRegStatus.loggedIn = false;
         router.push('/admin');
       } else {
+        Swal.fire(
+          'Logged in!',
+          'You have been logged in!',
+          'success',
+        );
         state.logRegStatus.loggedIn = true;
         router.push('/');
       }
@@ -53,7 +59,10 @@ export default new Vuex.Store({
       );
     },
     getAllProducts(state, payload) {
-      state.products = [...payload];
+      state.products = [...payload]
+      let categories = payload.map(obj => obj.category)
+      state.categories = [...new Set(categories)];
+      console.log(state)
     },
     getCart(state, payload) {
       state.user = {...payload};
@@ -72,8 +81,12 @@ export default new Vuex.Store({
         .then(({ data }) => {
           context.commit('registered', data);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(({response}) => {
+          Swal.fire(
+            'Register error!',
+            response.data.message,
+            'error',
+          );
         });
     },
     login(context, payload) {
@@ -83,14 +96,24 @@ export default new Vuex.Store({
         data: payload,
       })
         .then(({ data }) => {
-          context.commit('loggedIn', data);
+          if(data.message){
+            Swal.fire(
+              'Login error!',
+              data.message,
+              'error',
+            );
+          }
+          else context.commit('loggedIn', data);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(({response}) => {
+          Swal.fire(
+            'Login error!',
+            response.data.message,
+            'error',
+          );
         });
     },
     addProduct(context, payload) {
-      console.log(payload);
       axios({
         method: 'POST',
         url: '/products/create',
@@ -121,6 +144,25 @@ export default new Vuex.Store({
           console.log(err);
         });
     },
+    addToCart(context,id) {
+      axios({
+        method: 'POST',
+        url: `/cart/upsert/${id}`,
+        data: {
+          count: 1
+        },
+        headers: {
+          token: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          context.dispatch('getAllProducts')
+          context.commit('addProduct')
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     getCart(context) {
       axios({
         method: 'GET',
@@ -138,9 +180,27 @@ export default new Vuex.Store({
     },
     searchProducts(context,searchText) {
       let query = `?name=${searchText}`
+      console.log(searchText)
       axios({
         method: 'GET',
-        url: `/products/search${query}`,
+        url: `/products/read/search${query}`,
+        headers: {
+          token: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          context.commit('searchProducts', data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getProductsByCategory(context,searchText) {
+      let query = `?category=${searchText}`
+      console.log(query)
+      axios({
+        method: 'GET',
+        url: `/products/read/search${query}`,
         headers: {
           token: localStorage.getItem('token'),
         },

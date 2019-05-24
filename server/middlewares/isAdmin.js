@@ -1,7 +1,6 @@
 const User = require('../models/user')
 
 module.exports = (req, res, next) => {
-  console.log("isAdmin",req.decoded._id)
   User.findById(req.decoded._id)
   .then(row =>{
     console.log(row)

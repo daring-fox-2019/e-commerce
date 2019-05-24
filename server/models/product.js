@@ -6,6 +6,10 @@ let productSchema = new Schema({
     type: String,
     required: true
   },
+  description: {
+    type: String,
+    default: 'Ini produk TOP lho'
+  },
   image_url: {
     type: String,
   },
@@ -17,16 +21,12 @@ let productSchema = new Schema({
     type: Number,
     required: true
   },
-  created_at: {
-    type: Date,
-    default: new Date()
-  },
-  updated_at: {
-    type: Date,
-    default: new Date()
-  },
+  category: {
+    type: String,
+    required: true
+  }
   // image_url: String
-})
+},{timestamps: true})
 
 let Product = mongoose.model('Products', productSchema)
 

@@ -1,57 +1,59 @@
-// const mongoose = require('mongoose')
 const Product = require('../models/product')
-// const ObjectId = mongoose.mongo.ObjectId
 
 class ProductController {
   static create(req,res){
-    Product.create({
+    let newProduct = {
       name: req.body.name,
-      image_url: req.file.cloudStoragePublicUrl,
+      description: req.body.description,
+      category: req.body.category,
       price: req.body.price,
       stock: req.body.stock,
-    })
+    }
+    if (req.file) {
+      newProduct.image_url = req.file.cloudStoragePublicUrl
+    }
+    Product.create(newProduct)
     .then(result=>{
       res.status(201).json(result)
     })
     .catch(err => {
-      console.log(err)
       res.status(500).json({
-        message: "Failed to create new Product",
-        err
+        message: err
       })
     })
   }
   static read(req,res){
-    // console.log("READ",req.decoded)
     Product.find({})
+    .populate('cart.product')
     .then(products =>{
       res.status(200).json(products)
     })
     .catch(err => {
       res.status(500).json({
-        message: "Failed to read Products",
-        err
+        message: err
       })
     })
   }
   static search(req,res){
-    // console.log("SEARCH",req.decoded)
-    if(req.query.name) obj.name = { '$regex' : req.query.name, '$options' : 'i' }
+    let obj = {}
+    if(req.query.name) 
+      obj.name = { '$regex' : req.query.name, '$options' : 'i' }
+    if(req.query.category)
+      obj.category = req.query.category
+    console.log(obj)
     Product.find(obj)
+    .populate('cart.product')
     .then(products=>{
+      console.log(products)
       res.status(200).json(products)
     })
     .catch(err => {
       res.status(500).json({
-        message: "Failed to search Products",
-        err
+        message: err
       })
     })
   }
   static readOne(req,res){
-    // let obj = {}
-    // if(req.query.bookId) obj.booklist = req.query.bookId
-
     Product.findOne({
       _id: req.params._id
     })
@@ -60,26 +62,26 @@ class ProductController {
     })
     .catch(err => {
       res.status(500).json({
-        message: "Failed to read Products",
-        err
+        message: err
       })
     })
   }
   static update(req,res){
-    Product.findByIdAndUpdate(req.params._id,{
-      name: req.body.name,
-      image_url: req.file.cloudStoragePublicUrl,
-      price: req.body.price,
-      stock: req.body.stock,
-      updated_at: new Date(),
-    })
+    let { title, description, price, stock, category } = req.body
+    let updated = { title, description, price, stock, category }
+    for(let key in updated)
+      if(!updated[key])
+        delete updated[key]
+    if (req.file) {
+      updated.image_url = req.file.cloudStoragePublicUrl
+    }
+    Product.findByIdAndUpdate(req.params._id,updated)
     .then(result=>{
       res.status(200).json(result)
     })
     .catch(err => {
       res.status(500).json({
-        message: "Failed to update Product",
-        err
+        message: err
       })
     })
   }
@@ -90,8 +92,7 @@ class ProductController {
     })
     .catch(err => {
       res.status(500).json({
-        message: "Failed to delete Product",
-        err
+        message: err
       })
     })
   }

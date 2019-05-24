@@ -20,7 +20,7 @@
             <span class="sr-only">(current)</span>
           </li>
           <li class="nav-item">
-            <router-link to="/products" class="nav-link">All Products</router-link>
+            <router-link to="/products/all" class="nav-link">All Products</router-link>
           </li>
           <li class="nav-item">
             <router-link to="/cart" class="nav-link">Cart</router-link>
@@ -46,7 +46,7 @@ export default {
     },
     searchProducts() {
       this.$store.dispatch("searchProducts", this.searchText);
-      this.$router.push("/products");
+      // this.$router.push("/products");
     }
   }
 };

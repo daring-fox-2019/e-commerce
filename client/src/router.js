@@ -15,10 +15,14 @@ export default new Router({
     {
       path: '/products',
       name: 'allproducts',
-      component: () => import(/* webpackChunkName: "about" */ './views/AllProducts.vue'),
-      children: [{
-        path: ':id',
-        component: () => import(/* webpackChunkName: "about" */ './components/Product.vue'),
+      component: () => import(/* webpackChunkName: "about" */ './views/ProductPage.vue'),
+      children: [
+        {
+          path: '/all',
+          component: () => import(/* webpackChunkName: "about" */ './components/Products.vue'),
+        },{
+        path: ':category',
+        component: () => import(/* webpackChunkName: "about" */ './components/Products.vue'),
       }]
     },
     {

@@ -8,9 +8,10 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 class UserController {
   static upsertCart(req, res) {
+    console.log(req.decoded.name)
+    console.log(req.decoded._id)
     Promise.all([User.findOne({ 'cart.product': req.params._id }), Product.findById(req.params._id)])
       .then(results => {
-        console.log(results, req.body.count)
         if (results[1].stock - req.body.count >= 0) {
           results[1].stock -= req.body.count
           results[1].save()
@@ -35,7 +36,9 @@ class UserController {
             })
         }
         else {
+          console.log('sini nih')
           return User.findOneAndUpdate({
+            _id: req.decoded._id,
             'cart.product': req.params._id
           }, {
               $inc: {
@@ -47,6 +50,7 @@ class UserController {
         }
       })
       .then((row) => {
+        console.log(row)
         res.status(201).json(row)
       })
       .catch(err => {
@@ -57,9 +61,10 @@ class UserController {
   }
   static readCart(req, res) {
     User.findById(req.decoded._id)
-      .populate('cart.product')
-      .then(row => {
-        res.status(200).json(row)
+    .populate('cart.product')
+      .then(rows => {
+        console.log(rows)
+        res.status(200).json(rows)
       })
       .catch(err => {
         res.status(500).json({
@@ -154,7 +159,6 @@ class UserController {
         }
       })
       .catch((err) => {
-        console.log(err)
         res.status(500).json(err)
       })
   }
@@ -167,25 +171,22 @@ class UserController {
         email: req.body.email,
         password: req.body.password
       })
-      .then(() => {
+      .then(row => {
         res.status(201).json({
-          message: "register success"
+          message: "Register success"
         })
       })
       .catch(err => {
-        // {
-        //   errors: {
-
-        //   }
-        // }
         console.log(err)
-        if (err.message) {
-          res.status(406).json({
-            message: `Register failed : ${err.message}`
-          })
+        let message
+        if (err.errors) {
+          if (err.errors.email) {
+            message = err.errors.email.message
+          }
         }
-        else res.status(500).json({
-          message: "Internal Server Error"
+        else message = err
+        res.status(406).json({
+          message
         })
       })
   }
@@ -225,13 +226,9 @@ class UserController {
         }
       })
       .catch(err => {
-        if (err.message) {
-          res.status(406).json({
-            message: `Login failed : ${err.message}`
-          })
-        }
-        else res.status(500).json({
-          message: "Internal Server Error"
+        console.log(err)
+        res.status(500).json({
+          message: err
         })
       })
   }

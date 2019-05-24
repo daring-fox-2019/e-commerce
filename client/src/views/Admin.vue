@@ -7,8 +7,27 @@
       v-model="name"
         type="text"
         class="form-control"
-        id="formGroupExampleInput"
-        placeholder="Example input"
+        placeholder="Name"
+        required
+      >
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput">Category</label>
+      <input
+        v-model="category"
+        type="text"
+        class="form-control"
+        placeholder="Description"
+        required
+      >
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput">Description</label>
+      <input
+      v-model="description"
+        type="text"
+        class="form-control"
+        placeholder="Description"
         required
       >
     </div>
@@ -46,11 +65,14 @@
     <button type="submit" class="btn btn-primary">Add Product</button>
   </form>
 </template>
+
 <script>
 export default {
   data() {
     return {
       name: '',
+      category: '',
+      description: '',
       image_url: '',
       price: 1000,
       stock: 1,
@@ -61,10 +83,11 @@ export default {
     addProduct() {
       const produk = new FormData();
       produk.append('name', this.name);
+      produk.append('category', this.category);
+      produk.append('description', this.description);
       produk.append('image_url', this.image_url);
       produk.append('price', this.price);
       produk.append('stock', this.stock);
-      console.log(produk);
 
       this.$store.dispatch('addProduct', produk);
     },

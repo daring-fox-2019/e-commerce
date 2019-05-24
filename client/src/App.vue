@@ -2,7 +2,7 @@
   <div id="app">
     <navbar v-show="$store.state.logRegStatus.loggedIn"/>
     <router-view/>
-    <footers v-show="$store.state.logRegStatus.loggedIn"/>
+    <footers v-show="$store.state.logRegStatus.loggedIn" class="mt-4"/>
   </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
 
 <style>
 body {
-  padding-top: 56px;
+  padding-top: 70px;
 }
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;

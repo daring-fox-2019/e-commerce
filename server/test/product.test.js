@@ -1,24 +1,41 @@
 var chai = require('chai')
+  , chaiHttp = require('chai-http')
   , expect = chai.expect
-var agent
-var id
-var token
+chai.use(chaiHttp);
+const app = require('../app')
+const User = require('../models/user')
+// var agent = chai.request.agent(app)
+const jwt = require('jsonwebtoken')
+let token
+let id = ""
+
 describe("routes /products",function(){
+  this.timeout(3000);
   before((done)=>{
-    var exported = require('./user.test')
-    agent = exported.agent
-    id = exported.id
-    token = exported.token
-    done()
+    User.findOne({ email: "admin@mail.com" })
+    .then(row =>{
+      let payload = {
+        _id: row._id,
+        email: row.email,
+        password: row.password,
+      }
+      token = jwt.sign(payload, process.env.KUNCI)
+      // console.log(token, 'token');
+      done()
+    })
+    .catch(err =>{
+      // console.log(err, 'err');
+      done(err)
+    })
   })
   it('create product berhasil (Admin only) /create', function(done) {
     let reqBody = {
-      name: "boleh",
-      image_url: "boleh",
-      price: 5000,
-      stock: 6,
+      name: "Kapak",
+      category: 'Perkakas',
+      price: 50000,
+      stock: 68,
     }
-    agent
+    chai.request(app)
     .post('/products/create')
     .set('token', token)
     .send(reqBody)
@@ -30,7 +47,7 @@ describe("routes /products",function(){
     });
   });
   it('baca semua products berhasil /read', function(done) {
-    agent
+    chai.request(app)
     .get('/products/read')
     .set('token', token)
     .end(function(err, res) {
@@ -40,7 +57,7 @@ describe("routes /products",function(){
     });
   });
   it('baca satu product dari id berhasil /read/:id', function(done) {
-    agent
+    chai.request(app)
     .get(`/products/read/${id}`)
     .set('token', token)
     .end(function(err, res) {
@@ -50,8 +67,8 @@ describe("routes /products",function(){
     });
   });
   it('search products berhasil /read/search', function(done) {
-    let query = "?name=boleh"
-    agent
+    let query = "?name=Kapak"
+    chai.request(app)
     .get(`/products/read/search${query}`)
     .set('token', token)
     .end(function(err, res) {
@@ -63,11 +80,12 @@ describe("routes /products",function(){
   it('update product berhasil /read/update', function(done) {
     let reqBody = {
       name: "aja",
-      image_url: "aja",
+      category: 'Baju',
       price: 10000,
       stock: 14,
+      
     }
-    agent
+    chai.request(app)
     .put(`/products/update/${id}`)
     .set('token', token)
     .send(reqBody)
@@ -78,7 +96,7 @@ describe("routes /products",function(){
     });
   });
   it('delete product berhasil /delete/:id', function(done) {
-    agent
+    chai.request(app)
     .delete(`/products/delete/${id}`)
     .set('token', token)
     .end(function(err, res) {
