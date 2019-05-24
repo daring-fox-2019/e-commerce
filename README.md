@@ -34,9 +34,11 @@ After you have finished, on your server run the following command:
 $ npm run dev
 ```
 
-On your client, run the following command:
+For your client, run the following commands:
 
 ```
+$ cd client/shopenguin-vue
+$ npm install
 $ npm run serve
 ```
 
