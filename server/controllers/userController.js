@@ -23,6 +23,7 @@ class UserController{
       })
     })
   }
+
   static readOne(req,res){
     User.findById(req.query.id)
     .then(user=>{
@@ -34,38 +35,41 @@ class UserController{
       })
     })
   }
+
   static login(req,res){
-      User.findOne({
-        email: req.body.email
-      })
-      .then(user=>{
-        if (user){
-          let check = compareHash(req.body.password, user.password)
-          if (check){
-            let token = generateJWT({
-              email: user.email,
-              id: user._id
-            })
-            res.status(201).json({
-              token : token
-            })
-          }else{
-            res.status(400).json({
-              msg: `Invalid email/password`
-            })
-          }
+    console.log(req.body)
+    User.findOne({
+      email: req.body.email
+    })
+    .then(user=>{
+      if (user){
+        let check = compareHash(req.body.password, user.password)
+        console.log(check)
+        if (check){
+          let token = generateJWT({
+            email: user.email,
+            id: user._id
+          })
+          res.status(201).json({
+            token : token
+          })
         }else{
           res.status(400).json({
             msg: `Invalid email/password`
           })
         }
-      })
-      .catch(err=>{
-        res.status(500).json({
-          msg: err.message
+      }else{
+        res.status(400).json({
+          msg: `Invalid email/password`
         })
+      }
+    })
+    .catch(err=>{
+      res.status(500).json({
+        msg: err.message
       })
-    }
+    })
+  }
   static getPayload(req,res){
     let decode = decodeJWT(req.headers.token)
     User.findOne({

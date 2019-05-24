@@ -10,10 +10,10 @@ module.exports = {
     return jwt.sign(
       { name: obj.name, email: obj.email, id: obj.id },
       process.env.JWT_KEY
-      // ,{ expiresIn: "1h" }
     );
   },
   compareHash(pass, passDB) {
+    console.log(passDB)
     return bcrypt.compareSync(pass, passDB);
   },
   decodeJWT(token) {
