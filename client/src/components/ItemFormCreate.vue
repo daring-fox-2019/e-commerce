@@ -80,21 +80,35 @@ import api from '../api.js'
 export default {
   name: 'ItemFormCreate',
   props: {
-    token: String
+    token: String,
+    item: Object
   },
   data: function () {
     return {
+      id: '',
       name: '',
       stock: 1,
       price: 0,
       image: {
         url: '',
         filename: ''
-      }
+      },
+      isImageChange: false
+    }
+  },
+  watch: {
+    item: function () {
+      this.id = this.item._id
+      this.name = this.item.name
+      this.stock = this.item.stock
+      this.price = this.item.price
+      this.image.url = 'http://localhost:3000/' + this.item.imageUrl
+      this.image.filename = this.item.imageUrl
     }
   },
   methods: {
     onInputImage: function () {
+      this.isImageChange = true
       let image = this.$refs.image.files[0]
       if (image) {
         this.image = {
@@ -108,14 +122,28 @@ export default {
       formData.append('name', this.name)
       formData.append('stock', this.stock)
       formData.append('price', this.price)
-      formData.append('image', this.$refs.image.files[0])
 
-      api
-        .createItem(formData, this.token)
-        .then(({ data }) => {
-          console.log(data)
-        })
-        .catch(err => console.log(err))
+      if (this.isImageChange) {
+        formData.append('image', this.$refs.image.files[0])
+      }
+
+      if (this.id) {
+        api
+          .updateItem(formData, this.id, this.token)
+          .then(({ data }) => {
+            this.$alertify.success('Success updating item')
+            this.$router.push('/')
+          })
+          .catch(err => console.log(err))
+      } else {
+        api
+          .createItem(formData, this.token)
+          .then(({ data }) => {
+            this.$alertify.success('Success add new item')
+            this.$router.push('/')
+          })
+          .catch(err => console.log(err))
+      }
     }
   }
 }

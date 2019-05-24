@@ -51,15 +51,21 @@ class Item {
   }
 
   static update (req, res) {
+    let imageUrl
+
+    if (req.file) {
+      if (process.env.NODE_ENV === 'test') {
+        imageUrl = req.file.originalname
+      } else {
+        imageUrl = req.file.path
+      }
+    }
+
     req.item
       .updateOne({
         $set: {
           name: req.body.name,
-          imageUrl: req.file
-            ? process.env.NODE_ENV === 'test'
-              ? req.file.originalname
-              : req.file.path
-            : undefined,
+          imageUrl: imageUrl,
           stock: req.body.stock,
           price: req.body.price
         }

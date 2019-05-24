@@ -130,16 +130,18 @@ export default {
           'This action can\'t be reverted',
           () => {
             api
-              .deleteItem(this.item._id, this.token)
+              .deleteItem(this.id, this.token)
               .then(({ data }) => {
-                this.$alerify.success('Item successfully deleted', data.item._id)
+                this.$alertify.success('Item successfully deleted', data.item._id)
                 this.$router.push('/')
               })
               .catch(err => console.log(err))
           }
         )
     },
-    onClickEdit: function () {}
+    onClickEdit: function () {
+      this.$router.push(`/item/edit/${this.id}`)
+    }
   }
 }
 </script>

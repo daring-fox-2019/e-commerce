@@ -7,6 +7,7 @@ import LoginPage from './views/LoginPage.vue'
 import ItemPage from './views/ItemPage.vue'
 import ItemPageCreate from './views/ItemPageCreate.vue'
 import ItemPageDetail from './views/ItemPageDetail.vue'
+import ItemPageEdit from './views/ItemPageEdit.vue'
 import CartPage from './views/CartPage.vue'
 
 Vue.use(Router)
@@ -44,13 +45,18 @@ export default new Router({
           path: ':itemId',
           name: 'item-detail',
           component: ItemPageDetail
+        },
+        {
+          path: 'edit/:itemId',
+          name: 'item-edit',
+          component: ItemPageEdit
         }
       ]
     },
     {
       path: '/cart',
       name: 'cart',
-      component: CartPage,
+      component: CartPage
     }
   ]
 })

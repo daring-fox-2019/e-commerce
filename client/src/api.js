@@ -38,6 +38,14 @@ const removeItem = (itemId, token) => {
   return api.delete(`/cart/${itemId}`, auth(token))
 }
 
+const deleteItem = (itemId, token) => {
+  return api.delete(`/items/${itemId}`, auth(token))
+}
+
+const updateItem = (item, itemId, token) => {
+  return api.put(`/items/${itemId}`, item, auth(token))
+}
+
 const clearCart = (token) => {
   return api.delete('/cart', auth(token))
 }
@@ -56,5 +64,7 @@ export default {
   addItem,
   clearCart,
   fetchCart,
-  removeItem
+  removeItem,
+  deleteItem,
+  updateItem
 }
