@@ -5,12 +5,12 @@ if (process.env.NODE_ENV === 'development || test') {
 const express = require('express')
 const app = express()
 const port = process.env.PORT || 3000
-const NODE_ENV = process.env.NODE_ENV || "development"
+// const NODE_ENV = process.env.NODE_ENV || "development"
 const mongoose = require('mongoose')
 const cors = require('cors')
 const morgan = require('morgan')
-
-mongoose.connect('mongodb://localhost/e-commerce-' + NODE_ENV,{useNewUrlParser : true, useCreateIndex: true} )
+const database = process.env.ATLAS_PASS ? `mongodb+srv://admin:${process.env.ATLAS_PASS}@cluster0-ayir7.gcp.mongodb.net/e-commerce?retryWrites=true` : 'mongodb://localhost/hacktiv-overflow'
+mongoose.connect(database ,{useNewUrlParser : true, useCreateIndex: true} )
 let db = mongoose.connection
 db.on('error', console.error.bind(console, 'Connection error!'))
 db.once('open', function(){ console.log('mongoose is connected!')})
