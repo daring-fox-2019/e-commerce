@@ -29,82 +29,82 @@
 </template>
 
 <script>
-import swal from 'sweetalert';
+import swal from 'sweetalert'
 
 export default {
-  name: "Transaction",
-  props: ["isLogin", "userId", "isAdmin"],
-  data: function() {
+  name: 'Transaction',
+  props: ['isLogin', 'userId', 'isAdmin'],
+  data: function () {
     return {
-      tfimage : "",
+      tfimage: '',
       transactions: []
-    };
+    }
   },
-  created(){
-    if(this.isAdmin === false){
-      setTimeout( ()=>{
+  created () {
+    if (this.isAdmin === false) {
+      setTimeout(() => {
         this.populateUser()
       }, 2000)
-    } else { 
-      setTimeout(()=>{
+    } else {
+      setTimeout(() => {
         this.populateAdmin()
       }, 2000)
     }
   },
-  mounted() {
-    if(this.isAdmin === false){
-      setTimeout( ()=>{
+  mounted () {
+    if (this.isAdmin === false) {
+      setTimeout(() => {
         this.populateUser()
       }, 2000)
-    } else { 
-      setTimeout(()=>{
+    } else {
+      setTimeout(() => {
         this.populateAdmin()
       }, 2000)
     }
   },
-  methods : {
+  methods: {
     populateUser () {
       this.$axios({
-        methods: "get",
-        url: "http://35.240.223.244/cart/"+ localStorage.getItem('user'),
+        methods: 'get',
+        url: 'http://35.240.223.244/cart/' + localStorage.getItem('user'),
         headers: {
           token: localStorage.getItem('token'),
           id: localStorage.getItem('user')
         }
-        })
-        .then(({data})=>{
+      })
+        .then(({ data }) => {
           console.log(data)
           this.transactions = data
         })
-        .catch(err=>{
+        .catch(err => {
           console.log(JSON.stringify(err))
-          this.$swal("error","internal server error", "error")
+          this.$swal('error', 'internal server error', 'error')
         })
     },
     populateAdmin () {
       this.$axios({
-        methods: "get",
-        url: "http://35.240.223.244/carts",
+        methods: 'get',
+        url: 'http://35.240.223.244/carts',
         headers: {
           token: localStorage.getItem('token'),
           id: localStorage.getItem('user')
         }
-        })
-        .then(({data})=>{
+      })
+        .then(({ data }) => {
           console.log(data)
           this.transactions = data
         })
-        .catch(err=>{
+        .catch(err => {
           console.log(err)
-          this.$swal("error","internal server error", "error")
+          this.$swal('error', 'internal server error', 'error')
         })
     },
-    uploadtransfer(id){
+    uploadtransfer (id) {
       console.log(id)
-      if (this.tfimage === "") {
+      if (this.tfimage === '') {
         this.$swal('Please add product image')
       } else {
-        console.log("upload")
+        console.log('upload')
         swal('Upload Your Image...', {
           buttons: false,
           timer: 200
@@ -125,123 +125,123 @@ export default {
         })
           .then(({ data }) => {
             this.tfimage = data
-            console.log("selesai upload")
+            console.log('selesai upload')
             swal('Updating your order status...', {
               buttons: false,
               timer: 100
             })
             this.$axios({
               method: 'put',
-              url: 'http://35.240.223.244/cart/'+id,
+              url: 'http://35.240.223.244/cart/' + id,
               headers: {
                 id: localStorage.getItem('user'),
                 token: localStorage.getItem('token')
               },
               data: {
-                transfer : this.tfimage,
-                status : "paid"
+                transfer: this.tfimage,
+                status: 'paid'
               }
             })
               .then(({ data }) => {
                 console.log('created => ' + JSON.stringify(data))
-                this.tfimage = ""
+                this.tfimage = ''
                 this.$swal('Success', 'Your Order Updated', 'success')
                 this.populateUser()
               })
               .catch(err => {
-                this.tfimage = ""
+                this.tfimage = ''
                 this.$swal('Error', 'Internal Server Error', 'error')
                 console.log('error di db')
                 console.log(err)
               })
           })
           .catch(({ response }) => {
-            this.tfimage = ""
+            this.tfimage = ''
             this.$swal(
               'Error Status : ' + String(response.status),
               response.data.message,
               'error'
             )
-              console.log("error pas upload image")
+            console.log('error pas upload image')
           })
       }
     },
     accept (id, products) {
       this.$axios({
+        method: 'put',
+        url: 'http://35.240.223.244/cart/' + id,
+        headers: {
+          id: localStorage.getItem('user'),
+          token: localStorage.getItem('token')
+        },
+        data: {
+          status: 'shipped'
+        }
+      })
+        .then(({ data }) => {
+          console.log('created => ' + JSON.stringify(data))
+          this.tfimage = ''
+          this.$swal('Success', 'Your Order Updated', 'success')
+
+          for (let i = 0; i < products.length; i++) {
+            this.$axios({
               method: 'put',
-              url: 'http://35.240.223.244/cart/'+id,
+              url: 'http://35.240.223.244/product/' + products[i]._id,
               headers: {
-                id: localStorage.getItem('user'),
-                token: localStorage.getItem('token')
+                token: localStorage.getItem('token'),
+                id: localStorage.getItem('user')
               },
               data: {
-                status : "shipped"
+                stock: products[i].stock - products[i].total
               }
             })
-              .then(({ data }) => {
-                console.log('created => ' + JSON.stringify(data))
-                this.tfimage = ""
-                this.$swal('Success', 'Your Order Updated', 'success')
-                
-                for(let i =0; i < products.length; i++){
-                  this.$axios({
-                    method: 'put',
-                    url: 'http://35.240.223.244/product/'+products[i]._id,
-                    headers : {
-                      token : localStorage.getItem('token'),
-                      id : localStorage.getItem('user')
-                    },
-                    data : {
-                      stock : products[i].stock - products[i].total
-                    }
-                  })
-                  .then(({response})=>{
-                    this.populateAdmin()
-                  })
-                  .catch(err=>{
-                    this.populateAdmin()
-                    this.$swal('Error', 'Internal Server Error',    'error')
-                    console.log(err)
-                    console.log('error di db pas update stock')
-                  })
-                }
+              .then(({ response }) => {
+                this.populateAdmin()
               })
               .catch(err => {
-                this.tfimage = ""
+                this.populateAdmin()
                 this.$swal('Error', 'Internal Server Error', 'error')
-                console.log('error di db')
                 console.log(err)
+                console.log('error di db pas update stock')
               })
+          }
+        })
+        .catch(err => {
+          this.tfimage = ''
+          this.$swal('Error', 'Internal Server Error', 'error')
+          console.log('error di db')
+          console.log(err)
+        })
     },
     reject (id) {
       this.$axios({
-              method: 'put',
-              url: 'http://35.240.223.244/cart/'+id,
-              headers: {
-                id: localStorage.getItem('user'),
-                token: localStorage.getItem('token')
-              },
-              data: {
-                status : "cancelled"
-              }
-            })
-              .then(({ data }) => {
-                console.log('created => ' + JSON.stringify(data))
-                this.tfimage = ""
-                this.$swal('Success', 'Your Order Updated', 'success')
-                this.populateAdmin()
-              })
-              .catch(err => {
-                this.tfimage = ""
-                this.$swal('Error', 'Internal Server Error', 'error')
-                console.log('error di db')
-                console.log(err)
-                this.populateAdmin()
-              })
+        method: 'put',
+        url: 'http://35.240.223.244/cart/' + id,
+        headers: {
+          id: localStorage.getItem('user'),
+          token: localStorage.getItem('token')
+        },
+        data: {
+          status: 'cancelled'
+        }
+      })
+        .then(({ data }) => {
+          console.log('created => ' + JSON.stringify(data))
+          this.tfimage = ''
+          this.$swal('Success', 'Your Order Updated', 'success')
+          this.populateAdmin()
+        })
+        .catch(err => {
+          this.tfimage = ''
+          this.$swal('Error', 'Internal Server Error', 'error')
+          console.log('error di db')
+          console.log(err)
+          this.populateAdmin()
+        })
     },
     previewFile (e) {
       this.tfimage = e.target.files[0]
     }
   }
-};
+}
 </script>

@@ -97,6 +97,10 @@
     </nav>
     <div>
       <router-view
+        @deleteitem="deleteitem"
+        @populateitems="populate"
+        @updateitem="upd"
+        :items="items"
         v-on:atc="atc"
         v-on:login="login"
         :isLogin="isLogin"
@@ -118,12 +122,13 @@ export default {
       userDetail: {
         address: "",
         phonenumber: "",
-        email : localStorage.getItem('email')
+        email: localStorage.getItem("email")
       },
       carts: [],
       cartItems: 0,
       isAdmin: false,
-      checkoutStat: false
+      checkoutStat: false,
+      items: []
     };
   },
   created() {
@@ -133,6 +138,94 @@ export default {
     this.checkLogin();
   },
   methods: {
+    upd(product) {
+      if (product.image === "") {
+        this.$axios({
+          method: "put",
+          url: "http://35.240.223.244/product/" + product._id,
+          headers: {
+            token: localStorage.getItem("token"),
+            id: localStorage.getItem("user")
+          },
+          data: {
+            name: product.name,
+            price: product.price,
+            stock: product.stock,
+            description: product.description
+          }
+        })
+          .then(({ response }) => {
+            this.$swal(
+              "Product Updated",
+              "produc successfully updated",
+              "success"
+            );
+            this.populate();
+          })
+          .catch(({ response }) => {
+            this.$swal(
+              "Error Status : " + String(response.status),
+              response.data.message,
+              "error"
+            );
+            this.populate();
+          });
+      } else if (
+        this.product.name === "" ||
+        this.product.image === "" ||
+        this.product.price === null ||
+        this.product.price <= 0 ||
+        this.product.stock === null ||
+        this.product.stock < 0 ||
+        this.product.description === ""
+      ) {
+        this.$swal("Please input valid product info");
+      } else {
+        swal("Upload Your Image...", {
+          buttons: false,
+          timer: 3500
+        });
+      }
+    },
+    deleteitem(e) {
+      console.log(e);
+      this.$axios({
+        method: "delete",
+        url: "http://35.240.223.244/product/" + e,
+        headers: {
+          token: localStorage.getItem("token"),
+          id: localStorage.getItem("user")
+        }
+      })
+        .then(({ data }) => {
+          swal("Successfully delete product", {
+            icon: "success"
+          });
+          this.populate(true);
+        })
+        .catch(err => {
+          console.log(JSON.stringify(err));
+          this.$swal(`Error`, `error`, "error");
+        });
+    },
+    populate(e) {
+      this.$axios({
+        method: "get",
+        url: "http://35.240.223.244/products",
+        headers: {
+          id: localStorage.getItem("user"),
+          token: localStorage.getItem("token")
+        }
+      })
+        .then(({ data }) => {
+          this.items = data;
+          this.$forceUpdate();
+        })
+        .catch(err => {
+          console.log(JSON.stringify(err));
+          this.$swal("error", "internal server", "error");
+        });
+    },
     sumCart() {
       let total = 0;
       this.carts.forEach(item => {
@@ -144,7 +237,7 @@ export default {
       this.checkoutStat = true;
     },
     checkout() {
-      this.hideModalCart()
+      this.hideModalCart();
       let amount = 0;
       let total = 0;
       this.carts.forEach(item => {
@@ -158,30 +251,34 @@ export default {
         transfer: "",
         status: "wait for payment",
         userId: localStorage.getItem("user"),
-        userDetail: this.userDetail,
-        }   
+        userDetail: this.userDetail
+      };
       this.$axios({
-          method: 'post',
-          url: 'http://35.240.223.244/cart',
-          headers: {
-            id: localStorage.getItem('user'),
-            token: localStorage.getItem('token')
-          },
-          data : transaction
-        })
+        method: "post",
+        url: "http://35.240.223.244/cart",
+        headers: {
+          id: localStorage.getItem("user"),
+          token: localStorage.getItem("token")
+        },
+        data: transaction
+      })
         .then(({ data }) => {
-          this.carts = []
-          this.updateCart("wkwk")
-          this.userDetail= {
+          this.carts = [];
+          this.updateCart("wkwk");
+          this.userDetail = {
             address: "",
             phonenumber: "",
-            email : localStorage.getItem('email')
-          }
-          this.$swal("Order submitted", "Transfer to 123456789 and sent the transfer receipt in the transactions dashboard, click the transaction menu on the navbar and upload your picture", 'success')
+            email: localStorage.getItem("email")
+          };
+          this.$swal(
+            "Order submitted",
+            "Transfer to 123456789 and sent the transfer receipt in the transactions dashboard, click the transaction menu on the navbar and upload your picture",
+            "success"
+          );
         })
         .catch(({ response }) => {
-          this.$swal(response.status, response.data.message, 'error')
-        })
+          this.$swal(response.status, response.data.message, "error");
+        });
     },
     updateCart(i) {
       this.$axios({
@@ -198,10 +295,9 @@ export default {
         .then(({ data }) => {
           if (i === "add") {
             this.$swal("Addedd to cart", `Added item to cart`, "success");
-          } else if(i === "upd"){
+          } else if (i === "upd") {
             this.$swal("Item deleted", `Deleted item from cart`, "success");
           } else {
-
           }
           this.sumCart();
         })
@@ -237,7 +333,7 @@ export default {
       this.isLogin = data.isLogin;
       this.userId = data.userId;
       this.cart = data.cart;
-      this.checkLogin()
+      this.checkLogin();
     },
     logout() {
       this.carts = [];
@@ -246,7 +342,7 @@ export default {
       localStorage.removeItem("token");
       localStorage.removeItem("email");
       localStorage.removeItem("_id");
-      this.checkLogin()
+      this.checkLogin();
       this.$router.push("/");
     },
     showModalCart() {
