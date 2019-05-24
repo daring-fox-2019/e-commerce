@@ -9,7 +9,7 @@ const routes   = require('./routes');
 const PORT     = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development'
 
-mongoose.connect(`mongodb://localhost/e-commerce-${NODE_ENV}`, { useNewUrlParser: true });
+mongoose.connect(process.env.DB_URI, { useNewUrlParser: true });
 mongoose.set('useCreateIndex', true)
 
 

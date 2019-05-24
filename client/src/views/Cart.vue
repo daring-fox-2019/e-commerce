@@ -8,6 +8,7 @@
             <th></th>
             <th>Product</th>
             <th>Price</th>
+            <th>Quantity</th>
           </tr>
         </thead>
         <tbody>
@@ -25,12 +26,14 @@
               </h4>
             </td>
             <td>Rp. {{ item.price }}</td>
+            <td><input type="number" v-model="item.quantity"></td>
           </tr>
         </tbody>
         <tfoot class="full-width">
           <tr>
             <th></th>
             <th>Total:</th>
+            <th></th>
             <th>
                 Rp. {{ totalPrice }}
               <div class="ui right floated small black labeled icon button" @click="$emit('checkout')">

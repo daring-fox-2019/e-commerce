@@ -56,6 +56,10 @@ class CartContoller {
             })
     }
 
+    static updateCart(req, res, next) {
+        
+    }
+
     static removeProduct(req, res, next) {
         User
             .updateOne(

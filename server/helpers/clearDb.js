@@ -40,5 +40,23 @@ module.exports = {
                     console.log(err);
                 });
         }
+    },
+
+    clearAll(done) {
+        if (process.env.NODE_ENV === 'test') {
+            Promise
+                .all([
+                    User.deleteMany({}),
+                    Product.deleteMany({}),
+                    Transaction.deleteMany({})    
+                ])
+                .then(() => {
+                    console.log('done')
+                    done();
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
     }
 }

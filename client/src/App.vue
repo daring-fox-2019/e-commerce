@@ -121,11 +121,29 @@ export default {
                 })
         },
         logout() {
-            localStorage.clear()
-            this.isLogin = false
-            this.fetchProducts()
-            this.cart = []
-            this.transactions = []
+            swal({
+                title: "Are you sure?",
+                text: "",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+              if (willDelete) {
+                localStorage.clear()
+                this.isLogin = false
+                this.fetchProducts()
+                this.cart = []
+                this.transactions = []
+                this.$router.push('/')
+                swal("See You Later!", {
+                  icon: "success",
+                });
+              } else {
+                // swal("Welcome Back!");
+              }
+            });
+            
         },
         login() {
             backend
@@ -143,6 +161,7 @@ export default {
                     this.clearForm()
                     this.fetchProducts();
                     this.fetchCart();
+                    swal('Login Success', '', 'success')
                     this.isLogin = true
                 })
                 .catch(err => {
@@ -164,7 +183,7 @@ export default {
                 )
                 .then(({data}) => {
                     this.clearForm()
-
+                    swal('Register Success', '', 'success')
                     this.$router.push('/login')
                 })
                 .catch(err => {
@@ -239,6 +258,7 @@ export default {
                     }
                 })
                 .then(({data}) => {
+                    swal('Transaction Success', '', 'success')
                     console.log(data)
                     this.fetchProducts();
                     this.fetchCart();

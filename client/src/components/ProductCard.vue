@@ -22,9 +22,9 @@
   class="ui basic bottom attached button" 
   tabindex="0"
   @click="$emit('add-to-cart', product._id)"
-  :class="{ disabled: onCart == 'Added to Cart' }"
+  :class="{ disabled: onCart == 'Added to Cart' || product.stock == 0 }"
   >
-    <p>{{ onCart }}</p>
+    <p>{{ product.stock ? onCart : 'Stock Empty' }}</p>
 </div>
   </div>
 </template>
