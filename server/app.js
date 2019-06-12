@@ -10,16 +10,20 @@ const routes = require('./routes')
 
 const app = express()
 const PORT = process.env.PORT || 3000
-const uploads = multer({
-  storage: multerGoogleStorage.storageEngine()
-})
-// const uploads = process.env.NODE_ENV === 'test'
-//   ? multer()
-//   : multer({ dest: 'uploads/' })
+const uploads = process.env.NODE_ENV === 'test'
+  ? multer()
+  : process.env.NODE_ENV === 'dev'
+    ? multer({ dest: 'uploads/' })
+    : multer({
+      storage: multerGoogleStorage.storageEngine()
+    })
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
 
-// app.use(express.static(__dirname))
+if (process.env.NODE_ENV === 'dev') {
+  app.use(express.static(__dirname))
+}
+
 app.use(cors())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())

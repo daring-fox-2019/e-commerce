@@ -5,7 +5,7 @@
         <div class="columns is-variable is-6">
           <div class="column">
             <figure class="image">
-              <img :src="baseUrl + imageUrl" v-if="imageUrl"/>
+              <img :src="imageUrl.replace('https', 'http')" v-if="imageUrl"/>
             </figure>
           </div>
           <div class="column">
@@ -74,7 +74,6 @@ export default {
   data: function () {
     return {
       id: '',
-      baseUrl: 'http://localhost:3000/',
       imageUrl: '',
       name: '',
       price: 0,

@@ -17,7 +17,7 @@
                 class="image"
                 v-if="image.url"
               >
-                <img :src="image.url">
+                <img :src="image.url.replace('https', 'http')">
               </figure>
               <template v-else>
                 <span class="file-icon mtl">
@@ -102,7 +102,7 @@ export default {
       this.name = this.item.name
       this.stock = this.item.stock
       this.price = this.item.price
-      this.image.url = 'http://localhost:3000/' + this.item.imageUrl
+      this.image.url = this.item.imageUrl.replace('https', 'http')
       this.image.filename = this.item.imageUrl
     }
   },

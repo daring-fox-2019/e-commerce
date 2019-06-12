@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "dev": "export NODE_ENV=dev && nodemon app.js -L",
     "test": "export NODE_ENV=test && ./node_modules/.bin/mocha --recursive --exit"
   },
   "devDependencies": {

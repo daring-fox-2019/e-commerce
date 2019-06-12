@@ -6,7 +6,7 @@
       :key="item._id"
     >
       <figure class="media-left image is-128x128">
-        <img :src="baseUrl + item.imageUrl"/>
+        <img :src="item.imageUrl.replace('https', 'http')"/>
       </figure>
       <div class="media-content has-text-weight-bold is-size-5">
         <p>{{item.name}}</p>
@@ -49,11 +49,6 @@ export default {
   props: {
     items: Array,
     token: String
-  },
-  data: function () {
-    return {
-      baseUrl: 'http://localhost:3000/'
-    }
   },
   methods: {
     onClickRemove: function (itemId) {

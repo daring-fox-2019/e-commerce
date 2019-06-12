@@ -9,7 +9,7 @@
       >
         <div class="has-background-white">
           <figure class="image is-5by4">
-            <img :src="host + item.imageUrl"/>
+            <img :src="item.imageUrl.replace('https', 'http')"/>
           </figure>
           <p class="has-text-weight-bold is-size-5">{{item.name}}</p>
           <p class="has-text-danger">Rp {{item.price}}</p>
@@ -25,11 +25,6 @@ export default {
   name: 'ItemTiles',
   props: {
     items: Array
-  },
-  data: function () {
-    return {
-      host: 'http://localhost:3000/'
-    }
   },
   methods: {
     onClickItem: function (itemId) {
